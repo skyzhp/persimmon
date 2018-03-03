@@ -1,0 +1,77 @@
+# Routes Config
+#
+# This file defines all application routes (Higher priority routes first)
+#
+
+module:testrunner
+# module:jobs
+
+GET     /                                       Home.Index
+# xmlrpc
+GET     /xmlrpc                                 XmlRpc.ShowMessage
+POST    /xmlrpc                                 XmlRpc.Index
+
+# Admin
+GET     /admin                                  Admin.Index
+POST    /admin/login                            Auth.Login
+GET     /admin/logout                           Auth.Logout
+# categories
+GET     /admin/categories                         Category.Index
+GET     /admin/categories/:id                     Category.Show
+POST    /admin/categories/store                   Category.Store
+POST    /admin/categories/update                  Category.Update
+POST    /admin/categories/destroy                 Category.Destroy
+# options
+GET     /admin/options                            Option.Index
+GET     /admin/options/:id                        Option.Show
+POST    /admin/options/store                      Option.Store
+POST    /admin/options/update                     Option.Update
+POST    /admin/options/destroy                    Option.Destroy
+# links
+GET     /admin/links                              Option.Index
+GET     /admin/links/:id                          Option.Show
+POST    /admin/links/store                        Option.Store
+POST    /admin/links/update                       Option.Update
+POST    /admin/links/destroy                      Option.Destroy
+# comments
+GET     /admin/comments                           Comment.Index
+POST    /admin/comments/store                     Comment.Store
+POST    /admin/comments/update                    Comment.Update
+POST    /admin/comments/destroy                   Comment.Destroy
+# posts
+GET     /admin/posts                              Posts.Index
+GET     /admin/posts/:id                          Posts.Show
+POST    /admin/posts/store                        Posts.Store
+POST    /admin/posts/update                       Posts.Update
+POST    /admin/posts/destroy                      Posts.Destroy
+# trash
+GET     /admin/posts-trash                        Posts.Index
+POST    /admin/posts-trash/update                 Posts.Update
+POST    /admin/posts-trash/destroy                Posts.Destroy
+# navigation
+GET     /admin/navigation                         Navigation.Index
+POST    /admin/navigation/update                  Navigation.Update
+# settings
+GET     /admin/settings                           Settings.Index
+POST    /admin/settings/update                    Settings.Update
+# uploads
+POST    /admin/file/uploads                       File.Uploads
+# utils
+GET     /admin/utils/fanyi/:words                 Utils.Translate
+GET     /admin/utils/debug                        Utils.Debug
+
+# Ignore favicon requests
+GET     /favicon.ico                            404
+
+# Map static resources from the /app/public folder to the /public path
+GET     /public/*filepath                       Static.Serve("public")
+
+# Catch all, this will route any request into the controller path
+#
+#                    **** WARNING ****
+# Enabling this exposes any controller and function to the web.
+# ** This is a serious security issue if used online **
+#
+# For rapid development uncomment the following to add new controller.action endpoints
+# without having to add them to the routes table.
+# *       /:controller/:action                    :controller.:action
