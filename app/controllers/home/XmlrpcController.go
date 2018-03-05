@@ -9,7 +9,7 @@ import (
 )
 
 type XmlRpc struct {
-	Base
+	BaseHomeController
 }
 
 type Methods struct {
@@ -39,5 +39,5 @@ func (c XmlRpc) Index() revel.Result {
 }
 
 func (c XmlRpc) ShowMessage() revel.Result {
-	return c.RenderJSON(info.Res{Ok: false, Code: 501, Msg: "GET request type error. Please use POST request"})
+	return c.RenderJSON(info.Res{Status: 501, Info: "GET request type error. Please use POST request"})
 }

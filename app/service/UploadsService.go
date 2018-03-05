@@ -36,7 +36,7 @@ func (this UploadsService) QiniuUploads(format string, filePath string) info.Res
 	key := fmt.Sprintf("%s/%s.%s", nowDate, utils.NewGuid(), format)
 	err := formUploader.PutFile(context.Background(), &ret, upToken, key, filePath, nil)
 	if err != nil {
-		return info.Res{Ok: false, Code: 500, Msg: err.Error()}
+		return info.Res{Status: 500, Info: err.Error()}
 	}
 
 	//删除掉本地文件
@@ -51,5 +51,5 @@ func (this UploadsService) QiniuUploads(format string, filePath string) info.Res
 		protocol = "s"
 	}
 	item := fmt.Sprintf("http%s://%s/%s", protocol, domain, key)
-	return info.Res{Ok: true, Code: 200, Item: item}
+	return info.Res{Status: 200, Item: item}
 }

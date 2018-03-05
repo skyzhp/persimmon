@@ -3,8 +3,9 @@ package app
 import (
 	"github.com/revel/revel"
 	"github.com/cong5/persimmon/app/service"
-	"github.com/cong5/persimmon/app/controllers/admin"
+	"github.com/cong5/persimmon/app/controllers/backend"
 	"github.com/cong5/persimmon/app/db"
+	"github.com/cong5/persimmon/app/modules/mycsrf"
 )
 
 var (
@@ -22,6 +23,7 @@ func init() {
 		revel.FilterConfiguringFilter, // A hook for adding or removing per-Action filters.
 		revel.ParamsFilter,            // Parse parameters into Controller.Params.
 		revel.SessionFilter,           // Restore and write the session cookie.
+		mycsrf.CsrfFilter,
 		revel.FlashFilter,             // Restore and write the flash cookie.
 		revel.ValidationFilter,        // Restore kept validation errors and save new ones from cookie.
 		revel.I18nFilter,              // Resolve the requested language
@@ -40,7 +42,7 @@ func init() {
 	revel.OnAppStart(func() {
 		// 其它service
 		service.InitService()
-		admin.InitService()
+		backend.InitService()
 		//DB
 		db.InitDB()
 	})

@@ -12,53 +12,52 @@ GET     /xmlrpc                                 XmlRpc.ShowMessage
 POST    /xmlrpc                                 XmlRpc.Index
 
 # Admin
-GET     /admin                                  Admin.Index
-POST    /admin/login                            Auth.Login
-GET     /admin/logout                           Auth.Logout
+GET     /backend                                    Admin.Index
+POST    /backend/login                              Auth.Login
+GET     /backend/logout                             Auth.Logout
 # categories
-GET     /admin/categories                         Category.Index
-GET     /admin/categories/:id                     Category.Show
-POST    /admin/categories/store                   Category.Store
-POST    /admin/categories/update                  Category.Update
-POST    /admin/categories/destroy                 Category.Destroy
+GET     /backend/categories                         Category.Index
+GET     /backend/categories/:id                     Category.Show
+POST    /backend/categories/store                   Category.Store
+POST    /backend/categories/update                  Category.Update
+POST    /backend/categories/destroy                 Category.Destroy
 # options
-GET     /admin/options                            Option.Index
-GET     /admin/options/:id                        Option.Show
-POST    /admin/options/store                      Option.Store
-POST    /admin/options/update                     Option.Update
-POST    /admin/options/destroy                    Option.Destroy
+GET     /backend/options                            Option.Index
+GET     /backend/options/:id                        Option.Show
+POST    /backend/options/store                      Option.Store
+POST    /backend/options/update                     Option.Update
+POST    /backend/options/destroy                    Option.Destroy
 # links
-GET     /admin/links                              Option.Index
-GET     /admin/links/:id                          Option.Show
-POST    /admin/links/store                        Option.Store
-POST    /admin/links/update                       Option.Update
-POST    /admin/links/destroy                      Option.Destroy
+GET     /backend/links                              Option.Index
+GET     /backend/links/:id                          Option.Show
+POST    /backend/links/store                        Option.Store
+POST    /backend/links/update                       Option.Update
+POST    /backend/links/destroy                      Option.Destroy
 # comments
-GET     /admin/comments                           Comment.Index
-POST    /admin/comments/store                     Comment.Store
-POST    /admin/comments/update                    Comment.Update
-POST    /admin/comments/destroy                   Comment.Destroy
+GET     /backend/comments                           Comment.Index
+POST    /backend/comments/store                     Comment.Store
+POST    /backend/comments/update                    Comment.Update
+POST    /backend/comments/destroy                   Comment.Destroy
 # posts
-GET     /admin/posts                              Posts.Index
-GET     /admin/posts/:id                          Posts.Show
-POST    /admin/posts/store                        Posts.Store
-POST    /admin/posts/update                       Posts.Update
-POST    /admin/posts/destroy                      Posts.Destroy
+GET     /backend/posts                              Posts.Index
+GET     /backend/posts/:id                          Posts.Show
+POST    /backend/posts/store                        Posts.Store
+POST    /backend/posts/update                       Posts.Update
+POST    /backend/posts/destroy                      Posts.Destroy
 # trash
-GET     /admin/posts-trash                        Posts.Index
-POST    /admin/posts-trash/update                 Posts.Update
-POST    /admin/posts-trash/destroy                Posts.Destroy
+GET     /backend/posts-trash                        Posts.Index
+POST    /backend/posts-trash/update                 Posts.Update
+POST    /backend/posts-trash/destroy                Posts.Destroy
 # navigation
-GET     /admin/navigation                         Navigation.Index
-POST    /admin/navigation/update                  Navigation.Update
+GET     /backend/navigation                         Navigation.Index
+POST    /backend/navigation/update                  Navigation.Update
 # settings
-GET     /admin/settings                           Settings.Index
-POST    /admin/settings/update                    Settings.Update
+GET     /backend/settings                           Settings.Index
+POST    /backend/settings/update                    Settings.Update
 # uploads
-POST    /admin/file/uploads                       File.Uploads
+POST    /backend/file/uploads                       File.Uploads
 # utils
-GET     /admin/utils/fanyi/:words                 Utils.Translate
-GET     /admin/utils/debug                        Utils.Debug
+GET     /backend/utils/fanyi/:words                 Utils.Translate
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

@@ -1,0 +1,336 @@
+<template>
+    <div class="pit-content">
+        <div class="pit-action-btn">
+            <Button type="primary" @click="handleCreate" icon="plus">新增</Button>
+            <Button type="primary" @click="handleDistory('multi',{})" icon="delete">删除</Button>
+        </div>
+        <div class="data-list">
+            <Table :loading="listLoading" :columns="tableColumns" :data="listData" stripe @on-select="selectRow" @on-select-all="selectAll"></Table>
+        </div>
+
+        <Modal :title="myFormTitle" v-model="editFormVisible" @on-ok="submitMyForm" @on-cancel="closeForm">
+            <div class="pit-dialog-edit-form">
+                <Form ref="myForm" :rules="myRules" class="myForm" :model="myForm" label-position="right" :label-width="100" style="width: 90%;">
+                    <FormItem label="分类名称" prop="category_name">
+                        <Input v-model="myForm.category_name" auto-complete="off" @on-blur="translateWords" @on-enter="translateWords"></Input>
+                    </FormItem>
+                    <FormItem label="分类别名" prop="category_flag">
+                        <Input v-model="myForm.category_flag" auto-complete="off"></Input>
+                    </FormItem>
+                    <FormItem label="分类描述">
+                        <Input type="textarea" v-model="myForm.category_description"></Input>
+                    </FormItem>
+                    <FormItem label="父分类">
+                        <Select v-model="myForm.category_parent" placeholder="请选择父分类">
+                            <Option v-for="item in categorys" :value="item.id" :key="item.id">{{ item.category_name }}</Option>
+                        </Select>
+                    </FormItem>
+                    <FormItem v-if="myForm.id">
+                        <Input v-model="myForm.id" style="display: none;"></Input>
+                    </FormItem>
+                </Form>
+                <Spin size="large" fix v-if="editFormLoading"></Spin>
+            </div>
+        </Modal>
+    </div>
+</template>
+<style type="text/css">
+
+</style>
+<script>
+    import Util from '../../libs/util';
+
+    export default{
+        data(){
+            return {
+                listData: [],
+                categorys: [],
+                myForm: {
+                    id: 0,
+                    category_name: '',
+                    category_flag: '',
+                    category_description: '',
+                    category_parent: 0,
+                },
+                myRules: {
+                    category_name: [
+                        {required: true, type: "string", title: '请填写分类名称', trigger: 'blur'}
+                    ],
+                    category_flag: [
+                        {required: true, type: "string", title: '请填写分类别名', trigger: 'blur'},
+                        {pattern: /^[a-zA-Z0-9_-]+$/, title: '只允许英文或者拼音,横杠(-),下划线(_)', trigger: 'blur'}
+                    ]
+                },
+                editFormVisible: false,
+                editFormLoading: false,
+                listLoading: false,
+                myFormTitle: '编辑',
+                checkedAll: [],
+                tableColumns: [
+                    {
+                        type: 'selection',
+                        width: 60,
+                        align: 'center'
+                    },
+                    {
+                        title: '分类名称',
+                        key: 'category_name'
+                    },
+                    {
+                        title: '分类别名',
+                        key: 'category_flag'
+                    },
+                    {
+                        title: '日期',
+                        key: 'created_at'
+                    },
+                    {
+                        title: '操作',
+                        key: 'action',
+                        width: 150,
+                        align: 'center',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.handleEdit(params.row)
+                                        }
+                                    }
+                                }, '编辑'),
+                                h('Button', {
+                                    props: {
+                                        type: 'error',
+                                        size: 'small'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.handleDistory('one', params.row);
+                                        }
+                                    }
+                                }, '删除')
+                            ]);
+                        }
+                    }
+                ],
+            }
+        },
+        methods: {
+            getData: function () {
+                let that = this;
+                that.listLoading = true;
+                Util.ajax.get('/categorys', {
+                    params: {}
+                }).then(function (response) {
+                    let res = response.data;
+                    if (res != false) {
+                        that.listData = res.data;
+                        that.listLoading = false;
+                    } else {
+                        that.$Notice.warning({
+                            title: '数据获取失败',
+                            duration: 3 * 1000
+                        });
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            },
+            handleCreate: function () {
+                let that = this;
+                that.myFormTitle = '新增';
+                that.myForm.id = 0;
+                that.editFormVisible = true;
+                that.setTopCategorys();
+            },
+            handleEdit: function (row) {
+                let that = this;
+                that.setTopCategorys();
+                that.editFormLoading = true;
+                that.myFormTitle = '编辑';
+                that.editFormVisible = true;
+                Util.ajax.get('/categorys/' + row.id).then(function (response) {
+                    let res = response.data;
+                    if (res != false) {
+                        that.myForm = res;
+                    } else {
+                        that.$Notice.warning({
+                            title: '数据获取失败',
+                            desc: ''
+                        });
+                    }
+                    that.editFormLoading = false;
+                }).catch(function (error) {
+                    console.log(error);
+                    that.editFormLoading = false;
+                });
+            },
+            handleDistory: function (type, row) {
+                let that = this, idsParam = {};
+                switch (type) {
+                    case 'one':
+                        if (parseInt(row.id) <= 0) {
+                            that.$Notice.warning({
+                                title: '请选择需要删除的数据',
+                                desc: ''
+                            });
+                            return false;
+                        }
+                        idsParam = {ids: [row.id]};
+                        break;
+                    case 'multi':
+                        var ids = Util.getIdByArr(that.checkedAll);
+                        if (ids.length <= 0) {
+                            that.$Notice.warning({
+                                title: '请选择需要删除的数据',
+                                desc: ''
+                            });
+                            return false;
+                        }
+                        idsParam = {ids: ids};
+                        break;
+                    default:
+                        break;
+                }
+
+                that.$Modal.confirm({
+                    title: '确认删除选中的记录吗?',
+                    content: '<p>您确认删除选中的记录吗?</p>',
+                    onOk: () => {
+                        that.listLoading = true;
+                        Util.ajax.delete('/categorys/destroy', {data: idsParam}).then(function (response) {
+                            that.listLoading = false;
+                            let res = response.data;
+                            that.$Notice.warning({
+                                title: res.status == 'success' ? '删除成功' : '删除失败',
+                                desc: ''
+                            });
+                            if (type == 'one') {
+                                Util.removeByValue(that.listData, row.id);
+                            } else {
+                                for (var index in that.checkedAll) {
+                                    Util.removeByValue(that.listData, that.checkedAll[index].id);
+                                }
+                            }
+
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                    },
+                    onCancel: () => {
+                        that.listLoading = false;
+                    }
+                });
+            },
+            submitMyForm: function () {
+                let that = this;
+                that.$refs['myForm'].validate((valid) => {
+                    if (!valid) {
+                        console.log('myForm valid error.');
+                        return false;
+                    }
+
+                    if (that.myForm.id > 0) {
+                        Util.ajax.put('/categorys/update', that.myForm).then(function (response) {
+                            let res = response.data;
+                            that.$Notice.open({
+                                title: res.status == 'success' ? '编辑成功' : '编辑失败',
+                                desc: ''
+                            });
+                            if (res.status == 'success') {
+                                that.closeForm('myForm');
+                                that.getData();
+                            }
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                    } else {
+                        Util.ajax.post('/categorys', that.myForm).then(function (response) {
+                            console.log(response);
+
+                            let res = response.data;
+                            if (res.status == 'success') {
+                                that.closeForm('myForm');
+                                that.getData();
+                            }
+                            that.$Notice.open({
+                                title: res.status == 'success' ? '新增成功' : '新增失败',
+                                desc: ''
+                            });
+                        }).catch(function (error) {
+                            if (error.response) {
+                                if (error.response.status == 422) {
+                                    for (var index in error.response.data) {
+                                        that.$Notice.warning({
+                                            title: '警告',
+                                            desc: error.response.data[index][0]
+                                        });
+                                    }
+                                }
+                            } else {
+                                console.log(error);
+                            }
+                        });
+                    }
+                });
+            },
+            closeForm: function () {
+                this.editFormVisible = false;
+                this.$refs['myForm'].resetFields();
+                this.myForm = {
+                    id: 0,
+                    category_name: '',
+                    category_flag: '',
+                    category_description: '',
+                    category_parent: 0,
+                };
+                console.log('closeForm');
+            },
+            setTopCategorys: function () {
+                let categorys = this.listData.concat();
+                categorys.splice(0, 0, {id: 0, category_name: '顶级分类', hidden: true, category_parent: 0});
+                this.categorys = categorys;
+            },
+            selectRow(row) {
+                this.checkedAll = row;
+            },
+            selectAll(selection) {
+                this.checkedAll = selection;
+            },
+            translateWords(event) {
+                let that = this;
+                let query = that.myForm.category_name;
+                if (query.match(/\w+/g) != null) {
+                    that.myForm.flag = query;
+                }
+                if (query == null || query == '') {
+                    return false;
+                }
+                Util.ajax.get('/util', {
+                    params: {
+                        action: 'translates',
+                        q: query
+                    }
+                }).then(function (response) {
+                    let res = response.data;
+                    if (res.status == 200 && res.trans_result) {
+                        let flag = res.trans_result.toLowerCase();
+                        that.myForm.category_flag = flag.replaceAll(' ', '-', flag);
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            },
+        },
+        mounted() {
+            this.getData();
+        }
+    }
+</script>
