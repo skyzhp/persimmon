@@ -25,3 +25,10 @@ type CommentMail struct {
 	Url       string
 	CreatedAt string
 }
+
+type MetaInfo struct {
+	Posts     int `json:"posts"`
+	Comments  int `json:"comments"`
+	PostTrash int `json:"post_trash"`
+	UserViews int `json:"user_views"`
+}

@@ -18,11 +18,25 @@ func (this *PostService) GetOne(id int) *info.Posts {
 	return post
 }
 
-func (this *PostService) GetList(page int) []info.Posts {
-	limit := 20
+func (this *PostService) GetList(categoryId int, keywords string, page int, limit int) []info.Posts {
+	if page <= 0 {
+		page = 1
+	}
+	if limit <= 0 {
+		limit = 20
+	}
+
+	session := db.MasterDB.NewSession()
 	start := (page - 1) * limit
 	postList := make([]info.Posts, 0)
-	err := db.MasterDB.Limit(limit, start).Find(&postList)
+	if categoryId > 0 {
+		session.And("category_id = ?", categoryId)
+	}
+	if len(keywords) > 0 {
+		keywordsStr := "%" + keywords + "%"
+		session.And("title like ?", keywordsStr)
+	}
+	err := session.Limit(limit, start).Find(&postList)
 	if err != nil {
 		revel.INFO.Printf("Get posts list fatal : %s", err)
 	}
@@ -73,6 +87,36 @@ func (this *PostService) Destroy(id int, post info.Posts) bool {
 		return false
 	}
 	return true
+}
+
+func (this *PostService) CountPost() int {
+	post := new(info.Posts)
+	postNum, err := db.MasterDB.Count(post)
+	if err != nil {
+		revel.INFO.Printf("Count post error: %s", err)
+		return 0
+	}
+	return int(postNum)
+}
+
+func (this *PostService) CountTrashPost() int {
+	post := new(info.Posts)
+	postNum, err := db.MasterDB.Where("deleted_at != null").Count(post)
+	if err != nil {
+		revel.INFO.Printf("Count post error: %s", err)
+		return 0
+	}
+	return int(postNum)
+}
+
+func (this *PostService) SumViews() int {
+	post := new(info.Posts)
+	viewNum, err := db.MasterDB.Sum(post, "views")
+	if err != nil {
+		revel.INFO.Printf("Count post error: %s", err)
+		return 0
+	}
+	return int(viewNum)
 }
 
 func (this *PostService) GetDateTime() string {

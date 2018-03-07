@@ -18,8 +18,14 @@ func (this *CategoryService) GetOne(id int) *info.Categorys {
 	return category
 }
 
-func (this *CategoryService) GetList(page int) []info.Categorys {
-	limit := 20
+func (this *CategoryService) GetList(limit int, page int) []info.Categorys {
+	if limit <= 0 {
+		limit = 20
+	}
+	if page <= 0 {
+		page = 1
+	}
+
 	start := (page - 1) * limit
 	categoryList := make([]info.Categorys, 0)
 	err := db.MasterDB.Limit(limit, start).Find(&categoryList)

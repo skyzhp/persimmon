@@ -12,8 +12,8 @@
                 </p>
                 <div class="form-con">
                     <Form ref="loginForm" :model="form" :rules="rules">
-                        <FormItem prop="userName">
-                            <Input v-model="form.email" placeholder="请输入Email">
+                        <FormItem prop="username">
+                            <Input v-model="form.email" placeholder="请输入用户名">
                             <span slot="prepend">
                                     <Icon :size="16" type="person"></Icon>
                                 </span>
@@ -30,7 +30,7 @@
                             <Button @click="handleSubmit" type="primary" long>登录</Button>
                         </FormItem>
                     </Form>
-                    <p class="login-tip">输入用户名和密码.</p>
+                    <p class="login-tip">输入邮箱和密码登录。</p>
                     <Spin size="large" fix v-if="spinShow" class="login-spin">登陆中...</Spin>
                 </div>
             </Card>
@@ -41,21 +41,22 @@
 <script>
     import Cookies from 'js-cookie';
     import Util from '../libs/util';
-
     export default {
         data() {
             return {
+                spinShow:false,
                 form: {
                     email: '',
                     password: ''
                 },
-                spinShow:false,
                 rules: {
                     email: [
-                        {type: "email", required: true, message: '账号不能为空', trigger: 'blur'}
+                        {required: true, message: '账号不能为空', trigger: 'blur'},
+                        {type: 'email', message: '邮箱格式不正确', trigger: 'blur'}
                     ],
                     password: [
-                        {required: true, message: '密码不能为空', trigger: 'blur'}
+                        {required: true, message: '密码不能为空', trigger: 'blur'},
+                        { type: 'string', min: 6, message: '密码长度需要大于6位', trigger: 'blur' }
                     ]
                 }
             };
@@ -97,7 +98,7 @@
                     }
                 });
             },
-            handleSpinCustom () {
+            handleSpinCustom() {
                 this.$Spin.show({
                     render: (h) => {
                         return h('div', [

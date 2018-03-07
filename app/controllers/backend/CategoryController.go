@@ -10,11 +10,7 @@ type Category struct {
 }
 
 func (c Category) Index(page int) revel.Result {
-	if page <= 0 {
-		page = 1
-	}
-
-	lists := categoryService.GetList(page)
+	lists := categoryService.GetList(20, page)
 	return c.RenderJSON(info.Res{Status: 200, List: lists})
 }
 

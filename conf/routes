@@ -12,7 +12,8 @@ GET     /xmlrpc                                 XmlRpc.ShowMessage
 POST    /xmlrpc                                 XmlRpc.Index
 
 # Admin
-GET     /backend                                    Admin.Index
+GET     /backend                                    Dashboard.Index
+GET     /backend/meta                               Dashboard.MetaCount
 POST    /backend/login                              Auth.Login
 GET     /backend/logout                             Auth.Logout
 # categories

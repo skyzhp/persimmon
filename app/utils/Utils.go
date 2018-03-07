@@ -10,6 +10,8 @@ import (
 	"crypto/rand"
 	"strconv"
 	"bytes"
+	"regexp"
+	"fmt"
 )
 
 // md5
@@ -53,7 +55,6 @@ func ToInt(value string) int {
 	return val
 }
 
-
 func Urlencode(data map[string]string) string {
 	var buf bytes.Buffer
 	for k, v := range data {
@@ -63,5 +64,15 @@ func Urlencode(data map[string]string) string {
 		buf.WriteByte('&')
 	}
 	s := buf.String()
-	return s[0 : len(s)-1]
+	return s[0: len(s)-1]
+}
+
+func SQLFilters(sql string) bool {
+	str := `(?:')|(?:--)|(/\\*(?:.|[\\n\\r])*?\\*/)|(\b(select|update|and|or|delete|insert|trancate|char|chr|into|substr|ascii|declare|exec|count|master|into|drop|execute)\b)`
+	re, err := regexp.Compile(str)
+	if err != nil {
+		fmt.Println(err.Error())
+		return false
+	}
+	return re.MatchString(sql)
 }

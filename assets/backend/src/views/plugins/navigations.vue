@@ -1,5 +1,5 @@
 <style lang="less">
-    @import '../../styles/common.css';
+    @import '../../styles/common.less';
     @import './components/table.less';
 
     .navigation {

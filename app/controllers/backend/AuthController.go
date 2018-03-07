@@ -22,8 +22,8 @@ func (c Auth) Login(email string, password string) revel.Result {
 	AuthResult := authService.Login(password, userInfo)
 	if AuthResult {
 		c.SetSession(userInfo)
-		userInfo.Password = "Don't tell you."
-		return c.RenderJSON(info.Res{Status: 200, Info: "Login success.", Item: userInfo})
+		userInfo.Password = "Do you want to know password? Sorry don't tell you."
+		return c.RenderJSON(info.Res{Status: 200, Id: c.Session.ID(), Info: "Login success.", Item: userInfo})
 	} else {
 		return c.ResponseError(200, "Username or password error.")
 	}

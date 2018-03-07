@@ -1,5 +1,6 @@
 <style lang="less">
     @import './post-edit.less';
+    @import '../../styles/simplemde.min.css';
 
     .ivu-form-item-error .ivu-input-group-prepend {
         background: #f0f0f0;
@@ -8,8 +9,7 @@
 
 <template>
     <div class="pit-post-form">
-        <Form :model="myForm" ref="myForm" :rules="myRules" label-position="right" :label-width="100"
-              style="width: 90%;">
+        <Form :model="myForm" ref="myForm" :rules="myRules" label-position="right" :label-width="100" style="width: 90%;">
             <FormItem label="标题" prop="title">
                 <Input v-model="myForm.title" @on-blur="titleBlur"></Input>
             </FormItem>
@@ -22,8 +22,7 @@
                 <Tag v-for="tag in myForm.tags" color="blue" :key="tag" :name="tag" closable @on-close="closeTags">
                     {{ tag }}
                 </Tag>
-                <Input v-model="newTag" @on-enter="addTag" @on-blur="addTag" size="small" placeholder="+"
-                       style="width: 50px;"></Input>
+                <Input v-model="newTag" @on-enter="addTag" @on-blur="addTag" size="small" placeholder="+" style="width: 50px;"></Input>
             </FormItem>
             <FormItem label="分类" prop="category_id">
                 <Select v-model="myForm.category_id">
@@ -77,7 +76,7 @@
 <script>
     import Util from '../../libs/util';
     import inlineAttachment from '../../libs/inline-attachment';
-    import localforage from 'localforage';
+    //import localforage from 'localforage';
     import SimpleMDE from 'simplemde';
 
     let simpleEditor;
@@ -98,13 +97,13 @@
                 previewVisible: false,
                 showPreview: '',
                 myForm: {
-                    id: 0,
-                    title: '',
-                    flag: '',
-                    thumb: '',
-                    tags: [],
-                    category_id: 0,
-                    markdown: ''
+                    'post.Id': 0,
+                    'post.Title': '',
+                    'post.Flag': '',
+                    'post.Thumb': '',
+                    'post.Tags': [],
+                    'post.CategoryId': 0,
+                    'post.Markdown': ''
                 },
                 headers: {'X-CSRF-TOKEN': persimmon.csrf},
                 myRules: {
@@ -294,7 +293,7 @@
                 this.$router.replace('/posts');
                 console.log('closeForm');
             },
-            removeItem(){
+            removeItem() {
                 localStorage.removeItem('smde_MyPersimmonMarkdown');
             },
             getCategorys() {

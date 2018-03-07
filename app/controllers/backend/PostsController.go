@@ -10,12 +10,9 @@ type Posts struct {
 	BaseController
 }
 
-func (c Posts) Index(page int) revel.Result {
-	if page <= 0 {
-		page = 1
-	}
-
-	lists := postService.GetList(page)
+func (c Posts) Index(page int, rows int, categoryId int, keywords string) revel.Result {
+	lists := postService.GetList(categoryId, keywords, page, rows)
+	//categoryList := categoryService.GetList(1000, 1)
 	return c.RenderJSON(info.Res{Status: 200, List: lists})
 }
 

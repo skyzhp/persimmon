@@ -55,6 +55,16 @@ func (this *CommentService) Destroy(id int, comment info.Comments) bool {
 	return true
 }
 
+func (this *CommentService) CountComment() int {
+	comment := new(info.Comments)
+	postNum, err := db.MasterDB.Count(comment)
+	if err != nil {
+		revel.INFO.Printf("Count comment error: %s", err)
+		return 0
+	}
+	return int(postNum)
+}
+
 func (this *CommentService) GetDateTime() string {
 	return time.Now().Format("2006-01-02 15:04:05")
 }

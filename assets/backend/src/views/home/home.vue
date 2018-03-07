@@ -1,6 +1,6 @@
 <style lang="less">
     @import "./home.less";
-    @import "../../styles/common.css";
+    @import "../../styles/common.less";
 </style>
 <template>
     <div class="home-main">
@@ -88,10 +88,10 @@ export default {
         getMeta: function () {
             let that = this;
             that.loading = true;
-            Util.ajax.get('/dashboard/meta').then(function (response) {
-                let res = response.data;
-                if (res != false) {
-                    that.count = res;
+            Util.ajax.get('/backend/meta').then(function (response) {
+                let data = response.data;
+                if (data.status == 200) {
+                    that.count = data.item;
                 } else {
                     that.$Notice.warning({
                         title: '数据获取失败',

@@ -1,3 +1,13 @@
+.lock-screen-back{
+    border-radius: 50%;
+    z-index: -1;
+    box-shadow: 0 0 0 0 #667aa6 inset;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    transition: all 3s;
+}
 .main{
     position: absolute;
     width: 100%;
@@ -104,7 +114,7 @@
             right: 0;
             top: 0;
             height: 100%;
-            width: 170px;
+            width: 300px;
             .switch-theme-con{
                 display: inline-block;
                 width: 40px;
@@ -179,8 +189,7 @@
         right: 0;
         bottom: 0;
         overflow: auto;
-        /*background-color: #F0F0F0;*/
-        background-color: #FFF;
+        background-color: #F0F0F0;
         z-index: 1;
         transition: left .3s;
         .single-page{

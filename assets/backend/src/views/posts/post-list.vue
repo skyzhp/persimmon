@@ -7,7 +7,7 @@
         <div class="pit-action-btn">
             <Button @click="handleDistory('multi',{})" type="primary" class="myp-search-item">删除</Button>
             <Button type="primary" icon="android-add" @click="addPost()" class="myp-search-item">新增</Button>
-            <Select v-model="category_id" @change="filterCategory" style="width:200px" class="myp-search-item">
+            <Select v-model="category_id" @on-change="filterCategory" style="width:200px" class="myp-search-item">
                 <Option v-for="item in categorys" :value="item.id" :key="item.id">{{ item.category_name }}</Option>
             </Select>
             <Input v-model="q" placeholder="请输入内容" style="width: 200px" class="myp-search-item">
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-    import Util from '../../libs/util';
+    import util from '../../libs/util';
 
     export default {
         data() {
@@ -111,7 +111,7 @@
                     }
                 ],
                 listData: [],
-                category_id: '',
+                category_id: 0,
                 categorys: [],
                 currentPage: 1,
                 total: 0,
@@ -134,15 +134,15 @@
                 that.listLoading = true;
                 let query = {
                     rows: that.pageSize,
-                    category_id: that.category_id,
+                    categoryId: that.category_id,
                     q: that.q,
                     page: that.currentPage
                 };
 
-                Util.ajax.get('/posts', {params: query}).then(function (response) {
+                util.ajax.get('/backend/posts', {params: query}).then(function (response) {
                     let res = response.data;
-                    if (res != false) {
-                        that.listData = res.data;
+                    if (res.status == 200) {
+                        that.listData = res.list;
                         that.total = res.total;
                         that.currentPage = res.current_page;
                         that.listLoading = false;
@@ -180,7 +180,7 @@
                         idsParam = {ids: [row.id]};
                         break;
                     case 'multi':
-                        var ids = Util.getIdByArr(that.checkedAll);
+                        let ids = util.getIdByArr(that.checkedAll);
                         if (ids.length <= 0) {
                             this.$Notice.warning({
                                 title: '请选择需要删除的数据',
@@ -199,20 +199,20 @@
                     content: '<p>您确认删除选中的记录吗?</p>',
                     onOk: () => {
                         that.listLoading = true;
-                        Util.ajax.delete('/posts/destroy', {data: idsParam}).then(function (response) {
+                        util.ajax.delete('/backend/posts/destroy', {data: idsParam}).then(function (response) {
                             that.listLoading = false;
                             let res = response.data;
                             that.$Notice.open({
-                                title: res.status == 'success' ? '删除成功' : '删除失败',
+                                title: res.status == 200 ? '删除成功' : '删除失败',
                                 desc: '',
                                 duration: 2
                             });
 
                             if (type == 'one') {
-                                Util.removeByValue(that.listData, row.id);
+                                util.removeByValue(that.listData, row.id);
                             } else {
                                 for (let index in that.checkedAll) {
-                                    Util.removeByValue(that.listData, that.checkedAll[index].id);
+                                    util.removeByValue(that.listData, that.checkedAll[index].id);
                                 }
                             }
                         }).catch(function (error) {
@@ -232,15 +232,15 @@
             },
             getCategorys() {
                 let that = this;
-                Util.ajax.get('/categorys', {
+                util.ajax.get('/backend/categories', {
                     params: {
                         rows: 999
                     }
                 }).then(function (response) {
-                    let res = response.data;
-                    if (res != false) {
-                        res.data.splice(0, 0, {id: 0, category_name: '顶级分类', hidden: true, category_parent: 0});
-                        that.categorys = res.data;
+                    let data = response.data;
+                    if (data.status == 200) {
+                        data.list.splice(0, 0, {id: 0, category_name: '顶级分类', hidden: true, category_parent: 0});
+                        that.categorys = data.list;
                     } else {
                         this.$Notice.error({
                             title: '数据获取失败',
@@ -251,13 +251,8 @@
                     console.log(error);
                 });
             },
-            setTopCategorys() {
-                var categorys = this.listData.concat();
-                categorys.splice(0, 0, {id: 0, category_name: '顶级分类', hidden: true, category_parent: 0});
-                this.categorys = categorys;
-            },
             postEditor(row) {
-                let path = '/posts/edit/' + row.id;
+                let path = '/backend/posts/' + row.id;
                 this.$router.push({path: path});
             },
             addPost() {

@@ -1,7 +1,10 @@
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import Qs from 'qs';
-import config from '../config/config';
+import Cookies from 'js-cookie';
+import env from '../../build/env';
+// import semver from 'semver';
+// import packjson from '../../../../package.json';
+import config from '../../build/config';
 
 let util = {};
 
@@ -35,118 +38,14 @@ util.ajax.interceptors.response.use((response) => {
 });
 
 util.title = function (title) {
-    title = title || 'MyPersimmon';
+    title = title || 'Persimmon';
     window.document.title = title;
 };
 
-Date.prototype.format = function (fmt) {
-    var o = {
-        "M+": this.getMonth() + 1,                 //月份
-        "d+": this.getDate(),                    //日
-        "h+": this.getHours(),                   //小时
-        "m+": this.getMinutes(),                 //分
-        "s+": this.getSeconds(),                 //秒
-        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-        "S": this.getMilliseconds()             //毫秒
-    };
-    if (/(y+)/.test(fmt)) {
-        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-    }
-    for (var k in o) {
-        if (new RegExp("(" + k + ")").test(fmt)) {
-            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-        }
-    }
-    return fmt;
-}
-String.prototype.replaceAll = function (reallyDo, replaceWith, ignoreCase) {
-    if (!RegExp.prototype.isPrototypeOf(reallyDo)) {
-        return this.replace(new RegExp(reallyDo, (ignoreCase ? "gi" : "g")), replaceWith);
-    } else {
-        return this.replace(reallyDo, replaceWith);
-    }
-}
-if (!Object.assign) {
-    Object.defineProperty(Object, "assign", {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function (target, firstSource) {
-            "use strict";
-            if (target === undefined || target === null)
-                throw new TypeError("Cannot convert first argument to object");
-            var to = Object(target);
-            for (var i = 1; i < arguments.length; i++) {
-                var nextSource = arguments[i];
-                if (nextSource === undefined || nextSource === null) continue;
-                var keysArray = Object.keys(Object(nextSource));
-                for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
-                    var nextKey = keysArray[nextIndex];
-                    var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
-                    if (desc !== undefined && desc.enumerable) to[nextKey] = nextSource[nextKey];
-                }
-            }
-            return to;
-        }
-    });
-}
-
-util.filterDataType = function (obj) {
-    if (obj === null) return "Null";
-    if (obj === undefined) return "Undefined";
-    return Object.prototype.toString.call(obj).slice(8, -1);
-}
-
-util.dealObjectValue = function (obj) {
-    var _this = this;
-    var param = {};
-    if (obj === null || obj === undefined || obj === "") return param;
-    for (var key in obj) {
-        if (_this.filterDataType(obj[key]) === "Object") {
-            param[key] = _this.dealObjectValue(obj[key]);
-        } else if (obj[key] !== null && obj[key] !== undefined && obj[key] !== "") {
-            param[key] = obj[key];
-        }
-    }
-    return param;
-}
-
-util.searchEmojies = function (term) {
-    var _this = this;
-    var search = _this.emojies.map(function (word) {
-        return word.indexOf(term) === 0 ? word : null;
-    });
-    return _this.dealObjectValue(search);
-}
-
-util.formatDate = function (date) {
-    var oldTime = (new Date(date)).getTime();
-    var curTime = new Date(oldTime).format("yyyy-MM-dd");
-    return curTime;
-}
-
-util.removeByValue = function (arr, val) {
-    for (var i = 0; i < arr.length; i++) {
-        if (arr[i].id == val) {
-            arr.splice(i, 1);
-            break;
-        }
-    }
-}
-
-util.getIdByArr = function (arr) {
-    var checkedAll = [];
-    for (var index in arr) {
-        checkedAll.push(arr[index].id);
-    }
-    return checkedAll;
-}
-
-//end
 
 util.inOf = function (arr, targetArr) {
     let res = true;
-    arr.map(item => {
+    arr.forEach(item => {
         if (targetArr.indexOf(item) < 0) {
             res = false;
         }
@@ -163,7 +62,7 @@ util.oneOf = function (ele, targetArr) {
 };
 
 util.showThisRoute = function (itAccess, currentAccess) {
-    if (typeof itAccess === 'object' && itAccess.isArray()) {
+    if (typeof itAccess === 'object' && Array.isArray(itAccess)) {
         return util.oneOf(currentAccess, itAccess);
     } else {
         return itAccess === currentAccess;
@@ -171,29 +70,21 @@ util.showThisRoute = function (itAccess, currentAccess) {
 };
 
 util.getRouterObjByName = function (routers, name) {
-    let routerObj = {};
-    routers.forEach(item => {
-        if (item.name === 'otherRouter') {
-            item.children.forEach((child, i) => {
-                if (child.name === name) {
-                    routerObj = item.children[i];
-                }
-            });
-        } else {
-            if (item.children.length === 1) {
-                if (item.children[0].name === name) {
-                    routerObj = item.children[0];
-                }
-            } else {
-                item.children.forEach((child, i) => {
-                    if (child.name === name) {
-                        routerObj = item.children[i];
-                    }
-                });
-            }
+    if (!name || !routers || !routers.length) {
+        return null;
+    }
+    // debugger;
+    let routerObj = null;
+    for (let item of routers) {
+        if (item.name === name) {
+            return item;
         }
-    });
-    return routerObj;
+        routerObj = util.getRouterObjByName(item.children, name);
+        if (routerObj) {
+            return routerObj;
+        }
+    }
+    return null;
 };
 
 util.handleTitle = function (vm, item) {
@@ -207,7 +98,7 @@ util.handleTitle = function (vm, item) {
 util.setCurrentPath = function (vm, name) {
     let title = '';
     let isOtherRouter = false;
-    vm.$store.state.routers.forEach(item => {
+    vm.$store.state.app.routers.forEach(item => {
         if (item.children.length === 1) {
             if (item.children[0].name === name) {
                 title = util.handleTitle(vm, item);
@@ -230,7 +121,7 @@ util.setCurrentPath = function (vm, name) {
     if (name === 'home_index') {
         currentPathArr = [
             {
-                title: util.handleTitle(vm, util.getRouterObjByName(vm.$store.state.routers, 'home_index')),
+                title: util.handleTitle(vm, util.getRouterObjByName(vm.$store.state.app.routers, 'home_index')),
                 path: '',
                 name: 'home_index'
             }
@@ -238,7 +129,7 @@ util.setCurrentPath = function (vm, name) {
     } else if ((name.indexOf('_index') >= 0 || isOtherRouter) && name !== 'home_index') {
         currentPathArr = [
             {
-                title: util.handleTitle(vm, util.getRouterObjByName(vm.$store.state.routers, 'home_index')),
+                title: util.handleTitle(vm, util.getRouterObjByName(vm.$store.state.app.routers, 'home_index')),
                 path: '/home',
                 name: 'home_index'
             },
@@ -249,7 +140,7 @@ util.setCurrentPath = function (vm, name) {
             }
         ];
     } else {
-        let currentPathObj = vm.$store.state.routers.filter(item => {
+        let currentPathObj = vm.$store.state.app.routers.filter(item => {
             if (item.children.length <= 1) {
                 return item.children[0].name === name;
             } else {
@@ -315,12 +206,12 @@ util.setCurrentPath = function (vm, name) {
 };
 
 util.openNewPage = function (vm, name, argu, query) {
-    let pageOpenedList = vm.$store.state.pageOpenedList;
+    let pageOpenedList = vm.$store.state.app.pageOpenedList;
     let openedPageLen = pageOpenedList.length;
     let i = 0;
     let tagHasOpened = false;
     while (i < openedPageLen) {
-        if (name === pageOpenedList[i].name) {  // 页面已经打开
+        if (name === pageOpenedList[i].name) { // 页面已经打开
             vm.$store.commit('pageOpenedList', {
                 index: i,
                 argu: argu,
@@ -332,7 +223,7 @@ util.openNewPage = function (vm, name, argu, query) {
         i++;
     }
     if (!tagHasOpened) {
-        let tag = vm.$store.state.tagsList.filter((item) => {
+        let tag = vm.$store.state.app.tagsList.filter((item) => {
             if (item.children) {
                 return name === item.children[0].name;
             } else {
@@ -340,25 +231,26 @@ util.openNewPage = function (vm, name, argu, query) {
             }
         });
         tag = tag[0];
-        tag = tag.children ? tag.children[0] : tag;
-        if (argu) {
-            tag.argu = argu;
+        if (tag) {
+            tag = tag.children ? tag.children[0] : tag;
+            if (argu) {
+                tag.argu = argu;
+            }
+            if (query) {
+                tag.query = query;
+            }
+            vm.$store.commit('increateTag', tag);
         }
-        if (query) {
-            tag.query = query;
-        }
-        vm.$store.commit('increateTag', tag);
     }
     vm.$store.commit('setCurrentPageName', name);
 };
 
 util.toDefaultPage = function (routers, name, route, next) {
     let len = routers.length;
-    console.log(len)
     let i = 0;
     let notHandle = true;
     while (i < len) {
-        if (routers[i].name === name && routers[i].redirect === undefined) {
+        if (routers[i].name === name && routers[i].children && routers[i].redirect === undefined) {
             route.replace({
                 name: routers[i].children[0].name
             });
@@ -373,8 +265,44 @@ util.toDefaultPage = function (routers, name, route, next) {
     }
 };
 
+util.fullscreenEvent = function (vm) {
+    vm.$store.commit('initCachepage');
+    // 权限菜单过滤相关
+    vm.$store.commit('updateMenulist');
+    // 全屏相关
+};
+
 util.stringify = function (data) {
     return Qs.stringify(data)
+}
+
+util.getUserInfo = function (key) {
+    if (key == '') {
+        return ''
+    }
+    let user = Cookies.get('user');
+    if (user == '') {
+        return ''
+    }
+    let userInfo = JSON.parse(user);
+    return userInfo[key]
+}
+
+util.removeByValue = function (arr, val) {
+    for (var i = 0; i < arr.length; i++) {
+        if (arr[i].id == val) {
+            arr.splice(i, 1);
+            break;
+        }
+    }
+}
+
+util.getIdByArr = function (arr) {
+    var checkedAll = [];
+    for (var index in arr) {
+        checkedAll.push(arr[index].id);
+    }
+    return checkedAll;
 }
 
 export default util;
