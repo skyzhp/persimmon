@@ -1,7 +1,7 @@
 <template>
     <div class="pit-post-form" style="width: 60%">
         <Form ref="myForm" :model="myForm" :label-width="150"
-                 class="pit-common">
+              class="pit-common">
             <FormItem v-for="option in options" :value="option.id" :key="option.id" :label="option.option_title">
                 <Input :type="option.data_type" v-model="myForm[option.option_name]"></Input>
             </FormItem>
@@ -19,29 +19,30 @@
 <script>
     import Util from '../../libs/util';
 
-    export default{
-        data(){
+    export default {
+        data() {
             return {
                 editFormLoading: false,
                 options: [],
                 myForm: {}
             }
         },
-        created () {
+        created() {
             this.getData();
         },
         methods: {
             getData: function () {
                 let that = this;
                 that.editFormLoading = true;
-                Util.ajax.get('/settings').then(function (response) {
+                Util.ajax.get('/backend/settings').then(function (response) {
                     let res = response.data;
-                    if (res != false) {
-                        if (res.length > 0) {
-                            for (var index in res) {
-                                that.myForm[res[index].option_name] = res[index].option_value;
+                    if (res.status == 200) {
+                        let data = res.list
+                        if (data.length > 0) {
+                            for (var index in data) {
+                                that.myForm[data[index].option_name] = data[index].option_value;
                             }
-                            that.options = res;
+                            that.options = data;
                         }
                     } else {
                         that.$Notice.warning({
@@ -58,10 +59,10 @@
 
             submitMyForm: function () {
                 let that = this;
-                Util.ajax.put('/settings/update', that.myForm).then(function (response) {
+                Util.ajax.post('/backend/settings/update', Util.stringify(that.myForm)).then(function (response) {
                     let res = response.data;
                     that.$Notice.warning({
-                        title: res.status == 'success' ? '更新成功' : '更新失败',
+                        title: res.status == 200 ? '更新成功' : '更新失败',
                         desc: ''
                     });
                 }).catch(function (error) {

@@ -9,17 +9,21 @@ type Link struct {
 	BaseController
 }
 
-func (c Link) Index(page int) revel.Result {
-	if page <= 0 {
-		page = 1
+func (c Link) Index(rows int, page int) revel.Result {
+	lists, err := linkService.GetListPaging(rows, page)
+	if err != nil {
+		return c.ResponseError(500, err.Error())
 	}
 
-	lists := linkService.GetList(page)
 	return c.RenderJSON(info.Res{Status: 200, List: lists})
 }
 
 func (c Link) Show(id int) revel.Result {
-	link := linkService.GetOne(id)
+	link, err := linkService.GetOne(id)
+	if err != nil {
+		return c.ResponseError(500, err.Error())
+	}
+
 	return c.RenderJSON(info.Res{Status: 200, Item: link})
 }
 
@@ -39,12 +43,12 @@ func (c Link) Store(content *info.Links) revel.Result {
 		Url: content.Url,
 		Ipaddress: c.ClientIP}
 
-	ret := linkService.Save(link)
-	if ret > 0 {
-		return c.ResponseSuccess("add success.")
-	} else {
-		return c.ResponseError(500, "Add failed.")
+	_, err := linkService.Save(link)
+	if err != nil {
+		return c.ResponseError(500, err.Error())
 	}
+
+	return c.ResponseSuccess("add success.")
 }
 
 func (c Link) Update(content *info.Links) revel.Result {
@@ -56,19 +60,19 @@ func (c Link) Update(content *info.Links) revel.Result {
 		Url: content.Url,
 		Ipaddress: c.ClientIP}
 
-	ret := linkService.Update(content.Id, link)
-	if ret {
-		return c.ResponseSuccess("Update success.")
-	} else {
-		return c.ResponseError(500, "Update failed.")
+	_, err := linkService.Update(content.Id, link)
+	if err != nil {
+		return c.ResponseError(500, err.Error())
 	}
+
+	return c.ResponseSuccess("Update success.")
 }
 
 func (c Link) Destroy(id int) revel.Result {
-	ret := linkService.Destroy(id, info.Links{})
-	if ret {
-		return c.ResponseSuccess("Delete success.")
-	} else {
-		return c.ResponseError(500, "Delete failed.")
+	_, err := linkService.Destroy(id, info.Links{})
+	if err != nil {
+		return c.ResponseError(500, err.Error())
 	}
+
+	return c.ResponseSuccess("Delete success.")
 }

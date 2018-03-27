@@ -42,7 +42,7 @@ func (this UploadsService) QiniuUploads(format string, filePath string) info.Res
 	//删除掉本地文件
 	if localSaveBool, localSaveErr := strconv.ParseBool(localSave); localSaveErr == nil && !localSaveBool {
 		if delErr := os.Remove(filePath); delErr != nil {
-			revel.INFO.Printf("Delete local file error: %s", delErr.Error())
+			revel.INFO.Printf("Delete local file failed: %s", delErr.Error())
 		}
 	}
 

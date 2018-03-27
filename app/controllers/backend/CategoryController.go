@@ -9,13 +9,21 @@ type Category struct {
 	BaseController
 }
 
-func (c Category) Index(page int) revel.Result {
-	lists := categoryService.GetList(20, page)
+func (c Category) Index(rows int, page int) revel.Result {
+	lists, err := categoryService.GetListPaging(rows, page)
+	if err != nil {
+		return c.ResponseError(500, err.Error())
+	}
+
 	return c.RenderJSON(info.Res{Status: 200, List: lists})
 }
 
 func (c Category) Show(id int) revel.Result {
-	category := categoryService.GetOne(id)
+	category, err := categoryService.GetOne(id)
+	if err != nil {
+		return c.ResponseError(500, err.Error())
+	}
+
 	return c.RenderJSON(info.Res{Status: 200, Item: category})
 }
 
@@ -35,12 +43,12 @@ func (c Category) Store(content *info.Categorys) revel.Result {
 		CategoryParent: content.CategoryParent,
 		Ipaddress: c.ClientIP}
 
-	ret := categoryService.Save(category)
-	if ret > 0 {
-		return c.ResponseSuccess("add success.")
-	} else {
-		return c.ResponseError(500, "Add failed.")
+	_, err := categoryService.Save(category)
+	if err != nil {
+		return c.ResponseError(500, err.Error())
 	}
+
+	return c.ResponseSuccess("add success.")
 }
 
 func (c Category) Update(content *info.Categorys) revel.Result {
@@ -51,19 +59,19 @@ func (c Category) Update(content *info.Categorys) revel.Result {
 		CategoryParent: content.CategoryParent,
 		Ipaddress: c.ClientIP}
 
-	ret := categoryService.Update(content.Id, category)
-	if ret {
-		return c.ResponseSuccess("Update success.")
-	} else {
-		return c.ResponseError(500, "Update failed.")
+	_, err := categoryService.Update(content.Id, category)
+	if err != nil {
+		return c.ResponseError(500, err.Error())
 	}
+
+	return c.ResponseSuccess("Update success.")
 }
 
-func (c Category) Destroy(id int) revel.Result {
-	ret := categoryService.Destroy(id, info.Categorys{})
-	if ret {
-		return c.ResponseSuccess("Delete success.")
-	} else {
+func (c Category) Destroy(ids []int) revel.Result {
+	_, err := categoryService.Destroy(ids, info.Categorys{})
+	if err != nil {
 		return c.ResponseError(500, "Delete failed.")
 	}
+
+	return c.ResponseSuccess("Delete success.")
 }

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Qs from 'qs';
 import Cookies from 'js-cookie';
+import Md5 from 'js-md5';
 import env from '../../build/env';
 // import semver from 'semver';
 // import packjson from '../../../../package.json';
@@ -303,6 +304,29 @@ util.getIdByArr = function (arr) {
         checkedAll.push(arr[index].id);
     }
     return checkedAll;
+}
+
+util.toFirstUpper = function (str) {
+    return str.substring(0, 1).toUpperCase() + str.substring(1);
+}
+
+util.toStructData = function (obj) {
+    let newData = {};
+    for (let i in obj) {
+        if (obj[i] instanceof Object) {
+            continue;
+        }
+        newData['post.' + util.toFirstUpper(i)] = obj[i]
+    }
+    //console.log(newData)
+    return newData
+}
+
+util.emailToMd5 = function (data) {
+    for (let i = 0, len = data.length; i < len; i++) {
+        data[i]["md5"] = Md5(data[i].email)
+    }
+    return data
 }
 
 export default util;

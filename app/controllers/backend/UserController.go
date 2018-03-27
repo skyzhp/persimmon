@@ -11,7 +11,11 @@ type User struct {
 
 func (c User) Index() revel.Result {
 	email := c.GetSession("Email")
-	user := userService.GetUserByEmail(email)
+	user, err := userService.GetUserByEmail(email)
+	if err != nil {
+		return c.ResponseError(500, err.Error())
+	}
+
 	return c.RenderJSON(info.Res{Status: 200, Item: user})
 }
 
@@ -29,15 +33,19 @@ func (c User) Update(id int, oldPwd string, pwd string, rePwd string) revel.Resu
 
 	//Valid old password
 	email := c.GetSession("Email")
-	user := userService.GetUserByEmail(email)
+	user, err := userService.GetUserByEmail(email)
+	if err != nil {
+		return c.ResponseError(500, err.Error())
+	}
+
 	if authService.CheckPasswordHash(pwd, user.Password) {
 		return c.ResponseError(500, "Old password error.")
 	}
 
-	ret := userService.UpdatePassword(id, pwd)
-	if ret {
-		return c.ResponseSuccess("Update password success.")
-	} else {
+	_, upErr := userService.UpdatePassword(id, pwd)
+	if upErr != nil {
 		return c.ResponseError(500, "Update password failed.")
 	}
+
+	return c.ResponseSuccess("Update password success.")
 }

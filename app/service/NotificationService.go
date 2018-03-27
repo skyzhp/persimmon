@@ -24,7 +24,7 @@ func (this *NotificationService) SendMail(subject string, body string) (bool, er
 	sendTo := strings.Split(to, ";")
 	err := smtp.SendMail(serverAddr, auth, account, sendTo, message)
 	if err != nil {
-		revel.INFO.Printf("SendMail Error: %s",err.Error())
+		revel.INFO.Printf("SendMail Error: %s", err.Error())
 		return false, err
 	}
 	return true, nil
@@ -42,8 +42,16 @@ func (this *NotificationService) SendCommentNotice(postId int, commentId int, ho
 		return false, tplErr
 	}
 
-	post := postService.GetOne(postId)
-	comment := commentService.GetOne(commentId)
+	post, err := postService.GetOne(postId)
+	if err != nil {
+		return false, err
+	}
+
+	comment, cmErr := commentService.GetOne(commentId)
+	if cmErr != nil {
+		return false, cmErr
+	}
+
 	createdAt, _ := comment.CreatedAt.MarshalJSON()
 	subject := fmt.Sprintf("“%s” 有新的评论", post.Title)
 	body := fmt.Sprintf(string(data), subject, comment.Url, comment.Name, comment.Content, string(createdAt), host)

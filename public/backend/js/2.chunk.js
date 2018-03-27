@@ -1,21 +1,21 @@
 webpackJsonp([2],{
 
-/***/ 248:
+/***/ 266:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_navigations_vue__ = __webpack_require__(268);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_navigations_vue__ = __webpack_require__(288);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_navigations_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_navigations_vue__);
 /* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_navigations_vue__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_navigations_vue__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_1202a7ab_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_navigations_vue__ = __webpack_require__(329);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_1202a7ab_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_navigations_vue__ = __webpack_require__(352);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_1202a7ab_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_navigations_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_1202a7ab_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_navigations_vue__);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(324)
+  __webpack_require__(347)
 }
-var normalizeComponent = __webpack_require__(1)
+var normalizeComponent = __webpack_require__(4)
 /* script */
 
 
@@ -60,7 +60,7 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 268:
+/***/ 288:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70,11 +70,15 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _util = __webpack_require__(18);
+var _stringify = __webpack_require__(38);
+
+var _stringify2 = _interopRequireDefault(_stringify);
+
+var _util = __webpack_require__(16);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _dragableTable = __webpack_require__(326);
+var _dragableTable = __webpack_require__(349);
 
 var _dragableTable2 = _interopRequireDefault(_dragableTable);
 
@@ -180,13 +184,10 @@ exports.default = {
         getData: function getData() {
             var that = this;
             that.listLoading = true;
-            _util2.default.ajax.get('/navigations').then(function (response) {
+            _util2.default.ajax.get('/backend/navigation').then(function (response) {
                 var res = response.data;
-                if (res != false) {
-                    res.sort(function (x, y) {
-                        return x.sorting > y.sorting ? 1 : -1;
-                    });
-                    that.navigations = res;
+                if (res.status == 200) {
+                    that.navigations = res.list;
 
                     if (that.navigations.length > 0) {
                         for (var index in that.navigations) {
@@ -205,15 +206,15 @@ exports.default = {
         getCategory: function getCategory() {
             var that = this;
             that.listLoading = true;
-            _util2.default.ajax.get('/categorys', {
+            _util2.default.ajax.get('/backend/categories', {
                 params: {
                     rows: 999,
                     page: 1
                 }
             }).then(function (response) {
                 var res = response.data;
-                if (res != false) {
-                    that.categorys = res.data;
+                if (res.status == 200) {
+                    that.categorys = res.list.data;
                 } else {
                     that.$Notice.error({
                         title: '数据获取失败',
@@ -245,9 +246,12 @@ exports.default = {
         updateMenu: function updateMenu() {
             var that = this;
             that.editLoading = true;
-            _util2.default.ajax.put('/navigations/update', that.navigations).then(function (response) {
+            var data = {
+                nav: (0, _stringify2.default)(that.navigations)
+            };
+            _util2.default.ajax.post('/backend/navigation/update', _util2.default.stringify(data)).then(function (response) {
                 var res = response.data;
-                if (res != false) {
+                if (res.status == 200) {
                     that.$Notice.success({
                         title: '更新成功',
                         desc: ''
@@ -286,7 +290,7 @@ exports.default = {
         addToNav: function addToNav(category) {
             var that = this;
             var navName = category.category_name;
-            var navUrl = '/category/' + category.category_flag;
+            var navUrl = '/categories/' + category.category_flag;
             for (var i = 0, len = that.navigations.length; i < len; i++) {
                 if (navName == that.navigations[i].name) {
                     that.$Notice.warning({
@@ -314,7 +318,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 269:
+/***/ 289:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -324,7 +328,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _sortablejs = __webpack_require__(327);
+var _sortablejs = __webpack_require__(350);
 
 var _sortablejs2 = _interopRequireDefault(_sortablejs);
 
@@ -354,17 +358,17 @@ exports.default = {
 
 /***/ }),
 
-/***/ 324:
+/***/ 347:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(325);
+var content = __webpack_require__(348);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(17)("e318e4a2", content, false, {});
+var update = __webpack_require__(20)("e318e4a2", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -381,10 +385,10 @@ if(false) {
 
 /***/ }),
 
-/***/ 325:
+/***/ 348:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(16)(false);
+exports = module.exports = __webpack_require__(19)(false);
 // imports
 
 
@@ -396,18 +400,18 @@ exports.push([module.i, "\n.margin-top-8 {\n  margin-top: 8px;\n}\n.margin-top-1
 
 /***/ }),
 
-/***/ 326:
+/***/ 349:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_dragableTable_vue__ = __webpack_require__(269);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_dragableTable_vue__ = __webpack_require__(289);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_dragableTable_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_dragableTable_vue__);
 /* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_dragableTable_vue__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_dragableTable_vue__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_8ac786ea_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_dragableTable_vue__ = __webpack_require__(328);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_8ac786ea_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_dragableTable_vue__ = __webpack_require__(351);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_8ac786ea_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_dragableTable_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_8ac786ea_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_dragableTable_vue__);
 var disposed = false
-var normalizeComponent = __webpack_require__(1)
+var normalizeComponent = __webpack_require__(4)
 /* script */
 
 
@@ -452,7 +456,7 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 327:
+/***/ 350:
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/**!
@@ -2003,7 +2007,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/**!
 
 /***/ }),
 
-/***/ 328:
+/***/ 351:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2040,7 +2044,7 @@ if (false) {
 
 /***/ }),
 
-/***/ 329:
+/***/ 352:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

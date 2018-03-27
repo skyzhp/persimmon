@@ -9,17 +9,21 @@ type Option struct {
 	BaseController
 }
 
-func (c Option) Index(page int) revel.Result {
-	if page <= 0 {
-		page = 1
+func (c Option) Index(rows int, page int) revel.Result {
+	lists, err := optionService.GetListPaging(rows, page)
+	if err != nil {
+		return c.ResponseError(500, err.Error())
 	}
 
-	lists := optionService.GetList(page)
 	return c.RenderJSON(info.Res{Status: 200, List: lists})
 }
 
 func (c Option) Show(id int) revel.Result {
-	option := optionService.GetOne(id)
+	option, err := optionService.GetOne(id)
+	if err != nil {
+		return c.ResponseError(500, err.Error())
+	}
+
 	return c.RenderJSON(info.Res{Status: 200, Item: option})
 }
 
@@ -40,12 +44,12 @@ func (c Option) Store(content *info.Options) revel.Result {
 		OptionStatus: content.OptionStatus,
 		DataType: content.DataType}
 
-	ret := optionService.Save(option)
-	if ret > 0 {
-		return c.ResponseSuccess("add success.")
-	} else {
-		return c.ResponseError(500, "Add failed.")
+	_, err := optionService.Save(option)
+	if err != nil {
+		return c.ResponseError(500, err.Error())
 	}
+
+	return c.ResponseSuccess("add success.")
 }
 
 func (c Option) Update(content *info.Options) revel.Result {
@@ -59,19 +63,19 @@ func (c Option) Update(content *info.Options) revel.Result {
 		OptionStatus: content.OptionStatus,
 		DataType: content.DataType}
 
-	ret := optionService.Update(content.Id, option)
-	if ret {
-		return c.ResponseSuccess("Update success.")
-	} else {
-		return c.ResponseError(500, "Update failed.")
+	_, err := optionService.Update(content.Id, option)
+	if err != nil {
+		return c.ResponseError(500, err.Error())
 	}
+
+	return c.ResponseSuccess("Update success.")
 }
 
 func (c Option) Destroy(id int) revel.Result {
-	ret := optionService.Destroy(id, info.Options{})
-	if ret {
-		return c.ResponseSuccess("Delete success.")
-	} else {
-		return c.ResponseError(500, "Delete failed.")
+	_, err := optionService.Destroy(id, info.Options{})
+	if err != nil {
+		return c.ResponseError(500, err.Error())
 	}
+
+	return c.ResponseSuccess("Delete success.")
 }

@@ -10,22 +10,25 @@ type Comment struct {
 	BaseController
 }
 
-func (c Comment) Index(page int) revel.Result {
-	if page <= 0 {
-		page = 1
+func (c Comment) Index(rows int, page int) revel.Result {
+	lists, err := commentService.GetListPaging(rows, page)
+	if err != nil {
+		return c.ResponseError(500, err.Error())
 	}
 
-	lists := commentService.GetList(page)
 	return c.RenderJSON(info.Res{Status: 200, List: lists})
 }
 
 func (c Comment) Show(id int) revel.Result {
-	link := commentService.GetOne(id)
-	return c.RenderJSON(info.Res{Status: 200, Item: link})
+	comment, err := commentService.GetOne(id)
+	if err != nil {
+		return c.ResponseError(500, err.Error())
+	}
+
+	return c.RenderJSON(info.Res{Status: 200, Item: comment})
 }
 
 func (c Comment) Store(comment *info.Comments) revel.Result {
-
 	//Validation
 	c.Validation.Required(comment.Name)
 	c.Validation.Required(comment.Url)
@@ -43,12 +46,12 @@ func (c Comment) Store(comment *info.Comments) revel.Result {
 		Markdown: comment.Markdown,
 		Ipaddress: c.ClientIP}
 
-	ret := commentService.Save(comments)
-	if ret > 0 {
-		return c.ResponseSuccess("add success.")
-	} else {
-		return c.ResponseError(500, "Add failed.")
+	_, err := commentService.Save(comments)
+	if err != nil {
+		return c.ResponseError(500, err.Error())
 	}
+
+	return c.ResponseSuccess("add success.")
 }
 
 func (c Comment) Update(content *info.Comments) revel.Result {
@@ -66,19 +69,19 @@ func (c Comment) Update(content *info.Comments) revel.Result {
 		Markdown: content.Markdown,
 		Ipaddress: c.ClientIP}
 
-	ret := commentService.Update(content.Id, comment)
-	if ret {
-		return c.ResponseSuccess("Update success.")
-	} else {
-		return c.ResponseError(500, "Update failed.")
+	_, err := commentService.Update(content.Id, comment)
+	if err != nil {
+		return c.ResponseError(500, err.Error())
 	}
+
+	return c.ResponseSuccess("Update success.")
 }
 
 func (c Comment) Destroy(id int) revel.Result {
-	ret := commentService.Destroy(id, info.Comments{})
-	if ret {
-		return c.ResponseSuccess("Delete success.")
-	} else {
-		return c.ResponseError(500, "Delete failed.")
+	_, err := commentService.Destroy(id, info.Comments{})
+	if err != nil {
+		return c.ResponseError(500, err.Error())
 	}
+
+	return c.ResponseSuccess("Delete success.")
 }

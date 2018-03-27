@@ -48,6 +48,7 @@
         background: rgba(153, 169, 191, 0.5);
         border-radius: 5px;
     }
+
     .ivu-card-body {
         padding: 0;
     }
@@ -228,13 +229,14 @@
             getData() {
                 let that = this;
                 that.listLoading = true;
-                Util.ajax.get('/navigations').then(function (response) {
+                Util.ajax.get('/backend/navigation').then(function (response) {
                     let res = response.data;
-                    if (res != false) {
-                        res.sort(function (x, y) {
+                    if (res.status == 200) {
+                        /*
+                        res.list.sort(function (x, y) {
                             return x.sorting > y.sorting ? 1 : -1;
-                        });
-                        that.navigations = res;
+                        });*/
+                        that.navigations = res.list;
                         //获取排序值
                         if (that.navigations.length > 0) {
                             for (let index in that.navigations) {
@@ -254,15 +256,15 @@
             getCategory() {
                 let that = this;
                 that.listLoading = true;
-                Util.ajax.get('/categorys', {
+                Util.ajax.get('/backend/categories', {
                     params: {
                         rows: 999,
                         page: 1
                     }
                 }).then(function (response) {
                     let res = response.data;
-                    if (res != false) {
-                        that.categorys = res.data;
+                    if (res.status == 200) {
+                        that.categorys = res.list.data;
                     } else {
                         that.$Notice.error({
                             title: '数据获取失败',
@@ -294,9 +296,12 @@
             updateMenu() {
                 let that = this;
                 that.editLoading = true;
-                Util.ajax.put('/navigations/update', that.navigations).then(function (response) {
+                let data = {
+                    nav: JSON.stringify(that.navigations)
+                }
+                Util.ajax.post('/backend/navigation/update', Util.stringify(data)).then(function (response) {
                     let res = response.data;
-                    if (res != false) {
+                    if (res.status == 200) {
                         that.$Notice.success({
                             title: '更新成功',
                             desc: ''
@@ -334,7 +339,7 @@
             addToNav: function (category) {
                 let that = this;
                 let navName = category.category_name;
-                let navUrl = '/category/' + category.category_flag;
+                let navUrl = '/categories/' + category.category_flag;
                 for (let i = 0, len = that.navigations.length; i < len; i++) {
                     if (navName == that.navigations[i].name) {
                         that.$Notice.warning({

@@ -1,21 +1,21 @@
 webpackJsonp([6],{
 
-/***/ 244:
+/***/ 262:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_post_list_vue__ = __webpack_require__(264);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_post_list_vue__ = __webpack_require__(284);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_post_list_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_post_list_vue__);
 /* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_post_list_vue__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_post_list_vue__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_d8c9a1ac_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_post_list_vue__ = __webpack_require__(314);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_d8c9a1ac_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_post_list_vue__ = __webpack_require__(337);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_d8c9a1ac_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_post_list_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_d8c9a1ac_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_post_list_vue__);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(312)
+  __webpack_require__(335)
 }
-var normalizeComponent = __webpack_require__(1)
+var normalizeComponent = __webpack_require__(4)
 /* script */
 
 
@@ -60,7 +60,7 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 264:
+/***/ 284:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70,7 +70,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _util = __webpack_require__(18);
+var _util = __webpack_require__(16);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -166,16 +166,16 @@ exports.default = {
             var query = {
                 rows: that.pageSize,
                 categoryId: that.category_id,
-                q: that.q,
+                keywords: that.q,
                 page: that.currentPage
             };
 
             _util2.default.ajax.get('/backend/posts', { params: query }).then(function (response) {
                 var res = response.data;
                 if (res.status == 200) {
-                    that.listData = res.list;
-                    that.total = res.total;
-                    that.currentPage = res.current_page;
+                    that.listData = res.list.data;
+                    that.total = res.list.total;
+                    that.currentPage = res.list.current_page;
                     that.listLoading = false;
                 } else {
                     this.$Notice.warning({
@@ -229,7 +229,7 @@ exports.default = {
                 content: '<p>您确认删除选中的记录吗?</p>',
                 onOk: function onOk() {
                     that.listLoading = true;
-                    _util2.default.ajax.delete('/backend/posts/destroy', { data: idsParam }).then(function (response) {
+                    _util2.default.ajax.post('/backend/posts/destroy', { data: idsParam }).then(function (response) {
                         that.listLoading = false;
                         var res = response.data;
                         that.$Notice.open({
@@ -264,13 +264,14 @@ exports.default = {
             var that = this;
             _util2.default.ajax.get('/backend/categories', {
                 params: {
-                    rows: 999
+                    rows: 999,
+                    page: 1
                 }
             }).then(function (response) {
                 var data = response.data;
                 if (data.status == 200) {
-                    data.list.splice(0, 0, { id: 0, category_name: '顶级分类', hidden: true, category_parent: 0 });
-                    that.categorys = data.list;
+                    data.list.data.splice(0, 0, { id: 0, category_name: '全部', hidden: true, category_parent: 0 });
+                    that.categorys = data.list.data;
                 } else {
                     this.$Notice.error({
                         title: '数据获取失败',
@@ -282,7 +283,7 @@ exports.default = {
             });
         },
         postEditor: function postEditor(row) {
-            var path = '/backend/posts/' + row.id;
+            var path = '/posts/edit/' + row.id;
             this.$router.push({ path: path });
         },
         addPost: function addPost() {
@@ -298,17 +299,17 @@ exports.default = {
 
 /***/ }),
 
-/***/ 312:
+/***/ 335:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(313);
+var content = __webpack_require__(336);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(17)("6ef8bb78", content, false, {});
+var update = __webpack_require__(20)("6ef8bb78", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -325,22 +326,22 @@ if(false) {
 
 /***/ }),
 
-/***/ 313:
+/***/ 336:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(16)(false);
+exports = module.exports = __webpack_require__(19)(false);
 // imports
 
 
 // module
-exports.push([module.i, "\n.pit-content {\n  margin-bottom: 50px;\n}\n.pit-action-btn,\n.myp-page {\n  margin-top: 10px;\n}\n", ""]);
+exports.push([module.i, "\n.pit-content {\n  margin-bottom: 50px;\n}\n.pit-action-btn,\n.myp-page {\n  margin-top: 10px;\n}\n.myp-search-item {\n  float: left;\n  margin-right: 10px;\n}\n.data-list {\n  clear: both;\n}\n.pit-action-btn,\n.myp-page {\n  margin-top: 10px;\n}\n.pit-action-btn {\n  margin: 10px 0;\n  display: inline-block;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
 
-/***/ 314:
+/***/ 337:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

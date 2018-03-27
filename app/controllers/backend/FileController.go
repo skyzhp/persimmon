@@ -35,15 +35,13 @@ func (c File) Uploads(file []byte) revel.Result {
 	//Validation
 	fileBuffer := bytes.NewReader(file)
 	_, format, err := image.DecodeConfig(fileBuffer)
-	if err != nil {
-		return c.ResponseError(501, err.Error())
+	if err != nil || format == "jpeg" {
+		format = "jpg"
 	}
 
 	c.Validation.Required(file)
 	c.Validation.MinSize(file, 2*KB).Message("Minimum a file size of 2KB expected")
 	c.Validation.MaxSize(file, 9*MB).Message("File cannot be larger than 9MB")
-	c.Validation.Required(err == nil).Key("file").Message("Incorrect file format")
-	//c.Validation.Required(format == "jpeg" || format == "png").Message( "JPEG or PNG file format is expected")
 	if c.Validation.HasErrors() {
 		return c.RenderJSON(info.Res{Status: 501, Info: c.Validation.Errors})
 	}
@@ -53,9 +51,6 @@ func (c File) Uploads(file []byte) revel.Result {
 	mkErr := os.MkdirAll(uploadsDir, 0755)
 	if mkErr != nil {
 		return c.ResponseError(501, mkErr.Error())
-	}
-	if format == "jpeg" {
-		format = "jpg"
 	}
 
 	filePath := fmt.Sprintf("%s/%s.%s", uploadsDir, utils.NewGuid(), format)

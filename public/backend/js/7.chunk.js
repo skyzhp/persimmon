@@ -1,21 +1,21 @@
 webpackJsonp([7],{
 
-/***/ 245:
+/***/ 263:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_categorys_vue__ = __webpack_require__(265);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_categorys_vue__ = __webpack_require__(285);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_categorys_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_categorys_vue__);
 /* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_categorys_vue__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_categorys_vue__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_053f9fb4_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_categorys_vue__ = __webpack_require__(317);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_053f9fb4_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_categorys_vue__ = __webpack_require__(340);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_053f9fb4_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_categorys_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_053f9fb4_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_categorys_vue__);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(315)
+  __webpack_require__(338)
 }
-var normalizeComponent = __webpack_require__(1)
+var normalizeComponent = __webpack_require__(4)
 /* script */
 
 
@@ -60,7 +60,7 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 265:
+/***/ 285:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70,7 +70,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _util = __webpack_require__(18);
+var _util = __webpack_require__(16);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -151,12 +151,15 @@ exports.default = {
         getData: function getData() {
             var that = this;
             that.listLoading = true;
-            _util2.default.ajax.get('/categorys', {
-                params: {}
+            _util2.default.ajax.get('/backend/categories', {
+                params: {
+                    page: 1,
+                    rows: 20
+                }
             }).then(function (response) {
                 var res = response.data;
-                if (res != false) {
-                    that.listData = res.data;
+                if (res.status == 200) {
+                    that.listData = res.list.data;
                     that.listLoading = false;
                 } else {
                     that.$Notice.warning({
@@ -181,10 +184,10 @@ exports.default = {
             that.editFormLoading = true;
             that.myFormTitle = '编辑';
             that.editFormVisible = true;
-            _util2.default.ajax.get('/categorys/' + row.id).then(function (response) {
+            _util2.default.ajax.get('/backend/categories/' + row.id).then(function (response) {
                 var res = response.data;
                 if (res != false) {
-                    that.myForm = res;
+                    that.myForm = res.item;
                 } else {
                     that.$Notice.warning({
                         title: '数据获取失败',
@@ -231,11 +234,11 @@ exports.default = {
                 content: '<p>您确认删除选中的记录吗?</p>',
                 onOk: function onOk() {
                     that.listLoading = true;
-                    _util2.default.ajax.delete('/categorys/destroy', { data: idsParam }).then(function (response) {
+                    _util2.default.ajax.post('/backend/categories/destroy', _util2.default.stringify(idsParam)).then(function (response) {
                         that.listLoading = false;
                         var res = response.data;
                         that.$Notice.warning({
-                            title: res.status == 'success' ? '删除成功' : '删除失败',
+                            title: res.status == 200 ? '删除成功' : '删除失败',
                             desc: ''
                         });
                         if (type == 'one') {
@@ -263,13 +266,13 @@ exports.default = {
                 }
 
                 if (that.myForm.id > 0) {
-                    _util2.default.ajax.put('/categorys/update', that.myForm).then(function (response) {
+                    _util2.default.ajax.put('/backend/categories/update', that.myForm).then(function (response) {
                         var res = response.data;
                         that.$Notice.open({
-                            title: res.status == 'success' ? '编辑成功' : '编辑失败',
+                            title: res.status == 200 ? '编辑成功' : '编辑失败',
                             desc: ''
                         });
-                        if (res.status == 'success') {
+                        if (res.status == 200) {
                             that.closeForm('myForm');
                             that.getData();
                         }
@@ -277,21 +280,19 @@ exports.default = {
                         console.log(error);
                     });
                 } else {
-                    _util2.default.ajax.post('/categorys', that.myForm).then(function (response) {
-                        console.log(response);
-
+                    _util2.default.ajax.post('/backend/categories/store', that.myForm).then(function (response) {
                         var res = response.data;
-                        if (res.status == 'success') {
+                        if (res.status == 200) {
                             that.closeForm('myForm');
-                            that.getData();
                         }
                         that.$Notice.open({
-                            title: res.status == 'success' ? '新增成功' : '新增失败',
+                            title: res.status == 200 ? '新增成功' : '新增失败',
                             desc: ''
                         });
+                        that.getData();
                     }).catch(function (error) {
                         if (error.response) {
-                            if (error.response.status == 422) {
+                            if (error.response.status == 501) {
                                 for (var index in error.response.data) {
                                     that.$Notice.warning({
                                         title: '警告',
@@ -338,16 +339,10 @@ exports.default = {
             if (query == null || query == '') {
                 return false;
             }
-            _util2.default.ajax.get('/util', {
-                params: {
-                    action: 'translates',
-                    q: query
-                }
-            }).then(function (response) {
+            _util2.default.ajax.get('/backend/utils/fanyi/' + query).then(function (response) {
                 var res = response.data;
-                if (res.status == 200 && res.trans_result) {
-                    var flag = res.trans_result.toLowerCase();
-                    that.myForm.category_flag = flag.replaceAll(' ', '-', flag);
+                if (res.status == 200) {
+                    that.myForm.category_flag = res.item;
                 }
             }).catch(function (error) {
                 console.log(error);
@@ -361,17 +356,17 @@ exports.default = {
 
 /***/ }),
 
-/***/ 315:
+/***/ 338:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(316);
+var content = __webpack_require__(339);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(17)("638392aa", content, false, {});
+var update = __webpack_require__(20)("638392aa", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -388,22 +383,22 @@ if(false) {
 
 /***/ }),
 
-/***/ 316:
+/***/ 339:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(16)(false);
+exports = module.exports = __webpack_require__(19)(false);
 // imports
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
 
 /***/ }),
 
-/***/ 317:
+/***/ 340:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -495,7 +490,7 @@ var render = function render() {
       expression: "myForm.category_parent"
     }
   }, _vm._l(_vm.categorys, function (item) {
-    return _c("Option", { key: item.id, attrs: { value: item.id } }, [_vm._v(_vm._s(item.category_name))]);
+    return _c("Option", { key: item.id, attrs: { value: item.id } }, [_vm._v(_vm._s(item.category_name) + "\n                        ")]);
   }))], 1), _vm._v(" "), _vm.myForm.id ? _c("FormItem", [_c("Input", {
     staticStyle: { display: "none" },
     model: {

@@ -1,17 +1,20 @@
-window.Vue = require('vue');
-window.axios = require('axios');
-window.marked = require('marked');
-window.Prism = require('./libs/prism.min');
+import Vue from 'vue';
+import layer from 'vue-layer-mobile'
+import Prism from './libs/prism.min';
+import './styles/app.css';
+import 'vue-layer-mobile/need/layer.css'
+import mycomment from './views/comment.vue';
+Vue.use(layer);
 Prism.highlightAll();
 
-Vue.component('myp-comment', require('./views/comment.vue'));
-var myPersimmon = new Vue({
-	el: '#comment',
-	data: function () {
-		return {}
-	},
-	methods: {},
-    mounted: function() {
+new Vue({
+    el: '#comment',
+    components: {mycomment},
+    data () {
+        return {};
     },
-	watch: {}
+    methods: {},
+    mounted () {
+    },
+    watch: {}
 });

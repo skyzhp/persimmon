@@ -3,56 +3,89 @@ package service
 import (
 	"github.com/cong5/persimmon/app/info"
 	"github.com/cong5/persimmon/app/db"
-	"github.com/revel/revel"
 	"time"
+	"github.com/cong5/persimmon/app/utils"
 )
 
 type LinkService struct{}
 
-func (this *LinkService) GetOne(id int) *info.Links {
-	option := &info.Links{Id: id}
-	_, err := db.MasterDB.Get(option)
+func (this *LinkService) GetOne(id int) (*info.Links, error) {
+	link := &info.Links{Id: id}
+	_, err := db.MasterDB.Get(link)
 	if err != nil {
-		revel.INFO.Printf("Get link fatal : %s", err)
+		//revel.INFO.Printf("Get link failed : %s", err)
+		return nil, err
 	}
-	return option
+	return link, nil
 }
 
-func (this *LinkService) GetList(page int) []info.Links {
-	limit := 20
+func (this *LinkService) GetList(limit int, page int) ([]info.Links, error) {
+	limit = utils.IntDefault(limit, 20)
+	page = utils.IntDefault(page, 1)
 	start := (page - 1) * limit
-	optionList := make([]info.Links, 0)
-	err := db.MasterDB.Limit(limit, start).Find(&optionList)
+	linkList := make([]info.Links, 0)
+	err := db.MasterDB.Limit(limit, start).Find(&linkList)
 	if err != nil {
-		revel.INFO.Printf("Get link fatal : %s", err)
+		//revel.INFO.Printf("Get link failed : %s", err)
+		return nil, err
 	}
-	return optionList
+
+	return linkList, nil
 }
 
-func (this *LinkService) Save(option info.Links) int64 {
-	lastInsertId, err := db.MasterDB.InsertOne(option)
+func (this *LinkService) GetListPaging(limit int, page int) (*info.PagingContent, error) {
+	dataList, err := this.GetList(limit, page)
 	if err != nil {
-		return int64(0)
+		return nil, err
 	}
-	return lastInsertId
+
+	total, cErr := this.CountLinks()
+	if cErr != nil {
+		return nil, err
+	}
+
+	totalPage := utils.GetTotalPage(total, limit)
+	pagingContent := &info.PagingContent{Data: dataList,
+		Total: total,
+		TotalPage: totalPage,
+		CurrentPage: page}
+	return pagingContent, nil
 }
 
-func (this *LinkService) Update(id int, option info.Links) bool {
-	_, err := db.MasterDB.Id(id).Update(option)
+func (this *LinkService) CountLinks() (int, error) {
+	link := new(info.Links)
+	total, err := db.MasterDB.Count(link)
 	if err != nil {
-		revel.INFO.Printf("Update link error: %s", err)
-		return false
+		//revel.INFO.Printf("Count link failed: %s", err)
+		return 0, err
 	}
-	return true
+	return int(total), nil
 }
 
-func (this *LinkService) Destroy(id int, option info.Links) bool {
-	_, err := db.MasterDB.Id(id).Delete(option)
-	if err != nil {
-		revel.INFO.Printf("Destroy link error: %s", err)
-		return false
+func (this *LinkService) Save(link info.Links) (int, error) {
+	if _, err := db.MasterDB.InsertOne(link); err != nil {
+		//revel.INFO.Printf("Save link failed : %s", err)
+		return 0, err
 	}
-	return true
+	return link.Id, nil
+}
+
+func (this *LinkService) Update(id int, link info.Links) (bool, error) {
+	_, err := db.MasterDB.Id(id).Update(link)
+	if err != nil {
+		//revel.INFO.Printf("Update link failed: %s", err)
+		return false, err
+	}
+	return true, nil
+}
+
+func (this *LinkService) Destroy(id int, link info.Links) (bool, error) {
+	_, err := db.MasterDB.Id(id).Delete(link)
+	if err != nil {
+		//revel.INFO.Printf("Destroy link failed: %s", err)
+		return false, err
+	}
+	return true, nil
 }
 
 func (this *LinkService) GetDateTime() string {

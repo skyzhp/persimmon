@@ -9,31 +9,31 @@ type Trash struct {
 	BaseController
 }
 
-func (c Trash) Index(page int) revel.Result {
-	if page <= 0 {
-		page = 1
+func (c Trash) Index(page int, rows int, categoryId int, keywords string) revel.Result {
+	lists, err := postTrashService.GetTrashListPaging(categoryId, keywords, rows, page)
+	if err != nil {
+		return c.ResponseError(500, err.Error())
 	}
 
-	lists := postService.GetTrashList(page)
 	return c.RenderJSON(info.Res{Status: 200, List: lists})
 }
 
 func (c Trash) Update(content *info.Posts) revel.Result {
 	//save
 	posts := info.Posts{}
-	ret := postService.Update(content.Id, posts)
-	if ret {
-		return c.ResponseSuccess("Recover success.")
-	} else {
-		return c.ResponseError(500, "Recover failed.")
+	_, err := postService.Update(content.Id, posts)
+	if err != nil {
+		return c.ResponseError(500, err.Error())
 	}
+
+	return c.ResponseSuccess("Restore success.")
 }
 
-func (c Trash) Destroy(id int) revel.Result {
-	ret := postService.Destroy(id, info.Posts{})
-	if ret {
-		return c.ResponseSuccess("Delete success.")
-	} else {
-		return c.ResponseError(500, "Delete failed.")
+func (c Trash) Destroy(ids []int) revel.Result {
+	_, err := postTrashService.Destroy(ids)
+	if err != nil {
+		return c.ResponseError(500, err.Error())
 	}
+
+	return c.ResponseSuccess("Delete success.")
 }

@@ -10,17 +10,21 @@ type Tags struct {
 	BaseController
 }
 
-func (c Tags) Index(page int) revel.Result {
-	if page <= 0 {
-		page = 1
+func (c Tags) Index(rows int, page int) revel.Result {
+	lists, err := tagService.GetListPaging(rows, page)
+	if err != nil {
+		return c.ResponseError(500, err.Error())
 	}
 
-	lists := tagService.GetList(page)
 	return c.RenderJSON(info.Res{Status: 200, List: lists})
 }
 
 func (c Tags) Show(id int) revel.Result {
-	tag := tagService.GetOne(id)
+	tag, err := tagService.GetOne(id)
+	if err != nil {
+		return c.ResponseError(500, err.Error())
+	}
+
 	return c.RenderJSON(info.Res{Status: 200, Item: tag})
 }
 
@@ -36,32 +40,32 @@ func (c Tags) Store(tagName string, tagFlag string) revel.Result {
 	tag := info.Tags{TagsName: tagName,
 		TagsFlag: url.QueryEscape(tagFlag)}
 
-	ret := tagService.SaveOne(tag)
-	if ret > 0 {
-		return c.ResponseSuccess("add success.")
-	} else {
-		return c.ResponseError(500, "Add failed.")
+	_, err := tagService.SaveOne(tag)
+	if err != nil {
+		return c.ResponseError(500, err.Error())
 	}
+
+	return c.ResponseSuccess("add success.")
 }
 
-func (c Tags) Update(id int,tagName string, tagFlag string) revel.Result {
+func (c Tags) Update(id int, tagName string, tagFlag string) revel.Result {
 	//save
 	tag := info.Tags{TagsName: tagName,
 		TagsFlag: url.QueryEscape(tagFlag)}
 
-	ret := tagService.Update(id, tag)
-	if ret {
-		return c.ResponseSuccess("Update success.")
-	} else {
-		return c.ResponseError(500, "Update failed.")
+	_, err := tagService.Update(id, tag)
+	if err != nil {
+		return c.ResponseError(500, err.Error())
 	}
+
+	return c.ResponseSuccess("Update success.")
 }
 
 func (c Tags) Destroy(id int) revel.Result {
-	ret := tagService.Destroy(id, info.Tags{})
-	if ret {
-		return c.ResponseSuccess("Delete success.")
-	} else {
-		return c.ResponseError(500, "Delete failed.")
+	_, err := tagService.Destroy(id, info.Tags{})
+	if err != nil {
+		return c.ResponseError(500, err.Error())
 	}
+
+	return c.ResponseSuccess("Delete success.")
 }

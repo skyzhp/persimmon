@@ -1,21 +1,21 @@
 webpackJsonp([8],{
 
-/***/ 252:
+/***/ 270:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_settings_vue__ = __webpack_require__(273);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_settings_vue__ = __webpack_require__(293);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_settings_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_settings_vue__);
 /* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_settings_vue__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_settings_vue__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_70e7c3f2_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_settings_vue__ = __webpack_require__(341);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_70e7c3f2_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_settings_vue__ = __webpack_require__(364);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_70e7c3f2_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_settings_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_70e7c3f2_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_settings_vue__);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(339)
+  __webpack_require__(362)
 }
-var normalizeComponent = __webpack_require__(1)
+var normalizeComponent = __webpack_require__(4)
 /* script */
 
 
@@ -60,7 +60,7 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 273:
+/***/ 293:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70,7 +70,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _util = __webpack_require__(18);
+var _util = __webpack_require__(16);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -92,14 +92,15 @@ exports.default = {
         getData: function getData() {
             var that = this;
             that.editFormLoading = true;
-            _util2.default.ajax.get('/settings').then(function (response) {
+            _util2.default.ajax.get('/backend/settings').then(function (response) {
                 var res = response.data;
-                if (res != false) {
-                    if (res.length > 0) {
-                        for (var index in res) {
-                            that.myForm[res[index].option_name] = res[index].option_value;
+                if (res.status == 200) {
+                    var data = res.list;
+                    if (data.length > 0) {
+                        for (var index in data) {
+                            that.myForm[data[index].option_name] = data[index].option_value;
                         }
-                        that.options = res;
+                        that.options = data;
                     }
                 } else {
                     that.$Notice.warning({
@@ -116,10 +117,10 @@ exports.default = {
 
         submitMyForm: function submitMyForm() {
             var that = this;
-            _util2.default.ajax.put('/settings/update', that.myForm).then(function (response) {
+            _util2.default.ajax.post('/backend/settings/update', _util2.default.stringify(that.myForm)).then(function (response) {
                 var res = response.data;
                 that.$Notice.warning({
-                    title: res.status == 'success' ? '更新成功' : '更新失败',
+                    title: res.status == 200 ? '更新成功' : '更新失败',
                     desc: ''
                 });
             }).catch(function (error) {
@@ -133,17 +134,17 @@ exports.default = {
 
 /***/ }),
 
-/***/ 339:
+/***/ 362:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(340);
+var content = __webpack_require__(363);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(17)("793d90dd", content, false, {});
+var update = __webpack_require__(20)("793d90dd", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -160,10 +161,10 @@ if(false) {
 
 /***/ }),
 
-/***/ 340:
+/***/ 363:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(16)(false);
+exports = module.exports = __webpack_require__(19)(false);
 // imports
 
 
@@ -175,7 +176,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 /***/ }),
 
-/***/ 341:
+/***/ 364:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

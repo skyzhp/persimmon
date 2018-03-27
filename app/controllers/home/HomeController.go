@@ -9,21 +9,59 @@ type Home struct {
 }
 
 func (c Home) Index() revel.Result {
-	return c.Render("Index")
+	limit := 10
+	c.PostList(0, limit, 1)
+	return c.Render()
+}
+
+func (c Home) Page(page int) revel.Result {
+	limit := 10
+	c.PostList(0, limit, page)
+	return c.Render()
 }
 
 func (c Home) Post(slug string) revel.Result {
-	return c.Render("Post")
+	c.GetGlobalInfo()
+	post, err := postService.GetOneBySlug(slug)
+	if slug == "" || err != nil {
+		return c.NotFound("很抱歉，没有找到这个页面.")
+	}
+
+	return c.Render(post)
 }
 
 func (c Home) Tag(tag string) revel.Result {
-	return c.Render("Tag")
+	c.GetGlobalInfo()
+	return c.Render()
 }
 
-func (c Home) Categories(tag string) revel.Result {
-	return c.Render("Tag")
+func (c Home) Categories(slug string, page int) revel.Result {
+	limit := 10
+	category, cErr := categoryService.GetOneBySlug(slug)
+	if cErr != nil {
+		c.Flash.Error(cErr.Error())
+	}
+	c.PostList(category.Id, limit, page)
+
+	return c.Render()
 }
 
-func (c Home) Feed(tag string) revel.Result {
-	return c.Render("Feed")
+func (c Home) Friends() revel.Result {
+	c.GetGlobalInfo()
+	links, err := linkService.GetList(9999, 1)
+	if err != nil {
+		c.Flash.Error(err.Error())
+	}
+
+	return c.Render(links)
+}
+
+func (c Home) Feed() revel.Result {
+	c.GetGlobalInfo()
+	return c.Render()
+}
+
+func (c Home) SiteMap() revel.Result {
+	c.GetGlobalInfo()
+	return c.Render()
 }

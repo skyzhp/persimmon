@@ -25,7 +25,6 @@ import:
   - bcrypt
 - package: github.com/gorilla/rpc
   version: ^1.1.0
-- package: github.com/divan/gorilla-xmlrpc
 - package: github.com/rogpeppe/go-charset
 - package: gopkg.in/russross/blackfriday.v2
   version: ^2.0.0
@@ -38,3 +37,9 @@ import:
   - bytes.v7
 - package: github.com/mozillazg/go-pinyin
   version: ^0.12.0
+- package: qiniupkg.com/x
+  version: ^7.0.8
+  subpackages:
+  - bytes.v7
+- package: github.com/flosch/pongo2
+  version: ^3.0.0

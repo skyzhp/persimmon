@@ -170,17 +170,17 @@
             getData: function () {
                 let that = this;
                 that.listLoading = true;
-                Util.ajax.get('/links', {
+                Util.ajax.get('/backend/links', {
                     params: {
                         rows: that.pageSize,
                         page: this.currentPage
                     }
                 }).then(function (response) {
                     let res = response.data;
-                    if (res != false) {
-                        that.listData = res.data;
-                        that.total = res.total;
-                        that.currentPage = res.current_page;
+                    if (res.status == 200) {
+                        that.listData = res.list.data;
+                        that.total = res.list.total;
+                        that.currentPage = res.list.current_page;
                         that.listLoading = false;
                     } else {
                         that.$Notice.open({
@@ -213,10 +213,10 @@
                 that.editFormLoading = true;
                 that.myFormTitle = '编辑';
                 that.editFormVisible = true;
-                Util.ajax.get('/links/' + row.id).then(function (response) {
+                Util.ajax.get('/backend/links/' + row.id).then(function (response) {
                     let res = response.data;
-                    if (res != false) {
-                        that.myForm = res;
+                    if (res.status == 200) {
+                        that.myForm = res.item;
                     } else {
                         that.$Notice.open({
                             title: '数据获取失败',
@@ -262,11 +262,11 @@
                     content: '<p>您确认删除选中的记录吗?</p>',
                     onOk: () => {
                         that.listLoading = true;
-                        Util.ajax.delete('/links/destroy', {data: idsParam}).then(function (response) {
+                        Util.ajax.post('/backend/links/destroy', Util.stringify(idsParam)).then(function (response) {
                             that.listLoading = false;
                             let res = response.data;
                             that.$Notice.warning({
-                                title: res.status == 'success' ? '删除成功' : '删除失败',
+                                title: res.status == 200 ? '删除成功' : '删除失败',
                                 desc: ''
                             });
                             if (type == 'one') {
@@ -296,13 +296,13 @@
                     }
 
                     if (that.myForm.id > 0) {
-                        Util.ajax.put('/links/update', that.myForm).then(function (response) {
+                        Util.ajax.post('/backend/links/update', Util.stringify(that.myForm)).then(function (response) {
                             let res = response.data;
                             that.$Notice.warning({
-                                title: res.status == 'success' ? '编辑成功' : '编辑失败',
+                                title: res.status == 200 ? '编辑成功' : '编辑失败',
                                 desc: ''
                             });
-                            if (res.status == 'success') {
+                            if (res.status == 200) {
                                 that.closeForm('myForm');
                                 that.getData();
                             }
@@ -310,14 +310,14 @@
                             console.log(error);
                         });
                     } else {
-                        Util.ajax.post('/links', that.myForm).then(function (response) {
+                        Util.ajax.post('/backend/links', Util.stringify(that.myForm)).then(function (response) {
                             let res = response.data;
-                            if (res.status == 'success') {
+                            if (res.status == 200) {
                                 that.closeForm('myForm');
                                 that.getData();
                             }
                             that.$Notice.open({
-                                title: res.status == 'success' ? '新增成功' : '新增失败',
+                                title: res.status == 200 ? '新增成功' : '新增失败',
                                 desc: ''
                             });
                         }).catch(function (error) {

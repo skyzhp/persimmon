@@ -1,11 +1,17 @@
 package info
 
-import "time"
+import (
+	"time"
+)
 
 type JsonTime time.Time
 
 func (j JsonTime) MarshalJSON() ([]byte, error) {
 	return []byte(`"` + time.Time(j).Format("2006-01-02 15:04:05") + `"`), nil
+}
+
+func (j JsonTime) ToDateTime() (string) {
+	return time.Time(j).Format("02 Jan , 2006")
 }
 
 type BaiduFanyi struct {
@@ -31,4 +37,11 @@ type MetaInfo struct {
 	Comments  int `json:"comments"`
 	PostTrash int `json:"post_trash"`
 	UserViews int `json:"user_views"`
+}
+
+type PagingContent struct {
+	Data        interface{} `json:"data"`
+	Total       int         `json:"total"`
+	TotalPage   int         `json:"total_page"`
+	CurrentPage int         `json:"current_page"`
 }

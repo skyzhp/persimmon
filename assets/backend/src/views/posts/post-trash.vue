@@ -6,7 +6,8 @@
     <div class="pit-content">
         <div class="pit-action-btn">
             <Button type="primary" @click="handleDistory('multi',{})" icon="delete" class="myp-search-item">删除</Button>
-            <Select v-model="category_id" clearable @change="filterCategory" placeholder="请选择" class="myp-search-item" style="width:200px">
+            <Select v-model="category_id" clearable @change="filterCategory" placeholder="请选择" class="myp-search-item"
+                    style="width:200px">
                 <Option v-for="item in categorys" :key="item.id" :value="item.id">{{ item.category_name }}</Option>
             </Select>
             <Input v-model="q" placeholder="请输入内容" icon="search" style="width: 200px" class="myp-search-item">
@@ -38,8 +39,9 @@
 
 <script>
     import Util from '../../libs/util';
-    export default{
-        data(){
+
+    export default {
+        data() {
             return {
                 tableColumns: [
                     {
@@ -134,16 +136,17 @@
                 that.listLoading = true;
                 let query = {
                     rows: that.pageSize,
-                    category_id: that.category_id,
-                    q: that.q
+                    categoryId: that.category_id,
+                    q: that.q,
+                    page: that.currentPage
                 };
 
-                Util.ajax.get('/trash', {params: query}).then(function (response) {
+                Util.ajax.get('/backend/posts-trash', {params: query}).then(function (response) {
                     let res = response.data;
-                    if (res != false) {
-                        that.listData = res.data;
-                        that.total = res.total;
-                        that.currentPage = res.current_page;
+                    if (res.status == 200) {
+                        that.listData = res.list.data;
+                        that.total = res.list.total;
+                        that.currentPage = res.list.current_page;
                         that.listLoading = false;
                     } else {
                         that.$message({
@@ -173,11 +176,11 @@
                     content: '<p>确认恢复选中的文章吗?</p>',
                     onOk: () => {
                         that.listLoading = true;
-                        Util.ajax.put('/trash/update', {'ids': [row.id]}).then(function (response) {
+                        Util.ajax.post('/backend/posts-trash/update', Util.stringify({'ids': [row.id]})).then(function (response) {
                             that.listLoading = false;
                             let res = response.data;
                             that.$Notice.open({
-                                title: res.status == 'success' ? '恢复成功' : '恢复失败',
+                                title: res.status == 200 ? '恢复成功' : '恢复失败',
                                 desc: ''
                             });
                             Util.removeByValue(that.listData, row.id);
@@ -223,17 +226,17 @@
                     content: '<p>您确认删除选中的记录吗?</p>',
                     onOk: () => {
                         that.listLoading = true;
-                        Util.ajax.delete('/trash/destroy', {data: idsParam}).then(function (response) {
+                        Util.ajax.delete('/backend/posts-trash/destroy', {data: idsParam}).then(function (response) {
                             that.listLoading = false;
                             let res = response.data;
                             that.$Notice.open({
-                                title: res.status == 'success' ? '删除成功' : '删除失败',
+                                title: res.status == 200 ? '删除成功' : '删除失败',
                                 desc: ''
                             });
                             if (type == 'one') {
                                 Util.removeByValue(that.listData, row.id);
                             } else {
-                                for (var index in that.checkedAll) {
+                                for (let index in that.checkedAll) {
                                     Util.removeByValue(that.listData, that.checkedAll[index].id);
                                 }
                             }
@@ -254,15 +257,16 @@
             },
             getCategorys: function () {
                 let that = this;
-                Util.ajax.get('/categorys', {
+                Util.ajax.get('/backend/categories', {
                     params: {
-                        rows: 999
+                        rows: 999,
+                        page: 1
                     }
                 }).then(function (response) {
                     let res = response.data;
-                    if (res != false) {
-                        res.data.splice(0, 0, {id: 0, category_name: '顶级分类', hidden: true, category_parent: 0});
-                        that.categorys = res.data;
+                    if (res.status == 200) {
+                        res.list.data.splice(0, 0, {id: 0, category_name: '全部', hidden: true, category_parent: 0});
+                        that.categorys = res.list.data;
                     } else {
                         that.$Notice.open({
                             title: '数据获取失败',
@@ -275,7 +279,7 @@
             },
             setTopCategorys: function () {
                 let categorys = this.listData.concat();
-                categorys.splice(0, 0, {id: 0, category_name: '顶级分类', hidden: true, category_parent: 0});
+                categorys.splice(0, 0, {id: 0, category_name: '全部', hidden: true, category_parent: 0});
                 this.categorys = categorys;
             }
         },

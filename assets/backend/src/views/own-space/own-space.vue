@@ -85,13 +85,13 @@
                         console.log('myForm valid error.');
                         return false;
                     }
-                    Util.ajax.put('/user', that.myForm).then(function (response) {
+                    Util.ajax.post('/backend/user', that.myForm).then(function (response) {
                         let res = response.data;
                         that.$Notice.open({
-                            title: res.status == 'success' ? '信息更新成功' : '信息更新失败',
+                            title: res.status == 200 ? '信息更新成功' : '信息更新失败',
                             desc: ''
                         });
-                        if (res.status == 'success') {
+                        if (res.status == 200) {
                             that.closeForm('myForm');
                         }
                         setTimeout(function () {

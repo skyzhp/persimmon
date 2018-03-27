@@ -1,19 +1,71 @@
 <!DOCTYPE html>
-
 <html>
-  <head>
-    <title>{{.title}}</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-dns-prefetch-control" content="on"/>
+    <link rel="dns-prefetch" href="//cdn.bootcss.com"/>
+    <link rel="dns-prefetch" href="//o75u5ooep.qnssl.com"/>
+    <link rel="dns-prefetch" href="//s.cong5.net"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="/public/css/bootstrap-3.3.6.min.css">
-    <link rel="shortcut icon" type="image/png" href="/public/img/favicon.png">
-    <script src="/public/js/jquery-2.2.4.min.js"></script>
-    <script src="/public/js/bootstrap-3.3.6.min.js"></script>
-    {{range .moreStyles}}
-      <link rel="stylesheet" type="text/css" href="/public/{{.}}">
+    <meta name="HandheldFriendly" content="True"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="address=no"/>
+    <meta name="format-detection" content="email=no"/>
+    <title>{{ .site_name }}</title>
+    <meta name="keywords" content="{{ .keywords }}"/>
+    <meta name="description" content="{{ .description }}"/>
+    <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/public/app/css/main.css">
+    <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    {{if .google_plus}}
+    <link rel="author" href="{{raw .google_plus }}"/>
     {{end}}
-    {{range .moreScripts}}
-      <script src="/public/{{.}}" type="text/javascript" charset="utf-8"></script>
-    {{end}}
-  </head>
-  <body>
+    <meta name="csrf-token" content="{{ csrftoken . }}">
+</head>
+<body>
+<div id="app">
+    <div id="header">
+        <div class="header-content">
+            <header>
+                <div class="avatar">
+                    <a href="{{ url "Home.Index" }}"><img src="https://o75u5ooep.qnssl.com/avatar/persimmon.jpg" alt=""></a>
+                </div>
+                <h1><a href="{{ url "Home.Index" }}">{{ .site_name }}</a></h1>
+                <div class="description">
+                    <p>{{ .description }}</p>
+                </div>
+            </header>
+            <div class="clear"></div>
+            <nav class="nav-bar">
+                <div class="menu-side-menu-container">
+                    <ul id="menu-side-menu" class="menu">
+                        <li class="menu-item"><a href="{{ url "Home.Index" }}">首页</a></li>
+                        {{range .navigations}}
+                        <li class="menu-item"><a href="{{ .Url }}">{{.Name}}</a></li>
+                        {{end}}
+                    </ul>
+                </div>
+            </nav>
+            <div class="clear"></div>
+            <div class="social-icons" id="my-social">
+                <a class="fa fa-weibo" href="{{ .weibo }}" target="_blank" rel="nofollow">
+                    <span class="hidden">Weibo</span>
+                </a>
+                <a class="fa fa-github" href="{{ .github }}" target="_blank" rel="nofollow">
+                    <span class="hidden">GitHub</span>
+                </a>
+                <a class="fa fa-google-plus" href="{{raw .google_plus }}" target="_blank" rel="nofollow">
+                    <span class="hidden">Google+</span>
+                </a>
+                <a class="fa fa-rss" href="{{ url "Home.Feed" }}" target="_blank">
+                    <span class="hidden">feed</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!--article content-->
+    <div id="content">

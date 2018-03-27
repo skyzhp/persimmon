@@ -1,21 +1,21 @@
 webpackJsonp([4],{
 
-/***/ 246:
+/***/ 264:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_post_trash_vue__ = __webpack_require__(266);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_post_trash_vue__ = __webpack_require__(286);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_post_trash_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_post_trash_vue__);
 /* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_post_trash_vue__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_post_trash_vue__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_72045d5c_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_post_trash_vue__ = __webpack_require__(320);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_72045d5c_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_post_trash_vue__ = __webpack_require__(343);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_72045d5c_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_post_trash_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_72045d5c_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_post_trash_vue__);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(318)
+  __webpack_require__(341)
 }
-var normalizeComponent = __webpack_require__(1)
+var normalizeComponent = __webpack_require__(4)
 /* script */
 
 
@@ -60,7 +60,7 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 266:
+/***/ 286:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70,7 +70,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _util = __webpack_require__(18);
+var _util = __webpack_require__(16);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -165,16 +165,17 @@ exports.default = {
             that.listLoading = true;
             var query = {
                 rows: that.pageSize,
-                category_id: that.category_id,
-                q: that.q
+                categoryId: that.category_id,
+                q: that.q,
+                page: that.currentPage
             };
 
-            _util2.default.ajax.get('/trash', { params: query }).then(function (response) {
+            _util2.default.ajax.get('/backend/posts-trash', { params: query }).then(function (response) {
                 var res = response.data;
-                if (res != false) {
-                    that.listData = res.data;
-                    that.total = res.total;
-                    that.currentPage = res.current_page;
+                if (res.status == 200) {
+                    that.listData = res.list.data;
+                    that.total = res.list.total;
+                    that.currentPage = res.list.current_page;
                     that.listLoading = false;
                 } else {
                     that.$message({
@@ -203,11 +204,11 @@ exports.default = {
                 content: '<p>确认恢复选中的文章吗?</p>',
                 onOk: function onOk() {
                     that.listLoading = true;
-                    _util2.default.ajax.put('/trash/update', { 'ids': [row.id] }).then(function (response) {
+                    _util2.default.ajax.post('/backend/posts-trash/update', _util2.default.stringify({ 'ids': [row.id] })).then(function (response) {
                         that.listLoading = false;
                         var res = response.data;
                         that.$Notice.open({
-                            title: res.status == 'success' ? '恢复成功' : '恢复失败',
+                            title: res.status == 200 ? '恢复成功' : '恢复失败',
                             desc: ''
                         });
                         _util2.default.removeByValue(that.listData, row.id);
@@ -254,11 +255,11 @@ exports.default = {
                 content: '<p>您确认删除选中的记录吗?</p>',
                 onOk: function onOk() {
                     that.listLoading = true;
-                    _util2.default.ajax.delete('/trash/destroy', { data: idsParam }).then(function (response) {
+                    _util2.default.ajax.delete('/backend/posts-trash/destroy', { data: idsParam }).then(function (response) {
                         that.listLoading = false;
                         var res = response.data;
                         that.$Notice.open({
-                            title: res.status == 'success' ? '删除成功' : '删除失败',
+                            title: res.status == 200 ? '删除成功' : '删除失败',
                             desc: ''
                         });
                         if (type == 'one') {
@@ -286,15 +287,16 @@ exports.default = {
 
         getCategorys: function getCategorys() {
             var that = this;
-            _util2.default.ajax.get('/categorys', {
+            _util2.default.ajax.get('/backend/categories', {
                 params: {
-                    rows: 999
+                    rows: 999,
+                    page: 1
                 }
             }).then(function (response) {
                 var res = response.data;
-                if (res != false) {
-                    res.data.splice(0, 0, { id: 0, category_name: '顶级分类', hidden: true, category_parent: 0 });
-                    that.categorys = res.data;
+                if (res.status == 200) {
+                    res.list.data.splice(0, 0, { id: 0, category_name: '全部', hidden: true, category_parent: 0 });
+                    that.categorys = res.list.data;
                 } else {
                     that.$Notice.open({
                         title: '数据获取失败',
@@ -307,7 +309,7 @@ exports.default = {
         },
         setTopCategorys: function setTopCategorys() {
             var categorys = this.listData.concat();
-            categorys.splice(0, 0, { id: 0, category_name: '顶级分类', hidden: true, category_parent: 0 });
+            categorys.splice(0, 0, { id: 0, category_name: '全部', hidden: true, category_parent: 0 });
             this.categorys = categorys;
         }
     },
@@ -319,17 +321,17 @@ exports.default = {
 
 /***/ }),
 
-/***/ 318:
+/***/ 341:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(319);
+var content = __webpack_require__(342);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(17)("c8ff3ff8", content, false, {});
+var update = __webpack_require__(20)("c8ff3ff8", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -346,22 +348,22 @@ if(false) {
 
 /***/ }),
 
-/***/ 319:
+/***/ 342:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(16)(false);
+exports = module.exports = __webpack_require__(19)(false);
 // imports
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, "\n.myp-search-item {\n  float: left;\n  margin-right: 10px;\n}\n.data-list {\n  clear: both;\n}\n.pit-action-btn,\n.myp-page {\n  margin-top: 10px;\n}\n.pit-action-btn {\n  margin: 10px 0;\n  display: inline-block;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
 
-/***/ 320:
+/***/ 343:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

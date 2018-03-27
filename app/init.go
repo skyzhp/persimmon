@@ -16,6 +16,10 @@ var (
 )
 
 func init() {
+
+	//CsrfFilter Exempt
+	mycsrf.MarkExempt("XmlRpc.Index")
+
 	// Filters is the default set of global filters.
 	revel.Filters = []revel.Filter{
 		revel.PanicFilter,             // Recover from panics and display an error page instead.

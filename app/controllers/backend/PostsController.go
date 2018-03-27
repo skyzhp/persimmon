@@ -10,14 +10,17 @@ type Posts struct {
 	BaseController
 }
 
-func (c Posts) Index(page int, rows int, categoryId int, keywords string) revel.Result {
-	lists := postService.GetList(categoryId, keywords, page, rows)
-	//categoryList := categoryService.GetList(1000, 1)
+func (c Posts) Index(categoryId int, keywords string, rows int, page int) revel.Result {
+	lists := postService.GetListPaging(categoryId, keywords, rows, page)
 	return c.RenderJSON(info.Res{Status: 200, List: lists})
 }
 
 func (c Posts) Show(id int) revel.Result {
-	post := postService.GetOne(id)
+	post, err := postService.GetOne(id)
+	if err != nil {
+		return c.ResponseError(501, err.Error())
+	}
+
 	return c.RenderJSON(info.Res{Status: 200, Item: post})
 }
 
@@ -41,14 +44,14 @@ func (c Posts) Store(post *info.Post) revel.Result {
 		Content: string(htmlContent),
 		Ipaddress: c.ClientIP}
 
-	postId := postService.Save(posts)
-	if postId > 0 {
-		//Insert post tags.
-		tagService.Save(int(postId), post.Tags)
-		return c.ResponseSuccess("add success.")
-	} else {
+	postId, err := postService.Save(posts)
+
+	if err != nil {
 		return c.ResponseError(500, "add failed.")
 	}
+
+	tagService.Save(int(postId), post.Tags)
+	return c.ResponseSuccess("add success.")
 }
 
 func (c Posts) Update(post info.Post) revel.Result {
@@ -63,21 +66,22 @@ func (c Posts) Update(post info.Post) revel.Result {
 		Content: string(htmlContent),
 		Ipaddress: c.ClientIP}
 
-	ret := postService.Update(post.Id, posts)
-	if ret {
-		//Update post tags
-		tagService.Save(int(post.Id), post.Tags)
-		return c.ResponseSuccess("Update success.")
-	} else {
+	_, err := postService.Update(post.Id, posts)
+
+	if err != nil {
 		return c.ResponseError(500, "Update failed.")
 	}
+
+	//Update post tags
+	tagService.Save(int(post.Id), post.Tags)
+	return c.ResponseSuccess("Update success.")
 }
 
-func (c Posts) Destroy(id int) revel.Result {
-	ret := postService.Trash(id, info.Posts{})
-	if ret {
-		return c.ResponseSuccess("Delete success.")
-	} else {
+func (c Posts) Destroy(ids []int) revel.Result {
+	_, err := postService.Trash(ids, info.Posts{})
+	if err != nil {
 		return c.ResponseError(500, "Delete failed.")
 	}
+
+	return c.ResponseSuccess("Delete success.")
 }

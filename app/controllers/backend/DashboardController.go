@@ -16,10 +16,26 @@ func (c Dashboard) Index() revel.Result {
 }
 
 func (c Dashboard) MetaCount() revel.Result {
-	post := postService.CountPost()
-	postTrash := postService.CountTrashPost()
-	comment := commentService.CountComment()
-	viewsCount := postService.SumViews()
+	post, pErr := postService.CountPost()
+	if pErr != nil {
+		post = 0
+	}
+
+	postTrash, ptErr := postTrashService.CountTrashPost()
+	if ptErr != nil {
+		postTrash = 0
+	}
+
+	comment, cErr := commentService.CountComment(0)
+	if cErr != nil {
+		comment = 0
+	}
+
+	viewsCount, vErr := postService.SumViews()
+	if vErr != nil {
+		viewsCount = 0
+	}
+
 	metaInfo := info.MetaInfo{Posts: post,
 		PostTrash: postTrash,
 		Comments: comment,

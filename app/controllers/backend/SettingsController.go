@@ -10,7 +10,11 @@ type Settings struct {
 }
 
 func (c Settings) Index() revel.Result {
-	options := optionService.GetAllOption()
+	options, err := optionService.GetAllOption()
+	if err != nil {
+		return c.ResponseError(500, err.Error())
+	}
+
 	return c.RenderJSON(info.Res{Status: 200, List: options})
 }
 

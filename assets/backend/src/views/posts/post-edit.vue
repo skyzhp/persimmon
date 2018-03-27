@@ -9,14 +9,13 @@
 
 <template>
     <div class="pit-post-form">
-        <Form :model="myForm" ref="myForm" :rules="myRules" label-position="right" :label-width="100" style="width: 90%;">
+        <Form :model="myForm" ref="myForm" :rules="myRules" label-position="right" :label-width="100"
+              style="width: 90%;">
             <FormItem label="标题" prop="title">
                 <Input v-model="myForm.title" @on-blur="titleBlur"></Input>
             </FormItem>
             <FormItem label="Uri" prop="flag">
-                <Input v-model="myForm.flag">
-                <span slot="prepend">{{domain}}</span>
-                </Input>
+                <Input v-model="myForm.flag"><span slot="prepend">{{domain}}</span></Input>
             </FormItem>
             <FormItem label="标签" prop="tags">
                 <Tag v-for="tag in myForm.tags" color="blue" :key="tag" :name="tag" closable @on-close="closeTags">
@@ -25,49 +24,43 @@
                 <Input v-model="newTag" @on-enter="addTag" @on-blur="addTag" size="small" placeholder="+" style="width: 50px;"></Input>
             </FormItem>
             <FormItem label="分类" prop="category_id">
-                <Select v-model="myForm.category_id">
+                <Select v-model="myForm.categoryId">
                     <Option v-for="item in categorys" :value="item.id" :key="item.id">{{ item.category_name }}</Option>
                 </Select>
             </FormItem>
             <FormItem label="封面图">
-                <div class="upload-list" v-for="item in imageList">
-                    <template v-if="item.status === 'finished'">
-                        <img :src="item.url">
-                        <div class="upload-list-cover">
-                            <Icon type="ios-eye-outline" @click.native="thumbView(item.url)"></Icon>
-                            <Icon type="ios-trash-outline" @click.native="thumbRemove(item)"></Icon>
-                        </div>
-                    </template>
-                    <template v-else>
-                        <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
-                    </template>
-                </div>
-                <Upload
-                        ref="upload"
-                        :show-upload-list="false"
-                        :default-file-list="imageList"
-                        :on-success="uploadsSuccess"
-                        :format="['jpg','jpeg','png']"
+                <Upload v-show="uploadBtnShow"
+                        :action="uploadsUrl"
+                        :headers="headers"
+                        :format="['jpg','jpeg','png','bmp']"
                         :max-size="2048"
+                        :show-upload-list="false"
+                        :on-progress="uploadsProgress"
+                        :on-success="uploadsSuccess"
                         :on-format-error="uploadsFormatError"
                         :on-exceeded-size="uploadsMaxSize"
-                        :before-upload="uploadsBeforeUpload"
-                        type="drag"
-                        :action="uploadsUrl"
-                        class="my-thumbnail">
-                    <div class="inner-camera">
-                        <Icon type="camera" size="20"></Icon>
-                    </div>
+                        :before-upload="uploadsBeforeUpload">
+                    <Button type="ghost" icon="ios-cloud-upload-outline">选择图片</Button>
                 </Upload>
+                <Progress v-show="uploadPercentShow" :percent="uploadPercent" :stroke-width="5">
+                    <Icon type="checkmark-circled"></Icon>
+                    <span>成功</span>
+                </Progress>
+                <template v-if="myForm.thumb">
+                    <div class="show-thumb">
+                        <img :src="myForm.thumb" alt=""/>
+                        <a @click="clearThumb()" href="javascript:void(0)">移除封面图</a>
+                    </div>
+                </template>
             </FormItem>
 
             <FormItem label="">
-                <textarea id="markdown_editor" v-model="myForm.markdown"></textarea>
+                <markdown-editor id="markdown_editor" v-model="myForm.markdown" :configs="simpleMDEConfigs" ref="markdownEditor"></markdown-editor>
             </FormItem>
             <FormItem label="">
                 <Button type="ghost" @click="clearCache()">清缓存</Button>
-                <Button type="ghost" @click="closeForm('myForm')">取 消</Button>
-                <Button type="primary" @click="submitMyForm('myForm')">确 定</Button>
+                <Button type="ghost" @click="closeForm()">取 消</Button>
+                <Button type="primary" @click="submitMyForm()">确 定</Button>
             </FormItem>
         </Form>
     </div>
@@ -76,14 +69,17 @@
 <script>
     import Util from '../../libs/util';
     import inlineAttachment from '../../libs/inline-attachment';
-    //import localforage from 'localforage';
-    import SimpleMDE from 'simplemde';
-
-    let simpleEditor;
+    import markdownEditor from 'vue-simplemde/src/markdown-editor'
 
     export default {
+        components: {
+            markdownEditor
+        },
         data() {
             return {
+                uploadBtnShow: true,
+                uploadPercentShow: false,
+                uploadPercent: 0,
                 editFormLoading: false,
                 loading: false,
                 myFormTitle: '编辑',
@@ -91,21 +87,20 @@
                 newTag: '',
                 textareaRow: 15,
                 categorys: [],
-                imageList: [],
                 markdownPreviews: '',
-                uploadsUrl: persimmon.baseUrl + '/uploads',
+                uploadsUrl: persimmon.baseUrl + '/backend/files/uploads',
                 previewVisible: false,
                 showPreview: '',
                 myForm: {
-                    'post.Id': 0,
-                    'post.Title': '',
-                    'post.Flag': '',
-                    'post.Thumb': '',
-                    'post.Tags': [],
-                    'post.CategoryId': 0,
-                    'post.Markdown': ''
+                    id: 0,
+                    title: '',
+                    flag: '',
+                    thumb: '',
+                    tags: [],
+                    categoryId: 0,
+                    markdown: ''
                 },
-                headers: {'X-CSRF-TOKEN': persimmon.csrf},
+                headers: {'X-CSRFToken': persimmon.csrf},
                 myRules: {
                     title: [
                         {required: true, type: "string", message: '请填写文章标题', trigger: 'blur'}
@@ -114,13 +109,34 @@
                         {required: true, type: "string", message: '请填写文章别名', trigger: 'blur'},
                         {pattern: /^[a-zA-Z0-9_-]+$/, message: '只允许英文或者拼音,横杠(-),下划线(_)', trigger: 'blur'}
                     ],
-                    category_id: [
+                    categoryId: [
                         {required: true, type: "integer", message: '请选择分类', trigger: 'blur'}
                     ],
                     markdown: [
                         {required: true, type: "string", message: '文章内容不能为空', trigger: 'blur'}
                     ]
                 },
+                simpleMDEConfigs:{
+                    placeholder:"日志正文",
+                    autofocus: true,
+                    autosave: {
+                        enabled: true,
+                        uniqueId: "MyPersimmonMarkdown",
+                        delay: 1000,
+                    },
+                    spellChecker: false,
+                    styleSelectedText: false,
+                    renderingConfig: {
+                        singleLineBreaks: true,
+                        codeSyntaxHighlighting: true
+                    },
+                    toolbar: ['bold', 'italic', 'strikethrough', 'heading-1', 'heading-2', 'heading-3', '|', 'code', 'quote', 'unordered-list', 'clean-block', '|', 'link', 'image', 'table', 'horizontal-rule', '|', 'preview', 'guide']
+                }
+            }
+        },
+        computed: {
+            simplemde() {
+                return this.$refs.markdownEditor.simplemde
             }
         },
         created() {
@@ -128,25 +144,13 @@
             if (postId != undefined) {
                 this.getPost(postId);
             }
+            if (this.$route.name == "post-add") {
+                this.removeItem();
+            }
         },
         methods: {
-            thumbView(name) {
-                /*
-                this.imgName = name;
-                this.visible = true;
-                */
-            },
-            thumbRemove(file) {
-                const fileList = this.$refs.upload.imageList;
-                this.$refs.upload.imageList.splice(fileList.indexOf(file), 1);
-            },
-            uploadsSuccess(res, file) {
-                if (res.status == 200) {
-                    this.myForm.thumb = res.filename;
-                } else {
-                    this.myForm.thumb = '';
-                }
-                this.imageList.push(res);
+            uploadsBeforeUpload() {
+                this.uploadPercentShow = true
             },
             uploadsFormatError(file) {
                 this.$Notice.warning({
@@ -160,8 +164,26 @@
                     desc: '文件  ' + file.name + ' 太大了，请选择 2M 以内的图片.'
                 });
             },
-            uploadsBeforeUpload() {
-
+            uploadsProgress(event, file, fileList) {
+                let that = this;
+                that.uploadPercent = event.percent
+                if (event.percent === 100) {
+                    setTimeout(function () {
+                        that.uploadPercentShow = false
+                    }, 1 * 1000);
+                }
+            },
+            uploadsSuccess(res, file) {
+                if (res.status == 200) {
+                    this.myForm.thumb = res.item;
+                } else {
+                    this.myForm.thumb = '';
+                }
+                this.uploadBtnShow = false;
+                //console.log(res)
+            },
+            clearThumb() {
+                this.myForm.thumb = '';
             },
             clearCache() {
                 this.removeItem();
@@ -180,6 +202,9 @@
             },
             titleBlur(event) {
                 let that = this;
+                if (that.myForm.flag != "") {
+                    return false;
+                }
                 let query = that.myForm.title;
                 if (query.match(/\w+/g) != null) {
                     that.myForm.flag = query;
@@ -187,16 +212,10 @@
                 if (query == null || query == '') {
                     return false;
                 }
-                Util.ajax.get('/util', {
-                    params: {
-                        action: 'translates',
-                        q: query
-                    }
-                }).then(function (response) {
+                Util.ajax.get('/backend/utils/fanyi/' + query).then(function (response) {
                     let res = response.data;
-                    if (res.status == 200 && res.trans_result) {
-                        let flag = res.trans_result.toLowerCase();
-                        that.myForm.flag = flag.replaceAll(' ', '-', flag);
+                    if (res.status == 200) {
+                        that.myForm.flag = res.item
                     }
                 }).catch(function (error) {
                     console.log(error);
@@ -209,24 +228,23 @@
                 let that = this;
                 that.editFormLoading = true;
                 that.myFormTitle = '编辑';
-                Util.ajax.get('/posts/' + id).then(function (response) {
+                Util.ajax.get('/backend/posts/' + id).then(function (response) {
                     let res = response.data;
-                    console.log(res);
-                    if (res != false) {
+                    if (res.status == 200) {
+                        let item = res.item;
                         let tags = [];
-                        that.myForm = res;
+                        that.myForm = item;
                         //tags
-                        if (res.tags.length > 0) {
-                            for (let index in res.tags) {
-                                tags.push(res.tags[index].tags_name);
+                        if (item.tags.length > 0) {
+                            for (let index in item.tags) {
+                                tags.push(item.tags[index].tags_name);
                             }
                             that.myForm.tags = tags;
                         }
                         //thumb
-                        if (res.thumb != '') {
-                            that.imageList = [{url: res.thumb}]
+                        if (item.thumb != '') {
+                            that.imageList = [{url: item.thumb}]
                         }
-                        simpleEditor.value(res.markdown);
                     } else {
                         that.$Notice.error({
                             title: '数据获取失败',
@@ -241,38 +259,37 @@
             },
             submitMyForm() {
                 let that = this;
-                that.$refs['myForm'].validate((valid) => {
+                this.$refs['myForm'].validate((valid) => {
                     if (!valid) {
                         console.log('myForm valid error.');
                         return false;
                     }
-
                     if (that.myForm.id > 0) {
-                        Util.ajax.put('/posts/update', that.myForm).then(function (response) {
+                        Util.ajax.post('/backend/posts/update', that.myForm).then(function (response) {
                             let res = response.data;
                             that.$Notice.open({
-                                title: res.status == 'success' ? '编辑成功' : '编辑失败',
+                                title: res.status == 200 ? '编辑成功' : '编辑失败',
                                 desc: ''
                             });
-                            if (res.status == 'success') {
+                            if (res.status == 200) {
                                 that.closeForm('myForm');
                             }
                         }).catch(function (error) {
                             console.log(error);
                         });
                     } else {
-                        Util.ajax.post('/posts', that.myForm).then(function (response) {
+                        Util.ajax.post('/backend/posts/store', that.myForm).then(function (response) {
                             let res = response.data;
-                            if (res.status == 'success') {
+                            if (res.status == 200) {
                                 that.closeForm('myForm');
                             }
                             that.$Notice.open({
-                                title: res.status == 'success' ? '新增成功' : '新增失败',
+                                title: res.status == 200 ? '新增成功' : '新增失败',
                                 desc: ''
                             });
                         }).catch(function (error) {
                             if (error.response) {
-                                if (error.response.status == 422) {
+                                if (error.response.status != 200) {
                                     for (let index in error.response.data) {
                                         that.$Notice.warning({
                                             title: '警告',
@@ -290,7 +307,7 @@
             closeForm() {
                 this.removeItem();
                 this.$refs['myForm'].resetFields();
-                this.$router.replace('/posts');
+                this.$router.replace('/posts/post-list');
                 console.log('closeForm');
             },
             removeItem() {
@@ -298,15 +315,16 @@
             },
             getCategorys() {
                 let that = this;
-                Util.ajax.get('/categorys', {
+                Util.ajax.get('/backend/categories', {
                     params: {
-                        rows: 999
+                        rows: 999,
+                        page: 1
                     }
                 }).then(function (response) {
                     let res = response.data;
-                    if (res != false) {
-                        res.data.splice(0, 0, {id: 0, category_name: '顶级分类', hidden: true, category_parent: 0});
-                        that.categorys = res.data;
+                    if (res.status == 200) {
+                        res.list.splice(0, 0, {id: 0, category_name: '顶级分类', hidden: true, category_parent: 0});
+                        that.categorys = res.list;
                     } else {
                         that.$Notice.warning({
                             title: '数据获取失败',
@@ -321,42 +339,40 @@
                 let location = window.location;
                 this.domain = location.protocol + '//' + location.host + '/';
             },
-            simpleMDE() {
-                let that = this;
-                simpleEditor = new SimpleMDE({
-                    autofocus: true,
-                    element: document.getElementById('markdown_editor'),
-                    autosave: {
-                        enabled: true,
-                        uniqueId: "MyPersimmonMarkdown",
-                        delay: 1000,
-                    },
-                    styleSelectedText: false,
-                    renderingConfig: {
-                        singleLineBreaks: true,
-                        codeSyntaxHighlighting: true
-                    },
-                    toolbar: ['bold', 'italic', 'strikethrough', 'heading', 'heading-smaller', 'heading-bigger', 'heading-1', 'heading-2', 'heading-3', '|', 'code', 'quote', 'unordered-list', 'clean-block', '|', 'link', 'image', 'table', 'horizontal-rule', '|', 'preview', 'guide']
-                });
-                simpleEditor.codemirror.on("change", function () {
-                    that.myForm.markdown = simpleEditor.value();
-                });
-            },
             inlineAtta() {
                 let that = this;
-                let el = that.$refs['myForm'].$el;
-                let textarea = el.querySelector('.CodeMirror textarea');
-                inlineAttachment.editors.input.attachToInput(textarea, {
+                inlineAttachment.editors.codemirror4.attach(that.simplemde.codemirror, {
                     uploadUrl: that.uploadsUrl,
+                    progressText: '![uploading file...]()',
+                    urlText: '![]({filename})',
+                    errorText: 'Error uploading file',
+                    jsonFieldName: 'file',
                     uploadFieldName: 'file',
-                    allowedTypes: ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'],
-                    progressText: '![文件上传中...]()',
-                    errorText: '文件上传失败，请重试.',
                     extraParams: {},
-                    extraHeaders: {
-                        'X-CSRF-TOKEN': persimmon.csrf
+                    extraHeaders: that.headers,
+                    onFileUploadResponse: function (xhr) {
+                        let result = JSON.parse(xhr.responseText);
+                        if (result.status == 200) {
+                            let filename = result.item;
+                            if (result && filename) {
+                                let newValue;
+                                if (typeof this.settings.urlText === 'function') {
+                                    newValue = this.settings.urlText.call(this, filename, result);
+                                } else {
+                                    newValue = this.settings.urlText.replace(this.filenameTag, filename);
+                                }
+                                let text = this.editor.getValue().replace(this.lastValue, newValue);
+                                this.editor.setValue(text);
+                                this.settings.onFileUploaded.call(this, filename);
+                            }
+                            return false;
+                        }
                     },
-                    onFileUploaded: function (response) {
+                    onFileUploadError: function (data) {
+                        that.$Notice.warning({
+                            title: '很抱歉，上传失败。请重试。',
+                            desc: ''
+                        });
                     }
                 });
             },
@@ -367,18 +383,20 @@
                 let postId = this.$route.params.id;
                 if (postId !== undefined) {
                     this.getPost(postId);
+                }
+            },
+            "myForm.thumb"(to,form){
+                if (to !== ""){
+                    this.uploadBtnShow = false;
                 } else {
-                    this.$refs['myForm'].resetFields();
-                    this.imageList = [];
-                    this.removeItem();
-                    simpleEditor.value('');
+                    this.uploadBtnShow = true;
                 }
             }
         },
         mounted() {
             this.getCategorys();
             this.setDomain();
-            this.simpleMDE();
+            //this.simpleMDE();
             this.inlineAtta();
         }
     }

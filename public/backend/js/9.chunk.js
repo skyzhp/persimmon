@@ -1,21 +1,21 @@
 webpackJsonp([9],{
 
-/***/ 251:
+/***/ 269:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_options_vue__ = __webpack_require__(272);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_options_vue__ = __webpack_require__(292);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_options_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_options_vue__);
 /* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_options_vue__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_options_vue__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_5c60f7ea_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_options_vue__ = __webpack_require__(338);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_5c60f7ea_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_options_vue__ = __webpack_require__(361);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_5c60f7ea_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_options_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_5c60f7ea_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_options_vue__);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(336)
+  __webpack_require__(359)
 }
-var normalizeComponent = __webpack_require__(1)
+var normalizeComponent = __webpack_require__(4)
 /* script */
 
 
@@ -60,7 +60,7 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 272:
+/***/ 292:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70,7 +70,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _util = __webpack_require__(18);
+var _util = __webpack_require__(16);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -161,16 +161,16 @@ exports.default = {
         getData: function getData() {
             var that = this;
             that.listLoading = true;
-            _util2.default.ajax.get('/options', {
+            _util2.default.ajax.get('/backend/options', {
                 params: {
                     rows: this.pageSize
                 }
             }).then(function (response) {
                 var res = response.data;
-                if (res != false) {
-                    that.listData = res.data;
-                    that.total = res.total;
-                    that.currentPage = res.current_page;
+                if (res.status == 200) {
+                    that.listData = res.list.data;
+                    that.total = res.list.total;
+                    that.currentPage = res.list.current_page;
                     that.listLoading = false;
                 } else {
                     that.$Notice.open({
@@ -201,10 +201,10 @@ exports.default = {
             that.editFormLoading = true;
             that.myFormTitle = '编辑';
             that.editFormVisible = true;
-            _util2.default.ajax.get('/options/' + row.id).then(function (response) {
+            _util2.default.ajax.get('/backend/options/' + row.id).then(function (response) {
                 var res = response.data;
-                if (res != false) {
-                    that.myForm = res;
+                if (res.status == 200) {
+                    that.myForm = res.item;
                 } else {
                     that.$Notice.open({
                         title: '数据获取失败',
@@ -251,11 +251,11 @@ exports.default = {
                 content: '<p>您确认删除选中的记录吗?</p>',
                 onOk: function onOk() {
                     that.listLoading = true;
-                    _util2.default.ajax.delete('/options/destroy', { data: idsParam }).then(function (response) {
+                    _util2.default.ajax.post('/backend/options/destroy', _util2.default.stringify(idsParam)).then(function (response) {
                         that.listLoading = false;
                         var res = response.data;
                         that.$Notice.open({
-                            title: res.status == 'success' ? '删除成功' : '删除失败',
+                            title: res.status == 200 ? '删除成功' : '删除失败',
                             desc: ''
                         });
                         if (type == 'one') {
@@ -283,13 +283,13 @@ exports.default = {
                 }
 
                 if (that.myForm.id > 0) {
-                    _util2.default.ajax.put('/options/update', that.myForm).then(function (response) {
+                    _util2.default.ajax.post('/backend/options/update', _util2.default.stringify(that.myForm)).then(function (response) {
                         var res = response.data;
                         that.$Notice.open({
-                            title: res.status == 'success' ? '编辑成功' : '编辑失败',
+                            title: res.status == 200 ? '编辑成功' : '编辑失败',
                             desc: ''
                         });
-                        if (res.status == 'success') {
+                        if (res.status == 200) {
                             that.closeForm('myForm');
                             that.getData();
                         }
@@ -297,15 +297,14 @@ exports.default = {
                         console.log(error);
                     });
                 } else {
-                    _util2.default.ajax.post('/options', that.myForm).then(function (response) {
-
+                    _util2.default.ajax.post('/backend/options/store', _util2.default.stringify(that.myForm)).then(function (response) {
                         var res = response.data;
-                        if (res.status == 'success') {
+                        if (res.status == 200) {
                             that.closeForm('myForm');
                             that.getData();
                         }
                         that.$Notice.open({
-                            title: res.status == 'success' ? '新增成功' : '新增失败',
+                            title: res.status == 200 ? '新增成功' : '新增失败',
                             desc: ''
                         });
                     }).catch(function (error) {
@@ -352,17 +351,17 @@ exports.default = {
 
 /***/ }),
 
-/***/ 336:
+/***/ 359:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(337);
+var content = __webpack_require__(360);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(17)("29854515", content, false, {});
+var update = __webpack_require__(20)("29854515", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -379,10 +378,10 @@ if(false) {
 
 /***/ }),
 
-/***/ 337:
+/***/ 360:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(16)(false);
+exports = module.exports = __webpack_require__(19)(false);
 // imports
 
 
@@ -394,7 +393,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 /***/ }),
 
-/***/ 338:
+/***/ 361:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

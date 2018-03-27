@@ -66,7 +66,8 @@ export default {
                     menu: '#495060',
                     element: '#e43e31'
                 }
-            ]
+            ],
+            themePath: "/public/backend/"
         };
     },
     methods: {
@@ -115,9 +116,9 @@ export default {
             }
             let stylePath = '';
             if (config.env.indexOf('dev') > -1) {
-                stylePath = './src/views/main-components/theme-switch/theme/';
+                stylePath = this.themePath;
             } else {
-                stylePath = 'dist/';
+                stylePath = this.themePath;
             }
             if (mainTheme !== 'b') {
                 path = stylePath + mainTheme + '.css';
@@ -130,9 +131,9 @@ export default {
     created () {
         let path = '';
         if (config.env.indexOf('dev') > -1) {
-            path = './src/views/main-components/theme-switch/theme/';
+            path = this.themePath;
         } else {
-            path = 'dist/';
+            path = this.themePath;
         }
         let name = util.getUserInfo("name");
         if (localStorage.theme) {

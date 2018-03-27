@@ -10,9 +10,11 @@
 
         <Modal :title="myFormTitle" v-model="editFormVisible" @on-ok="submitMyForm" @on-cancel="closeForm">
             <div class="pit-dialog-edit-form">
-                <Form ref="myForm" :rules="myRules" class="myForm" :model="myForm" label-position="right" :label-width="100" style="width: 90%;">
+                <Form ref="myForm" :rules="myRules" class="myForm" :model="myForm" label-position="right"
+                      :label-width="100" style="width: 90%;">
                     <FormItem label="分类名称" prop="category_name">
-                        <Input v-model="myForm.category_name" auto-complete="off" @on-blur="translateWords" @on-enter="translateWords"></Input>
+                        <Input v-model="myForm.category_name" auto-complete="off" @on-blur="translateWords"
+                               @on-enter="translateWords"></Input>
                     </FormItem>
                     <FormItem label="分类别名" prop="category_flag">
                         <Input v-model="myForm.category_flag" auto-complete="off"></Input>
@@ -22,7 +24,8 @@
                     </FormItem>
                     <FormItem label="父分类">
                         <Select v-model="myForm.category_parent" placeholder="请选择父分类">
-                            <Option v-for="item in categorys" :value="item.id" :key="item.id">{{ item.category_name }}</Option>
+                            <Option v-for="item in categorys" :value="item.id" :key="item.id">{{ item.category_name }}
+                            </Option>
                         </Select>
                     </FormItem>
                     <FormItem v-if="myForm.id">
@@ -40,8 +43,8 @@
 <script>
     import Util from '../../libs/util';
 
-    export default{
-        data(){
+    export default {
+        data() {
             return {
                 listData: [],
                 categorys: [],
@@ -126,12 +129,15 @@
             getData: function () {
                 let that = this;
                 that.listLoading = true;
-                Util.ajax.get('/categorys', {
-                    params: {}
+                Util.ajax.get('/backend/categories', {
+                    params: {
+                        page: 1,
+                        rows: 20
+                    }
                 }).then(function (response) {
                     let res = response.data;
-                    if (res != false) {
-                        that.listData = res.data;
+                    if (res.status == 200) {
+                        that.listData = res.list.data;
                         that.listLoading = false;
                     } else {
                         that.$Notice.warning({
@@ -156,10 +162,10 @@
                 that.editFormLoading = true;
                 that.myFormTitle = '编辑';
                 that.editFormVisible = true;
-                Util.ajax.get('/categorys/' + row.id).then(function (response) {
+                Util.ajax.get('/backend/categories/' + row.id).then(function (response) {
                     let res = response.data;
                     if (res != false) {
-                        that.myForm = res;
+                        that.myForm = res.item;
                     } else {
                         that.$Notice.warning({
                             title: '数据获取失败',
@@ -186,7 +192,7 @@
                         idsParam = {ids: [row.id]};
                         break;
                     case 'multi':
-                        var ids = Util.getIdByArr(that.checkedAll);
+                        let ids = Util.getIdByArr(that.checkedAll);
                         if (ids.length <= 0) {
                             that.$Notice.warning({
                                 title: '请选择需要删除的数据',
@@ -205,11 +211,11 @@
                     content: '<p>您确认删除选中的记录吗?</p>',
                     onOk: () => {
                         that.listLoading = true;
-                        Util.ajax.delete('/categorys/destroy', {data: idsParam}).then(function (response) {
+                        Util.ajax.post('/backend/categories/destroy',Util.stringify(idsParam)).then(function (response) {
                             that.listLoading = false;
                             let res = response.data;
                             that.$Notice.warning({
-                                title: res.status == 'success' ? '删除成功' : '删除失败',
+                                title: res.status == 200 ? '删除成功' : '删除失败',
                                 desc: ''
                             });
                             if (type == 'one') {
@@ -238,13 +244,13 @@
                     }
 
                     if (that.myForm.id > 0) {
-                        Util.ajax.put('/categorys/update', that.myForm).then(function (response) {
+                        Util.ajax.put('/backend/categories/update', that.myForm).then(function (response) {
                             let res = response.data;
                             that.$Notice.open({
-                                title: res.status == 'success' ? '编辑成功' : '编辑失败',
+                                title: res.status == 200 ? '编辑成功' : '编辑失败',
                                 desc: ''
                             });
-                            if (res.status == 'success') {
+                            if (res.status == 200) {
                                 that.closeForm('myForm');
                                 that.getData();
                             }
@@ -252,21 +258,19 @@
                             console.log(error);
                         });
                     } else {
-                        Util.ajax.post('/categorys', that.myForm).then(function (response) {
-                            console.log(response);
-
+                        Util.ajax.post('/backend/categories/store', that.myForm).then(function (response) {
                             let res = response.data;
-                            if (res.status == 'success') {
+                            if (res.status == 200) {
                                 that.closeForm('myForm');
-                                that.getData();
                             }
                             that.$Notice.open({
-                                title: res.status == 'success' ? '新增成功' : '新增失败',
+                                title: res.status == 200 ? '新增成功' : '新增失败',
                                 desc: ''
                             });
+                            that.getData();
                         }).catch(function (error) {
                             if (error.response) {
-                                if (error.response.status == 422) {
+                                if (error.response.status == 501) {
                                     for (var index in error.response.data) {
                                         that.$Notice.warning({
                                             title: '警告',
@@ -313,16 +317,10 @@
                 if (query == null || query == '') {
                     return false;
                 }
-                Util.ajax.get('/util', {
-                    params: {
-                        action: 'translates',
-                        q: query
-                    }
-                }).then(function (response) {
+                Util.ajax.get('/backend/utils/fanyi/' + query).then(function (response) {
                     let res = response.data;
-                    if (res.status == 200 && res.trans_result) {
-                        let flag = res.trans_result.toLowerCase();
-                        that.myForm.category_flag = flag.replaceAll(' ', '-', flag);
+                    if (res.status == 200) {
+                        that.myForm.category_flag = res.item
                     }
                 }).catch(function (error) {
                     console.log(error);

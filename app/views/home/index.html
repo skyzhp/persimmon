@@ -1,21 +1,44 @@
 {{set . "title" "Home"}}
 {{template "header.html" .}}
 
-<header class="jumbotron" style="background-color:#A9F16C">
-  <div class="container">
-    <div class="row">
-      <h1>It works!</h1>
-      <p></p>
+<div class="content-main">
+    {{range .posts}}
+    <article class="post clearfix" itemscope itemtype="http://schema.org/Article">
+        <header class="post-header">
+            <h1 class="entry-title"><a href="/post/{{ .Flag }}" rel="bookmark">{{ .Title }}</a></h1>
+            <div class="post-date">
+                <time class="fa fa-calendar date" datetime="{{ .CreatedAt.ToDateTime }}"
+                      itemprop="datePublished" pubdate=""> {{ .CreatedAt.ToDateTime }}
+                </time>
+                <span class="views fa fa-eye" itemprop="views"> {{ .Views }} views</span>
+            </div>
+            <div class="clear"></div>
+        </header>
+        <div class="post-content post-desc" itemprop="articleBody">
+            <p>{{ .Content }}...</p>
+            <p>[<a href="/post/{{ .Flag }}" rel="nofollow">阅读更多 →</a>]</p>
+            <div class="clear"></div>
+        </div>
+        <footer class="post-footer" itemprop="keywords">
+            <li>
+            </li>
+            <div class="clear"></div>
+        </footer>
+    </article>
+    {{end}}
+    <!--page nav-->
+    <div id="pager">
+        <div class="row">
+            <div class="small-12 large-8 large-centered columns pager-inner">
+                <span class="pager-number">{{ .page }} / {{ .totalPage }}</span>
+                {{if .page < .totalPage }}
+                <a rel="next" class="pager-btn pager-next" href="{{next .page }}">更早 &rarr;</a>
+                {{else}}
+                <a rel="next" class="pager-btn pager-next" href="{{previous .page }}">&larr; 最近</a>
+                {{end}}
+            </div>
+        </div>
     </div>
-  </div>
-</header>
-
-<div class="container">
-  <div class="row">
-    <div class="span6">
-      {{template "flash.html" .}}
-    </div>
-  </div>
 </div>
 
 {{template "footer.html" .}}

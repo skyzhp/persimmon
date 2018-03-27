@@ -135,16 +135,16 @@
                 let query = {
                     rows: that.pageSize,
                     categoryId: that.category_id,
-                    q: that.q,
+                    keywords: that.q,
                     page: that.currentPage
                 };
 
                 util.ajax.get('/backend/posts', {params: query}).then(function (response) {
                     let res = response.data;
                     if (res.status == 200) {
-                        that.listData = res.list;
-                        that.total = res.total;
-                        that.currentPage = res.current_page;
+                        that.listData = res.list.data;
+                        that.total = res.list.total;
+                        that.currentPage = res.list.current_page;
                         that.listLoading = false;
                     } else {
                         this.$Notice.warning({
@@ -199,7 +199,7 @@
                     content: '<p>您确认删除选中的记录吗?</p>',
                     onOk: () => {
                         that.listLoading = true;
-                        util.ajax.delete('/backend/posts/destroy', {data: idsParam}).then(function (response) {
+                        util.ajax.post('/backend/posts/destroy', {data: idsParam}).then(function (response) {
                             that.listLoading = false;
                             let res = response.data;
                             that.$Notice.open({
@@ -234,13 +234,14 @@
                 let that = this;
                 util.ajax.get('/backend/categories', {
                     params: {
-                        rows: 999
+                        rows: 999,
+                        page:1
                     }
                 }).then(function (response) {
                     let data = response.data;
                     if (data.status == 200) {
-                        data.list.splice(0, 0, {id: 0, category_name: '顶级分类', hidden: true, category_parent: 0});
-                        that.categorys = data.list;
+                        data.list.data.splice(0, 0, {id: 0, category_name: '全部', hidden: true, category_parent: 0});
+                        that.categorys = data.list.data;
                     } else {
                         this.$Notice.error({
                             title: '数据获取失败',
@@ -252,7 +253,7 @@
                 });
             },
             postEditor(row) {
-                let path = '/backend/posts/' + row.id;
+                let path = '/posts/edit/' + row.id;
                 this.$router.push({path: path});
             },
             addPost() {

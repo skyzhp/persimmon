@@ -18,6 +18,8 @@ var postTagsService, PostTagsS *service.PostTagsService
 var uploadsService, UploadsS *service.UploadsService
 var baiduFanyiService, baiduFanyiS *service.BaiduFanyiService
 var notificationService, notificationS *service.NotificationService
+var postTrashService, postTrashS *service.PostTrashService
+var navigationService, navigationS *service.NavigationService
 
 func InitService() {
 	AuthS = &service.AuthService{}
@@ -28,10 +30,13 @@ func InitService() {
 	commentS = &service.CommentService{}
 	TagS = &service.TagService{}
 	PostS = &service.PostService{}
+	postTrashS = &service.PostTrashService{}
 	PostTagsS = &service.PostTagsService{}
 	UploadsS = &service.UploadsService{}
 	baiduFanyiS = &service.BaiduFanyiService{}
 	notificationS = &service.NotificationService{}
+	navigationS = &service.NavigationService{}
+
 
 	categoryService = CategoryS
 	userService = UserS
@@ -41,10 +46,12 @@ func InitService() {
 	commentService = commentS
 	tagService = TagS
 	postService = PostS
+	postTrashService = postTrashS
 	postTagsService = PostTagsS
 	uploadsService = UploadsS
 	baiduFanyiService = baiduFanyiS
 	notificationService = notificationS
+	navigationService = navigationS
 }
 
 func AuthInterceptor(c *revel.Controller) revel.Result {

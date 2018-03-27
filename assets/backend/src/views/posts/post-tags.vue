@@ -144,17 +144,17 @@
             getData: function () {
                 let that = this;
                 that.listLoading = true;
-                Util.ajax.get('/tags', {
+                Util.ajax.get('/backend/tags', {
                     params: {
                         rows: this.pageSize,
                         page: this.currentPage
                     }
                 }).then(function (response) {
                     let res = response.data;
-                    if (res != false) {
-                        that.listData = res.data;
-                        that.total = res.total;
-                        that.currentPage = res.current_page;
+                    if (res.status == 200) {
+                        that.listData = res.list.data;
+                        that.total = res.list.total;
+                        that.currentPage = res.list.current_page;
                         that.listLoading = false;
                     } else {
                         that.$Notice.warning({
@@ -189,11 +189,11 @@
                 that.editFormLoading = true;
                 that.myFormTitle = '编辑';
                 that.editFormVisible = true;
-                Util.ajax.get('/tags/' + row.id).then(function (response) {
+                Util.ajax.get('/backend/tags/' + row.id).then(function (response) {
                     let res = response.data;
-                    if (res != false) {
-                        res.tags_flag = decodeURI(res.tags_flag);
-                        that.myForm = res;
+                    if (res.status == 200) {
+                        res.tags_flag = decodeURI(res.item.tags_flag);
+                        that.myForm = res.item;
                     } else {
                         that.$Notice.warning({
                             title: '数据获取失败',
@@ -239,11 +239,11 @@
                     content: '<p>您确认删除选中的记录吗?</p>',
                     onOk: () => {
                         that.listLoading = true;
-                        Util.ajax.delete('/tags/destroy', {data: idsParam}).then(function (response) {
+                        Util.ajax.post('/backend/tags/destroy', Util.stringify(idsParam)).then(function (response) {
                             that.listLoading = false;
                             let res = response.data;
                             that.$Notice.open({
-                                title: res.status == 'success' ? '删除成功' : '删除失败',
+                                title: res.status == 200 ? '删除成功' : '删除失败',
                                 desc: ''
                             });
                             if (type == 'one') {
@@ -272,13 +272,13 @@
                     }
 
                     if (that.myForm.id > 0) {
-                        Util.ajax.put('/tags/update', that.myForm).then(function (response) {
+                        Util.ajax.put('/backend/tags/update', that.myForm).then(function (response) {
                             let res = response.data;
                             that.$message({
-                                message: res.status == 'success' ? '编辑成功' : '编辑失败',
+                                message: res.status == 200 ? '编辑成功' : '编辑失败',
                                 type: res.status
                             });
-                            if (res.status == 'success') {
+                            if (res.status == 200) {
                                 that.closeForm('myForm');
                                 that.getData();
                             }
@@ -286,16 +286,15 @@
                             console.log(error);
                         });
                     } else {
-                        Util.ajax.post('/tags', that.myForm).then(function (response) {
-                            console.log(response);
-
+                        Util.ajax.post('/backend/tags/store', that.myForm).then(function (response) {
+                            //console.log(response);
                             let res = response.data;
-                            if (res.status == 'success') {
+                            if (res.status == 200) {
                                 that.closeForm('myForm');
                                 that.getData();
                             }
                             that.$Notice.open({
-                                title: res.status == 'success' ? '新增成功' : '新增失败',
+                                title: res.status == 200 ? '新增成功' : '新增失败',
                                 desc: ''
                             });
                         }).catch(function (error) {
@@ -345,16 +344,10 @@
                 if (query == null || query == '') {
                     return false;
                 }
-                Util.ajax.get('/util', {
-                    params: {
-                        action: 'translates',
-                        q: query
-                    }
-                }).then(function (response) {
+                Util.ajax.get('/backend/utils/fanyi/' + query).then(function (response) {
                     let res = response.data;
-                    if (res.status == 200 && res.trans_result) {
-                        let flag = res.trans_result.toLowerCase();
-                        that.myForm.tags_flag = flag.replaceAll(' ', '-', flag);
+                    if (res.status == 200) {
+                        that.myForm.tags_flag = res.item
                     }
                 }).catch(function (error) {
                     console.log(error);
