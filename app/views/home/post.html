@@ -7,8 +7,8 @@
         <header class="post-header">
             <h1 class="entry-title"><a href="/post/{{ .Flag }}" rel="nofollow">{{ .Title }}</a></h1>
             <div class="post-date">
-                <time class="fa fa-calendar date" datetime="{{ .CreatedAt.ToDateTime }}"
-                      itemprop="datePublished" pubdate=""> {{ .CreatedAt.ToDateTime }}
+                <time class="fa fa-calendar date" datetime="{{date "2006-01-02 15:04:05" .CreatedAt }}"
+                      itemprop="datePublished" pubdate=""> {{date "02 Jan , 2006" .CreatedAt }}
                 </time>
                 <span class="views fa fa-eye" itemprop="views"> {{ .Views }} views</span>
             </div>

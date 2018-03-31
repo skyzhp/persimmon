@@ -4,6 +4,7 @@ import (
 	"github.com/cong5/persimmon/app/info"
 	"github.com/revel/revel"
 	"gopkg.in/russross/blackfriday.v2"
+	"github.com/cong5/persimmon/app/utils"
 )
 
 type Comment struct {
@@ -11,7 +12,7 @@ type Comment struct {
 }
 
 func (c Comment) Index(rows int, page int) revel.Result {
-	lists, err := commentService.GetListPaging(rows, page)
+	lists, err := commentService.GetListPaging(rows, page, false)
 	if err != nil {
 		return c.ResponseError(500, err.Error())
 	}
@@ -20,7 +21,7 @@ func (c Comment) Index(rows int, page int) revel.Result {
 }
 
 func (c Comment) Show(id int) revel.Result {
-	comment, err := commentService.GetOne(id)
+	comment, err := commentService.GetCommentById(id, false)
 	if err != nil {
 		return c.ResponseError(500, err.Error())
 	}
@@ -38,13 +39,14 @@ func (c Comment) Store(comment *info.Comments) revel.Result {
 
 	//save
 	htmlContent := blackfriday.Run([]byte(comment.Markdown))
+	clientIP := utils.Ip2long(c.ClientIP)
 	comments := info.Comments{PostsId: comment.PostsId,
 		Name: comment.Name,
 		Email: comment.Email,
 		Url: comment.Url,
 		Content: string(htmlContent),
 		Markdown: comment.Markdown,
-		Ipaddress: c.ClientIP}
+		ClientIp: clientIP}
 
 	_, err := commentService.Save(comments)
 	if err != nil {
@@ -61,13 +63,14 @@ func (c Comment) Update(content *info.Comments) revel.Result {
 	}
 
 	//save
+	clientIP := utils.Ip2long(c.ClientIP)
 	comment := info.Comments{PostsId: content.PostsId,
 		Name: content.Name,
 		Email: content.Email,
 		Url: content.Url,
 		Content: content.Content,
 		Markdown: content.Markdown,
-		Ipaddress: c.ClientIP}
+		ClientIp: clientIP}
 
 	_, err := commentService.Update(content.Id, comment)
 	if err != nil {

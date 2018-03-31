@@ -2,53 +2,92 @@ package home
 
 import (
 	"github.com/revel/revel"
+	"github.com/cong5/persimmon/app/utils"
 )
 
 type Home struct {
 	BaseHomeController
 }
 
-func (c Home) Index() revel.Result {
-	limit := 10
-	c.PostList(0, limit, 1)
-	return c.Render()
-}
+func (c Home) Index(page int) revel.Result {
+	page = utils.IntDefault(page, FirstPage)
+	postArr, err := postService.SearchList(0, "", PageSize, FirstPage, false)
+	if err != nil {
+		c.Flash.Error(err.Error())
+	}
 
-func (c Home) Page(page int) revel.Result {
-	limit := 10
-	c.PostList(0, limit, page)
+	total, cErr := postService.CountPost(0, "")
+	if cErr != nil {
+		c.Flash.Error(cErr.Error())
+	}
+
+	c.ViewAssign(postArr, total, PageSize, page)
 	return c.Render()
 }
 
 func (c Home) Post(slug string) revel.Result {
 	c.GetGlobalInfo()
-	post, err := postService.GetOneBySlug(slug)
-	if slug == "" || err != nil {
+	post, err := postService.GetPostBySlug(slug, false)
+	if slug == "" || err != nil || post.Id <= 0 {
 		return c.NotFound("很抱歉，没有找到这个页面.")
 	}
 
 	return c.Render(post)
 }
 
-func (c Home) Tag(tag string) revel.Result {
-	c.GetGlobalInfo()
+func (c Home) Tag(name string, page int) revel.Result {
+	page = utils.IntDefault(page, 1)
+
+	if name == "" {
+		c.Flash.Error("标签不能为空.")
+	}
+
+	postIdArr, pErr := postTagsService.GetPostIdsByTagName(name)
+	if pErr != nil {
+		c.Flash.Error("很抱歉，根据这个标签没有找到文章.")
+	}
+
+	count := len(postIdArr)
+	start := (page - 1) * PageSize
+	newPostIdArr := utils.SliceIntArr(postIdArr, start, PageSize, count)
+
+	if len(newPostIdArr) <= 0 {
+		c.Flash.Error("很抱歉，找不到你想要的页面.")
+	}
+
+	postArr, postErr := postService.GetPostByIdArr(newPostIdArr, false)
+	if postErr != nil {
+		c.Flash.Error("很抱歉，根据这个标签没有找到文章.")
+	}
+
+	c.ViewAssign(postArr, count, PageSize, page)
 	return c.Render()
 }
 
 func (c Home) Categories(slug string, page int) revel.Result {
-	limit := 10
-	category, cErr := categoryService.GetOneBySlug(slug)
+	category, cErr := categoryService.GetCategoryBySlug(slug, false)
 	if cErr != nil {
 		c.Flash.Error(cErr.Error())
 	}
-	c.PostList(category.Id, limit, page)
 
+	page = utils.IntDefault(page, 1)
+	postArr, err := postService.SearchList(category.Id, "", PageSize, page, false)
+	if err != nil {
+		c.Flash.Error(err.Error())
+	}
+
+	total, cErr := postService.CountPost(category.Id, "")
+	if cErr != nil {
+		c.Flash.Error(cErr.Error())
+	}
+
+	c.ViewAssign(postArr, total, PageSize, page)
 	return c.Render()
 }
 
 func (c Home) Friends() revel.Result {
 	c.GetGlobalInfo()
-	links, err := linkService.GetList(9999, 1)
+	links, err := linkService.GetList(9999, 1, false)
 	if err != nil {
 		c.Flash.Error(err.Error())
 	}
@@ -57,11 +96,21 @@ func (c Home) Friends() revel.Result {
 }
 
 func (c Home) Feed() revel.Result {
-	c.GetGlobalInfo()
-	return c.Render()
+	domain := c.Request.Host
+	xml, err := feedService.BuildFeed(domain)
+	if err != nil {
+		c.Flash.Error(err.Error())
+	}
+
+	return myRenderXML(xml)
 }
 
-func (c Home) SiteMap() revel.Result {
-	c.GetGlobalInfo()
-	return c.Render()
+func (c Home) SiteMap(platform string) revel.Result {
+	domain := c.Request.Host
+	xml, err := sitemapService.BuildSiteMap(domain, platform)
+	if err != nil {
+		c.Flash.Error(err.Error())
+	}
+
+	return myRenderXML(xml)
 }

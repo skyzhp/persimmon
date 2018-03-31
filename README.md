@@ -43,3 +43,9 @@ go build -o ./persimmon github.com/cong5/persimmon/app/tmp
 ```
 ./persimmon -importPath=github.com/cong5/persimmon -runMode=prod -port=9100
 ```
+
+FYI, in the meantime, after Revel generates your app, you can just do:
+
+go build -o bin/myapp import/path/to/myapp/app/tmp
+run gdb on the binary bin/myapp.
+Pass in flags "-importPath", "-srcPath", "-runMode"

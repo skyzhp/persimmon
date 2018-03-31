@@ -3,8 +3,10 @@ package service
 import (
 	"github.com/cong5/persimmon/app/info"
 	"github.com/cong5/persimmon/app/db"
-	"time"
 	"github.com/cong5/persimmon/app/utils"
+	"github.com/revel/revel/cache"
+	"github.com/revel/revel"
+	"time"
 )
 
 type LinkService struct{}
@@ -19,22 +21,27 @@ func (this *LinkService) GetOne(id int) (*info.Links, error) {
 	return link, nil
 }
 
-func (this *LinkService) GetList(limit int, page int) ([]info.Links, error) {
+func (this *LinkService) GetList(limit int, page int, real bool) ([]info.Links, error) {
 	limit = utils.IntDefault(limit, 20)
 	page = utils.IntDefault(page, 1)
 	start := (page - 1) * limit
 	linkList := make([]info.Links, 0)
-	err := db.MasterDB.Limit(limit, start).Find(&linkList)
-	if err != nil {
-		//revel.INFO.Printf("Get link failed : %s", err)
-		return nil, err
+
+	cacheKey := utils.CacheKey("LinkService", "Links")
+	if err := cache.Get(cacheKey, &linkList); err != nil || real {
+		err := db.MasterDB.Limit(limit, start).Find(&linkList)
+		if err != nil {
+			revel.INFO.Printf("Get link failed : %s", err)
+			return nil, err
+		}
+		go cache.Set(cacheKey, linkList, 30*time.Minute)
 	}
 
 	return linkList, nil
 }
 
 func (this *LinkService) GetListPaging(limit int, page int) (*info.PagingContent, error) {
-	dataList, err := this.GetList(limit, page)
+	dataList, err := this.GetList(limit, page, false)
 	if err != nil {
 		return nil, err
 	}
@@ -88,6 +95,6 @@ func (this *LinkService) Destroy(id int, link info.Links) (bool, error) {
 	return true, nil
 }
 
-func (this *LinkService) GetDateTime() string {
-	return time.Now().Format("2006-01-02 15:04:05")
+func (this *LinkService) Table(tableName string) string {
+	return db.MasterDB.TableMapper.Obj2Table(tableName)
 }

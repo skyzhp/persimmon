@@ -11,7 +11,7 @@ type Tags struct {
 }
 
 func (c Tags) Index(rows int, page int) revel.Result {
-	lists, err := tagService.GetListPaging(rows, page)
+	lists, err := tagService.GetListPaging(rows, page, false)
 	if err != nil {
 		return c.ResponseError(500, err.Error())
 	}
@@ -20,7 +20,7 @@ func (c Tags) Index(rows int, page int) revel.Result {
 }
 
 func (c Tags) Show(id int) revel.Result {
-	tag, err := tagService.GetOne(id)
+	tag, err := tagService.GetTagById(id, false)
 	if err != nil {
 		return c.ResponseError(500, err.Error())
 	}

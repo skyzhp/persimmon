@@ -6,19 +6,10 @@ import (
 	"github.com/revel/revel"
 	"time"
 	"github.com/cong5/persimmon/app/utils"
+	"github.com/revel/revel/cache"
 )
 
 type OptionService struct{}
-
-func (this *OptionService) GetOne(id int) (*info.Options, error) {
-	option := &info.Options{Id: id}
-	_, err := db.MasterDB.Get(option)
-	if err != nil {
-		//revel.INFO.Printf("Get option failed : %s", err)
-		return nil, err
-	}
-	return option, nil
-}
 
 func (this *OptionService) GetList(limit int, page int) ([]info.Options, error) {
 
@@ -63,10 +54,49 @@ func (this *OptionService) CountOption() (int, error) {
 	return int(total), nil
 }
 
+func (this *OptionService) GetValueByName(optionName string, real bool) (string, error) {
+	option := &info.Options{}
+	_, err := db.MasterDB.Where("option_name = ?", optionName).Cols("option_value").Get(option)
+	if err != nil {
+		revel.INFO.Printf("Get value by name failed : %s", err)
+		return "", err
+	}
+
+	return option.OptionValue, nil
+}
+
+func (this *OptionService) GetAllOption(real bool) ([]info.Options, error) {
+	options := make([]info.Options, 0)
+	cacheKey := utils.CacheKey("OptionService", "AllOption")
+	if err := cache.Get(cacheKey, &options); err != nil || real {
+		dbErr := db.MasterDB.Where("option_status !='hidden'").Find(&options)
+		if dbErr != nil {
+			return nil, dbErr
+		}
+		go cache.Set(cacheKey, options, 30*time.Minute)
+	}
+
+	return options, nil
+}
+
+//============================ use backedn ============================
+
+func (this *OptionService) GetOptionById(id int) (*info.Options, error) {
+	option := &info.Options{Id: id}
+	_, err := db.MasterDB.Get(option)
+	if err != nil {
+		//revel.INFO.Printf("Get option failed : %s", err)
+		return nil, err
+	}
+	return option, nil
+}
+
 func (this *OptionService) Save(option info.Options) (int, error) {
 	if _, err := db.MasterDB.InsertOne(option); err != nil {
 		return 0, err
 	}
+
+	this.GetAllOption(true)
 	return option.Id, nil
 }
 
@@ -76,26 +106,9 @@ func (this *OptionService) Update(id int, option info.Options) (bool, error) {
 		//revel.INFO.Printf("Update option failed: %s", err)
 		return false, err
 	}
-	return true, nil
-}
 
-func (this *OptionService) Destroy(id int, option info.Options) (bool, error) {
-	_, err := db.MasterDB.Id(id).Delete(option)
-	if err != nil {
-		//revel.INFO.Printf("Destroy option failed: %s", err)
-		return false, err
-	}
+	this.GetAllOption(true)
 	return true, nil
-}
-
-func (this *OptionService) GetValueByName(optionName string) (string, error) {
-	option := &info.Options{}
-	_, err := db.MasterDB.Where("option_name = ?", optionName).Get(option)
-	if err != nil {
-		//revel.INFO.Printf("Get value by name failed : %s", err)
-		return "", err
-	}
-	return option.OptionValue, nil
 }
 
 func (this *OptionService) UpdateByName(optionName string, optionValue string) (bool, error) {
@@ -105,20 +118,18 @@ func (this *OptionService) UpdateByName(optionName string, optionValue string) (
 		//revel.INFO.Printf("Update by name option failed: %s", err)
 		return false, err
 	}
+
+	this.GetAllOption(true)
 	return true, nil
 }
 
-func (this *OptionService) GetAllOption() ([]info.Options, error) {
-	options := make([]info.Options, 0)
-	err := db.MasterDB.Where("option_status !='hidden'").Find(&options)
+func (this *OptionService) Destroy(id int, option info.Options) (bool, error) {
+	_, err := db.MasterDB.Id(id).Delete(option)
 	if err != nil {
-		//revel.INFO.Printf("Get all option failed: %s", err)
-		return nil, err
+		//revel.INFO.Printf("Destroy option failed: %s", err)
+		return false, err
 	}
 
-	return options, nil
-}
-
-func (this *OptionService) GetDateTime() string {
-	return time.Now().Format("2006-01-02 15:04:05")
+	this.GetAllOption(true)
+	return true, nil
 }

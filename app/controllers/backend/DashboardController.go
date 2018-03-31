@@ -16,7 +16,7 @@ func (c Dashboard) Index() revel.Result {
 }
 
 func (c Dashboard) MetaCount() revel.Result {
-	post, pErr := postService.CountPost()
+	post, pErr := postService.CountPost(0,"")
 	if pErr != nil {
 		post = 0
 	}

@@ -1,48 +1,87 @@
 package service
 
 import (
-	"github.com/cong5/persimmon/app/info"
-	"github.com/cong5/persimmon/app/db"
 	"github.com/revel/revel"
-	"time"
+	"github.com/revel/revel/cache"
+	"github.com/cong5/persimmon/app/db"
+	"github.com/cong5/persimmon/app/info"
 	"github.com/cong5/persimmon/app/utils"
-	"fmt"
+	"errors"
+	"time"
 )
 
 type CommentService struct{}
 
-func (this *CommentService) GetOne(id int) (*info.Comments, error) {
-	comment := &info.Comments{Id: id}
-	_, err := db.MasterDB.Get(comment)
-	if err != nil {
-		//revel.INFO.Printf("Get comment failed : %s", err)
-		return nil, err
+func (this *CommentService) GetCommentById(id int, real bool) (info.Comments, error) {
+	comments := info.Comments{}
+	cacheKey := utils.CacheKey("CommentService", "InfoById", id)
+	if err := cache.Get(cacheKey, &comments); err != nil || real {
+		_, err := db.MasterDB.Where("id = ?", id).Get(&comments)
+		if err != nil {
+			return comments, err
+		}
+		go cache.Set(cacheKey, comments, 30*time.Minute)
 	}
-	return comment, nil
+
+	//post title
+	post, _ := postService.GetPostById(comments.PostsId, false)
+	comments.Title = post.Title
+
+	return comments, nil
 }
 
-func (this *CommentService) GetList(limit int, page int) ([]info.JoinComments, error) {
+func (this *CommentService) GetCommentByIdArr(idArr []int, real bool) ([]info.Comments, error) {
+	idLen := len(idArr)
+	if idLen <= 0 {
+		return nil, errors.New("参数不正确")
+	}
+
+	commentArr := make([]info.Comments, idLen)
+
+	for k, commentId := range idArr {
+		comment, err := this.GetCommentById(commentId, real)
+		if err == nil {
+			commentArr[k] = comment
+		}
+	}
+
+	return commentArr, nil
+}
+
+func (this *CommentService) GetList(postId int, limit int, page int, real bool) ([]info.Comments, error) {
 	limit = utils.IntDefault(limit, 20)
 	page = utils.IntDefault(page, 1)
-
+	postId = utils.IntDefault(postId, 0)
 	start := (page - 1) * limit
-	commentList := make([]info.JoinComments, 0)
-	commentTable := db.MasterDB.TableMapper.Obj2Table("comments")
-	postTable := db.MasterDB.TableMapper.Obj2Table("posts")
-	joinWhere := fmt.Sprintf("%s.posts_id = %s.id", commentTable, postTable)
-	commentColumns := fmt.Sprintf("%s.*", commentTable)
-	postColumns := fmt.Sprintf("%s.title", postTable)
-	err := db.MasterDB.Table(commentTable).Join("LEFT OUTER", postTable, joinWhere).Limit(limit, start).Cols(commentColumns, postColumns).Find(&commentList)
+	commentIdArr := make([]info.Comments, 0)
+	dbSession := db.MasterDB.NewSession()
+
+	if postId > 0 {
+		dbSession.Where("posts_id = ?", postId)
+	}
+
+	err := dbSession.Cols("id").Limit(start, limit).Find(&commentIdArr)
 	if err != nil {
-		//revel.INFO.Printf("Get comment failed : %s", err)
+		revel.INFO.Printf("Get comment failed : %s", err)
 		return nil, err
 	}
 
-	return commentList, nil
+	idArr := make([]int, len(commentIdArr))
+	for k, v := range commentIdArr {
+		idArr[k] = v.Id
+	}
+
+	commentArr, cErr := this.GetCommentByIdArr(idArr, false)
+	if cErr != nil {
+		revel.INFO.Printf("GetCommentByIdArr Error : %s", cErr)
+		return nil, cErr
+	}
+
+	return commentArr, nil
 }
 
-func (this *CommentService) GetListPaging(limit int, page int) (*info.PagingContent, error) {
-	dataList, err := this.GetList(limit, page)
+func (this *CommentService) GetListPaging(limit int, page int, real bool) (*info.PagingContent, error) {
+	dataList, err := this.GetList(0, limit, page, real)
 	if err != nil {
 		return nil, err
 	}
@@ -129,6 +168,6 @@ func (this *CommentService) CountComment(postId int) (int, error) {
 	return int(total), nil
 }
 
-func (this *CommentService) GetDateTime() string {
-	return time.Now().Format("2006-01-02 15:04:05")
+func (this *CommentService) Table(tableName string) string {
+	return db.MasterDB.TableMapper.Obj2Table(tableName)
 }

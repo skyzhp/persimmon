@@ -3,6 +3,7 @@ package backend
 import (
 	"github.com/cong5/persimmon/app/info"
 	"github.com/revel/revel"
+	"github.com/cong5/persimmon/app/utils"
 )
 
 type Link struct {
@@ -37,11 +38,12 @@ func (c Link) Store(content *info.Links) revel.Result {
 	}
 
 	//save
+	clientIP := utils.Ip2long(c.ClientIP)
 	link := info.Links{Name: content.Name,
 		Logo: content.Logo,
 		Group: content.Group,
 		Url: content.Url,
-		Ipaddress: c.ClientIP}
+		ClientIp: clientIP}
 
 	_, err := linkService.Save(link)
 	if err != nil {
@@ -54,11 +56,12 @@ func (c Link) Store(content *info.Links) revel.Result {
 func (c Link) Update(content *info.Links) revel.Result {
 
 	//save
+	clientIP := utils.Ip2long(c.ClientIP)
 	link := info.Links{Name: content.Name,
 		Logo: content.Logo,
 		Group: content.Group,
 		Url: content.Url,
-		Ipaddress: c.ClientIP}
+		ClientIp: clientIP}
 
 	_, err := linkService.Update(content.Id, link)
 	if err != nil {

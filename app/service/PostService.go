@@ -1,55 +1,83 @@
 package service
 
 import (
+	"github.com/revel/revel"
 	"github.com/cong5/persimmon/app/info"
 	"github.com/cong5/persimmon/app/db"
-	"time"
 	"github.com/cong5/persimmon/app/utils"
+	"github.com/revel/revel/cache"
+	"html/template"
 	"errors"
-	"github.com/revel/revel"
+	"fmt"
+	"time"
 )
 
 type PostService struct{}
 
-func (this *PostService) GetOne(id int) (*info.Posts, error) {
-	post := &info.Posts{Id: id}
-	_, err := db.MasterDB.Get(post)
-	if err != nil {
-		return post, err
+func (this *PostService) GetPostById(id int, real bool) (info.Posts, error) {
+	post := info.Posts{}
+	cacheKey := utils.CacheKey("PostService", "InfoById", id)
+	if err := cache.Get(cacheKey, &post); err != nil || real {
+		_, err := db.MasterDB.Where("id = ?", id).Get(&post)
+		if err != nil {
+			return post, err
+		}
+		go cache.Set(cacheKey, post, 30*time.Minute)
 	}
+
 	//related tags
-	tags, err := tagService.GetListByPostId(post.Id)
+	tags, err := tagService.GetListByPostId(post.Id, real)
 	if err != nil {
 		revel.INFO.Printf("GetListByPostId failed : %s", tags)
-		return nil, err
+		return post, err
 	}
+	post.Tags = tags
+
+	//related Categories
+	category, catErr := categoryService.GetCategoryById(post.CategoryId, real)
+	if catErr != nil {
+		revel.INFO.Printf("GetCategoryById failed : %s", catErr)
+		return post, catErr
+	}
+	post.Categories = category
 
 	return post, nil
 }
 
-func (this *PostService) GetOneBySlug(slug string) (*info.Posts, error) {
-	post := &info.Posts{}
+func (this *PostService) GetPostBySlug(slug string, real bool) (info.Posts, error) {
+	post := info.Posts{}
 	if slug == "" {
 		return post, errors.New("Slug is empty.")
 	}
-	_, err := db.MasterDB.Where("flag = ?", slug).Get(post)
+	_, err := db.MasterDB.Where("flag = ?", slug).Cols("id").Get(&post)
 	if err != nil {
-		return nil, err
+		return post, err
 	}
-	//related tags
-	tags, err := tagService.GetListByPostId(post.Id)
-	if err != nil {
-		revel.INFO.Printf("GetListByPostId failed : %s", tags)
-		return nil, err
+
+	post, pErr := this.GetPostById(post.Id, real)
+	if pErr != nil {
+		return post, err
 	}
 
 	return post, nil
 }
 
-func (this *PostService) GetList(categoryId int, keywords string, limit int, page int) ([]info.Posts, error) {
+func (this *PostService) GetSlugList(limit int, page int) ([]info.Posts, error) {
+	limit = utils.IntDefault(limit, 20)
+	page = utils.IntDefault(page, 1)
+	start := (page - 1) * limit
+	postArr := make([]info.Posts, 0)
+	err := db.MasterDB.Desc("id").Cols("flag", "created_at").Limit(limit, start).Find(&postArr)
+	if err != nil {
+		return nil, err
+	}
 
-	limit = utils.IntDefault(limit,20)
-	page = utils.IntDefault(page,1)
+	return postArr, nil
+}
+
+func (this *PostService) GetPostIdArr(categoryId int, keywords string, limit int, page int) ([]int, error) {
+	limit = utils.IntDefault(limit, 20)
+	page = utils.IntDefault(page, 1)
 	session := db.MasterDB.NewSession()
 	start := (page - 1) * limit
 	postList := make([]info.Posts, 0)
@@ -60,17 +88,85 @@ func (this *PostService) GetList(categoryId int, keywords string, limit int, pag
 		keywordsStr := "%" + keywords + "%"
 		session.And("title like ?", keywordsStr)
 	}
-	err := session.Desc("id").Limit(limit, start).Find(&postList)
+	err := session.Desc("id").Cols("id").Limit(limit, start).Find(&postList)
 	if err != nil {
 		return nil, err
 	}
 
-	return this.JoinRelated(postList)
+	idArr := make([]int, len(postList))
+	for k, val := range postList {
+		idArr[k] = val.Id
+	}
+
+	return idArr, nil
 }
 
-func (this *PostService) GetListPaging(categoryId int, keywords string, limit int, page int) *info.PagingContent {
-	dataList, _ := this.GetList(categoryId, keywords, limit, page)
-	total, _ := this.CountPost()
+func (this *PostService) GetPostByIdArr(idArr []int, real bool) ([]info.Posts, error) {
+	idLen := len(idArr)
+	if idLen <= 0 {
+		return nil, errors.New("参数不正确")
+	}
+
+	postArr := make([]info.Posts, idLen)
+
+	for k, postId := range idArr {
+		post, err := this.GetPostById(postId, real)
+		if err == nil {
+			postArr[k] = post
+		}
+	}
+
+	return postArr, nil
+}
+
+func (this *PostService) CountPost(categoryId int, keywords string) (int, error) {
+	post := new(info.Posts)
+	dbSession := db.MasterDB.NewSession()
+
+	if categoryId > 0 {
+		dbSession.And("category_id = ?", categoryId)
+	}
+
+	if keywords != "" {
+		likeTitle := "%" + keywords + "%"
+		dbSession.And("title like ?", likeTitle)
+	}
+
+	total, err := dbSession.Count(post)
+	if err != nil {
+		//revel.INFO.Printf("Count post failed: %s", err)
+		return 0, err
+	}
+	return int(total), nil
+}
+
+func (this *PostService) ShowPage(prefix string, page int, totalPage int) template.HTML {
+	next := "<a rel='next' class='pager-btn pager-next' href='/%s/%d'>更早 &rarr;</a>"
+	previous := "<a rel='prev' class='pager-btn pager-previous' href='/%s/%d'>&larr; 最近</a>"
+	html := ""
+
+	if totalPage == 1 {
+		return template.HTML("")
+	}
+
+	if page < 1 {
+		html = fmt.Sprintf(next, prefix, 1)
+	} else if page == 1 {
+		html = fmt.Sprintf(next, prefix, page+1)
+	} else if page >= totalPage {
+		previousNum := utils.IntDefault(totalPage-1, 1)
+		html = fmt.Sprintf(previous, prefix, previousNum)
+	} else {
+		previousNum := utils.IntDefault(totalPage-1, 1)
+		html = fmt.Sprintf(previous+next, prefix, previousNum, prefix, page+1)
+	}
+
+	return template.HTML(html)
+}
+
+func (this *PostService) GetListPaging(categoryId int, keywords string, limit int, page int, real bool) *info.PagingContent {
+	dataList, _ := this.SearchList(categoryId, keywords, limit, page, real)
+	total, _ := this.CountPost(0, "")
 	totalPage := utils.GetTotalPage(total, limit)
 	pagingContent := &info.PagingContent{Data: dataList,
 		Total: total,
@@ -79,34 +175,42 @@ func (this *PostService) GetListPaging(categoryId int, keywords string, limit in
 	return pagingContent
 }
 
-func (this *PostService) JoinRelated(posts []info.Posts) ([]info.Posts, error) {
-	if len(posts) <= 0 {
-		return posts, nil
+func (this *PostService) SearchList(categoryId int, keywords string, limit int, page int, real bool) ([]info.Posts, error) {
+	limit = utils.IntDefault(limit, 20)
+	page = utils.IntDefault(page, 1)
+	session := db.MasterDB.NewSession()
+	start := (page - 1) * limit
+	postList := make([]info.Posts, 0)
+	if categoryId > 0 {
+		session.And("category_id = ?", categoryId)
 	}
-	categoryList, err := categoryService.GetList(999, 1)
+	if len(keywords) > 0 {
+		keywordsStr := "%" + keywords + "%"
+		session.And("title like ?", keywordsStr)
+	}
+	err := session.Desc("id").Cols("id").Limit(limit, start).Find(&postList)
 	if err != nil {
 		return nil, err
 	}
-	categories := make(map[int]info.Categorys, len(categoryList))
-	for _, category := range categoryList {
-		categories[category.Id] = category
-	}
-	for i, post := range posts {
-		posts[i].Categories = categories[post.CategoryId]
-		tags, err := tagService.GetListByPostId(post.Id)
-		if err == nil {
-			posts[i].Tags = tags
-		} else {
-			revel.INFO.Printf("GetListByPostId failed : %s", err)
-		}
+
+	idArr := make([]int, len(postList))
+	for k, v := range postList {
+		idArr[k] = v.Id
 	}
 
-	return posts, nil
+	postList, pErr := this.GetPostByIdArr(idArr, real)
+	if pErr != nil {
+		return nil, pErr
+	}
+
+	return postList, nil
 }
+
+//================================ use backend ===============================
 
 func (this *PostService) Save(post info.Posts) (int, error) {
 	if _, err := db.MasterDB.InsertOne(post); err != nil {
-		//revel.INFO.Printf("Save post failed : %s", err)
+		revel.INFO.Printf("Save post failed : %s", err)
 		return 0, err
 	}
 	return post.Id, nil
@@ -115,9 +219,11 @@ func (this *PostService) Save(post info.Posts) (int, error) {
 func (this *PostService) Update(id int, post info.Posts) (bool, error) {
 	_, err := db.MasterDB.Id(id).Update(post)
 	if err != nil {
-		//revel.INFO.Printf("Update post failed: %s", err)
+		revel.INFO.Printf("Update post failed: %s", err)
 		return false, err
 	}
+
+	this.GetPostById(id, true)
 	return true, nil
 }
 
@@ -125,32 +231,22 @@ func (this *PostService) Update(id int, post info.Posts) (bool, error) {
 func (this *PostService) Trash(ids []int, post info.Posts) (bool, error) {
 	_, err := db.MasterDB.In("id", ids).Delete(post)
 	if err != nil {
-		//revel.INFO.Printf("Destroy post failed: %s", err)
+		revel.INFO.Printf("Destroy post failed: %s", err)
 		return false, err
 	}
 	return true, nil
-}
-
-func (this *PostService) CountPost() (int, error) {
-	post := new(info.Posts)
-	total, err := db.MasterDB.Count(post)
-	if err != nil {
-		//revel.INFO.Printf("Count post failed: %s", err)
-		return 0, err
-	}
-	return int(total), nil
 }
 
 func (this *PostService) SumViews() (int, error) {
 	post := new(info.Posts)
 	total, err := db.MasterDB.Sum(post, "views")
 	if err != nil {
-		//revel.INFO.Printf("Count post failed: %s", err)
+		revel.INFO.Printf("Count post failed: %s", err)
 		return 0, err
 	}
 	return int(total), nil
 }
 
-func (this *PostService) GetDateTime() string {
-	return time.Now().Format("2006-01-02 15:04:05")
+func (this *PostService) Table(tableName string) string {
+	return db.MasterDB.TableMapper.Obj2Table(tableName)
 }

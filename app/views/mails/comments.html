@@ -12,9 +12,8 @@
     .persimmon-group .ct p{margin: 0}
 </style>
 <div style="margin: 2em;width: 500px;margin: 0 auto">
-    <h1 style="font-size: 16px; font-weight: normal;">{{ .Subject }}</h1>
+    <h1 style="font-size: 16px; font-weight: normal;">“{{ .Title }}” 有新的评论。</h1>
     <hr style="height: 1px; border: none; border-top: 1px solid #e8e8e8;"/>
-{{ with .Comment}}
     <div class="content" style="font-size: 13px;">
         <div class="persimmon-group">
             <label>评论用户：</label>
@@ -31,11 +30,10 @@
         <div class="persimmon-group">
             <label>评论时间：</label>
             <div class="ct">
-            {{ .CreatedAt.ToDateTime }}
+            {{ .CreatedAt }}
             </div>
         </div>
     </div>
-{{ end }}
     <div class="link" style="font-size: 13px;clear: both">
         <hr style="height: 1px; border: none; border-top: 1px solid #e8e8e8;"/>
         <a href="http://{{ .Host }}" style="text-decoration: none;">查看>></a>

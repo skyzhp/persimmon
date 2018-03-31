@@ -1,9 +1,10 @@
 package home
 
 import (
-	"github.com/cong5/persimmon/app/service"
 	"github.com/revel/revel"
-	"fmt"
+	"github.com/cong5/persimmon/app/service"
+	"github.com/cong5/persimmon/app/utils"
+	"html/template"
 )
 
 var authService, AuthS *service.AuthService
@@ -20,6 +21,8 @@ var baiduFanyiService, baiduFanyiS *service.BaiduFanyiService
 var notificationService, notificationS *service.NotificationService
 var postTrashService, postTrashS *service.PostTrashService
 var navigationService, navigationS *service.NavigationService
+var feedService, FeedS *service.FeedService
+var sitemapService, SitemapS *service.SitemapService
 
 func InitService() {
 	AuthS = &service.AuthService{}
@@ -36,6 +39,8 @@ func InitService() {
 	baiduFanyiS = &service.BaiduFanyiService{}
 	notificationS = &service.NotificationService{}
 	navigationS = &service.NavigationService{}
+	FeedS = &service.FeedService{}
+	SitemapS = &service.SitemapService{}
 
 	categoryService = CategoryS
 	userService = UserS
@@ -51,18 +56,18 @@ func InitService() {
 	baiduFanyiService = baiduFanyiS
 	notificationService = notificationS
 	navigationService = navigationS
+	feedService = FeedS
+	sitemapService = SitemapS
 }
 
 func NewTemplateFunc() {
-	revel.TemplateFuncs["previous"] = func(val int) string {
-		pageNum := val - 1
-		if val <= 1 {
-			pageNum = 1
+
+	revel.TemplateFuncs["date"] = func(format string, timestamp int64) template.JS {
+		if timestamp == 0 {
+			return ""
 		}
-		return fmt.Sprintf("/page/%d", pageNum)
-	}
-	revel.TemplateFuncs["next"] = func(val int) string {
-		return fmt.Sprintf("/page/%d", val+1)
+		date := utils.Date(format, timestamp)
+		return template.JS(date)
 	}
 }
 

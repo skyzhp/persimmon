@@ -10,7 +10,7 @@ type Navigation struct {
 }
 
 func (c Navigation) Index() revel.Result {
-	navigation, err := navigationService.GetNavigation()
+	navigation, err := navigationService.GetNavigation(false)
 	if err != nil {
 		return c.ResponseError(500, err.Error())
 	}

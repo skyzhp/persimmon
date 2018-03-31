@@ -21,9 +21,6 @@
     <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    {{if .google_plus}}
-    <link rel="author" href="{{raw .google_plus }}"/>
-    {{end}}
     <meta name="csrf-token" content="{{ csrftoken . }}">
 </head>
 <body>
@@ -32,9 +29,9 @@
         <div class="header-content">
             <header>
                 <div class="avatar">
-                    <a href="{{ url "Home.Index" }}"><img src="https://o75u5ooep.qnssl.com/avatar/persimmon.jpg" alt=""></a>
+                    <a href="/"><img src="https://o75u5ooep.qnssl.com/avatar/persimmon.jpg" alt=""></a>
                 </div>
-                <h1><a href="{{ url "Home.Index" }}">{{ .site_name }}</a></h1>
+                <h1><a href="/">{{ .site_name }}</a></h1>
                 <div class="description">
                     <p>{{ .description }}</p>
                 </div>
@@ -43,7 +40,7 @@
             <nav class="nav-bar">
                 <div class="menu-side-menu-container">
                     <ul id="menu-side-menu" class="menu">
-                        <li class="menu-item"><a href="{{ url "Home.Index" }}">首页</a></li>
+                        <li class="menu-item"><a href="/">首页</a></li>
                         {{range .navigations}}
                         <li class="menu-item"><a href="{{ .Url }}">{{.Name}}</a></li>
                         {{end}}

@@ -7,24 +7,27 @@ module:testrunner
 # module:jobs
 
 GET     /                                           Home.Index
-GET     /page/:page                                 Home.Page
+GET     /page/:page                                 Home.Index
 # xmlrpc
 GET     /xmlrpc                                     XmlRpc.ShowMessage
 POST    /xmlrpc                                     XmlRpc.Index
 # categories
-GET     /categories/:slug/:page                     Home.Categories
 GET     /categories/:slug                           Home.Categories
+GET     /categories/:slug/:page                     Home.Categories
 # comment
 GET     /comment/:id/:page                          HomeComment.List
 POST    /comment                                    HomeComment.Post
-POST    /comment/text                               HomeComment.Test
 # post & tags
 GET     /post/:slug                                 Home.Post
-GET     /tag/:tag                                   Home.Tag
+GET     /tag/:name                                  Home.Tag
+GET     /tag/:name/:page                            Home.Tag
+
+GET     /test                                       Home.Test
+
 # other
 GET     /friends                                    Home.Friends
 GET     /feed                                       Home.Feed
-GET     /sitemap.xml                                Home.SiteMap
+GET     /sitemap/:platform                          Home.SiteMap
 
 # Admin
 GET     /backend                                    Dashboard.Index

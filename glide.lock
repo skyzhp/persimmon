@@ -1,8 +1,15 @@
-hash: 341e9c486f942c6eed595fee22ab3850cf52e87ba46d0455535cb216872d1047
-updated: 2018-03-27T10:48:02.309479+08:00
+hash: 38d6ebebca48a723ddb2e15822b12a88f4dadedd237c34b686eafd5f6b3b55fe
+updated: 2018-03-28T15:46:43.675831+08:00
 imports:
-- name: github.com/flosch/pongo2
-  version: 5e81b817a0c48c1c57cdf1a9056cf76bdee02ca9
+- name: github.com/bradfitz/gomemcache
+  version: 1952afaa557dc08e8e0d89eafab110fb501c1a2b
+  subpackages:
+  - memcache
+- name: github.com/garyburd/redigo
+  version: a69d19351219b6dd56f274f96d85a7014a2ec34e
+  subpackages:
+  - internal
+  - redis
 - name: github.com/go-sql-driver/mysql
   version: a0583e0143b1624142adab07e0e97fe106d99561
 - name: github.com/go-xorm/builder
@@ -31,6 +38,8 @@ imports:
   version: 6ca4dbf54d38eea1a992b3c722a76a5d1c4cb25c
 - name: github.com/mozillazg/go-pinyin
   version: ff1ea6f92b184d58c766c60f96a7a9b5f30fb092
+- name: github.com/patrickmn/go-cache
+  version: a3647f8e31d79543b2d0f0ae2fe5c379d72cedc0
 - name: github.com/qiniu/api.v7
   version: 0c661d0ca96771709f67b3d9eac10f27033b1f2a
   subpackages:
@@ -66,6 +75,7 @@ imports:
 - name: github.com/revel/revel
   version: 248166bf840eab87a88d1c18309f8e174e8327ff
   subpackages:
+  - cache
   - logger
   - testing
 - name: github.com/rogpeppe/go-charset
@@ -88,7 +98,7 @@ imports:
   version: f6cff0780e542efa0c8e864dc8fa522808f6a598
   subpackages:
   - unix
-- name: gopkg.in/fsnotify.v1
+- name: gopkg.in/fsnotify/fsnotify.v1
   version: c2828203cd70a50dcccfb2761f8b1f8ceef9a8e9
 - name: gopkg.in/natefinch/lumberjack.v2
   version: a96e63847dc3c67d17befa69c303767e2f84e54f

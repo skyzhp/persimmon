@@ -12,11 +12,11 @@ type Posts struct {
 	Markdown   string    `json:"markdown"`
 	Views      int       `json:"views"`
 	Comments   int       `json:"comments"`
-	Ipaddress  string    `json:"ipaddress"`
+	ClientIp   uint32    `json:"client_ip"`
 	Tags       []Tags    `json:"tags" xorm:"-"`
-	DeletedAt  JsonTime  `json:"deleted_at" xorm:"deleted"`
-	CreatedAt  JsonTime  `json:"created_at" xorm:"created"`
-	UpdatedAt  JsonTime  `json:"updated_at" xorm:"updated"`
+	DeletedAt  int64     `json:"deleted_at" xorm:"deleted"`
+	CreatedAt  int64     `json:"created_at" xorm:"created"`
+	UpdatedAt  int64     `json:"updated_at" xorm:"updated"`
 }
 
 type Post struct {

@@ -3,6 +3,7 @@ package backend
 import (
 	"github.com/cong5/persimmon/app/info"
 	"github.com/revel/revel"
+	"github.com/cong5/persimmon/app/utils"
 )
 
 type Category struct {
@@ -10,7 +11,7 @@ type Category struct {
 }
 
 func (c Category) Index(rows int, page int) revel.Result {
-	lists, err := categoryService.GetListPaging(rows, page)
+	lists, err := categoryService.GetListPaging(rows, page, false)
 	if err != nil {
 		return c.ResponseError(500, err.Error())
 	}
@@ -19,7 +20,7 @@ func (c Category) Index(rows int, page int) revel.Result {
 }
 
 func (c Category) Show(id int) revel.Result {
-	category, err := categoryService.GetOne(id)
+	category, err := categoryService.GetCategoryById(id, false)
 	if err != nil {
 		return c.ResponseError(500, err.Error())
 	}
@@ -37,11 +38,12 @@ func (c Category) Store(content *info.Categorys) revel.Result {
 	}
 
 	//save
+	clientIP := utils.Ip2long(c.ClientIP)
 	category := info.Categorys{CategoryName: content.CategoryName,
 		CategoryDescription: content.CategoryDescription,
 		CategoryFlag: content.CategoryFlag,
 		CategoryParent: content.CategoryParent,
-		Ipaddress: c.ClientIP}
+		ClientIp: clientIP}
 
 	_, err := categoryService.Save(category)
 	if err != nil {
@@ -53,11 +55,12 @@ func (c Category) Store(content *info.Categorys) revel.Result {
 
 func (c Category) Update(content *info.Categorys) revel.Result {
 	//save
+	clientIP := utils.Ip2long(c.ClientIP)
 	category := info.Categorys{CategoryName: content.CategoryName,
 		CategoryDescription: content.CategoryDescription,
 		CategoryFlag: content.CategoryFlag,
 		CategoryParent: content.CategoryParent,
-		Ipaddress: c.ClientIP}
+		ClientIp: clientIP}
 
 	_, err := categoryService.Update(content.Id, category)
 	if err != nil {

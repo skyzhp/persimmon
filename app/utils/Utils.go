@@ -2,6 +2,7 @@ package utils
 
 import (
 	"github.com/cong5/persimmon/app/info"
+	"encoding/binary"
 	"encoding/base64"
 	"crypto/sha256"
 	"encoding/hex"
@@ -13,8 +14,17 @@ import (
 	"bytes"
 	"math"
 	"fmt"
+	"net"
 	"os"
 	"io"
+	"time"
+	"reflect"
+)
+
+const (
+	YmdTimeFormat  = "2006-01-02"
+	BaseTimeFormat = "2006-01-02 15:04:05"
+	WdmyTimeFormat = "Mon, 2 Jan 2006 15:04:05"
 )
 
 // md5
@@ -89,8 +99,24 @@ func IntImplode(intArr []int, delimiter string) string {
 	return newString
 }
 
-func GetTotalPage(page, count int) int {
-	return int(math.Ceil(float64(count) / float64(page)))
+func Ip2long(ipstr string) uint32 {
+	ip := net.ParseIP(ipstr)
+	if ip == nil {
+		return 0
+	}
+	ip = ip.To4()
+	return binary.BigEndian.Uint32(ip)
+}
+
+func Long2ip(ipLong uint32) string {
+	ipByte := make([]byte, 4)
+	binary.BigEndian.PutUint32(ipByte, ipLong)
+	ip := net.IP(ipByte)
+	return ip.String()
+}
+
+func GetTotalPage(count int, limit int) int {
+	return int(math.Ceil(float64(count) / float64(limit)))
 }
 
 func IntDefault(inputVal int, defaultVal int) int {
@@ -99,6 +125,41 @@ func IntDefault(inputVal int, defaultVal int) int {
 		newVal = defaultVal
 	}
 	return newVal
+}
+
+func Date(format string, timestamp int64) (string) {
+	if format == "" {
+		format = "2006-01-02 15:04:05"
+	}
+	tm := time.Unix(timestamp, 0)
+	return tm.Format(format)
+}
+
+func SliceIntArr(arr []int, start int, length int, total int) []int {
+	intArr := make([]int, 0)
+	if total > start && total > length {
+		intArr = arr[start:length]
+	} else if total <= length {
+		intArr = arr[start:total]
+	}
+
+	return intArr
+}
+
+func CacheKey(keys ...interface{}) string {
+	strArr := make([]string, len(keys))
+	for k, v := range keys {
+		vtype := reflect.TypeOf(v).String()
+		switch vtype {
+		case "string":
+			strArr[k] = v.(string)
+		case "int":
+			strArr[k] = strconv.Itoa(v.(int))
+		default:
+		}
+	}
+	newStr := strings.Join(strArr, ":")
+	return fmt.Sprintf("persimmon:%s", newStr)
 }
 
 func TrimHtml(src string) string {

@@ -4,6 +4,7 @@ import (
 	"github.com/revel/revel"
 	"github.com/cong5/persimmon/app/info"
 	"gopkg.in/russross/blackfriday.v2"
+	"github.com/cong5/persimmon/app/utils"
 )
 
 type Posts struct {
@@ -11,12 +12,12 @@ type Posts struct {
 }
 
 func (c Posts) Index(categoryId int, keywords string, rows int, page int) revel.Result {
-	lists := postService.GetListPaging(categoryId, keywords, rows, page)
+	lists := postService.GetListPaging(categoryId, keywords, rows, page, false)
 	return c.RenderJSON(info.Res{Status: 200, List: lists})
 }
 
 func (c Posts) Show(id int) revel.Result {
-	post, err := postService.GetOne(id)
+	post, err := postService.GetPostById(id, false)
 	if err != nil {
 		return c.ResponseError(501, err.Error())
 	}
@@ -35,6 +36,7 @@ func (c Posts) Store(post *info.Post) revel.Result {
 
 	//save
 	htmlContent := blackfriday.Run([]byte(post.Markdown))
+	clientIP := utils.Ip2long(c.ClientIP)
 	posts := info.Posts{Title: post.Title,
 		Flag: post.Flag,
 		Thumb: post.Thumb,
@@ -42,7 +44,7 @@ func (c Posts) Store(post *info.Post) revel.Result {
 		UserId: post.UserId,
 		Markdown: post.Markdown,
 		Content: string(htmlContent),
-		Ipaddress: c.ClientIP}
+		ClientIp: clientIP}
 
 	postId, err := postService.Save(posts)
 
@@ -57,6 +59,7 @@ func (c Posts) Store(post *info.Post) revel.Result {
 func (c Posts) Update(post info.Post) revel.Result {
 	//save
 	htmlContent := blackfriday.Run([]byte(post.Markdown))
+	clientIP := utils.Ip2long(c.ClientIP)
 	posts := info.Posts{Title: post.Title,
 		Flag: post.Flag,
 		Thumb: post.Thumb,
@@ -64,7 +67,7 @@ func (c Posts) Update(post info.Post) revel.Result {
 		UserId: post.UserId,
 		Markdown: post.Markdown,
 		Content: string(htmlContent),
-		Ipaddress: c.ClientIP}
+		ClientIp: clientIP}
 
 	_, err := postService.Update(post.Id, posts)
 

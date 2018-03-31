@@ -19,7 +19,7 @@ func (c Option) Index(rows int, page int) revel.Result {
 }
 
 func (c Option) Show(id int) revel.Result {
-	option, err := optionService.GetOne(id)
+	option, err := optionService.GetOptionById(id)
 	if err != nil {
 		return c.ResponseError(500, err.Error())
 	}

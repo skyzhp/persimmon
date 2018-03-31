@@ -36,3 +36,7 @@ func (this *UserService) UpdatePassword(id int, password string) (bool, error) {
 
 	return true, nil
 }
+
+func (this *UserService) Table(tableName string) string {
+	return db.MasterDB.TableMapper.Obj2Table(tableName)
+}

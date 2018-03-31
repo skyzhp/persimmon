@@ -2,10 +2,12 @@ package service
 
 import (
 	"github.com/revel/revel"
+	"github.com/cong5/persimmon/app/utils"
+	"html/template"
 	"net/smtp"
 	"strings"
+	"bytes"
 	"fmt"
-	"os"
 )
 
 type NotificationService struct{}
@@ -23,6 +25,7 @@ func (this *NotificationService) SendMail(subject string, body string) (bool, er
 	serverAddr := fmt.Sprintf("%s:%s", host, port)
 	sendTo := strings.Split(to, ";")
 	err := smtp.SendMail(serverAddr, auth, account, sendTo, message)
+
 	if err != nil {
 		revel.INFO.Printf("SendMail Error: %s", err.Error())
 		return false, err
@@ -32,35 +35,39 @@ func (this *NotificationService) SendMail(subject string, body string) (bool, er
 
 func (this *NotificationService) SendCommentNotice(postId int, commentId int, host string) (bool, error) {
 
-	tpl, tplErr := os.Open("app/views/mails/comments.html") // For read access.
-	if tplErr != nil {
-		return false, tplErr
-	}
-	data := make([]byte, 2*1024)
-	_, readErr := tpl.Read(data)
-	if readErr != nil {
-		return false, tplErr
+	tplName := "app/views/mails/comments.html"
+	comment, cmErr := commentService.GetCommentById(commentId, false)
+	if cmErr != nil {
+		revel.INFO.Printf("GetCommentById Error: %s", cmErr)
+		return false, cmErr
 	}
 
-	post, err := postService.GetOne(postId)
+	subject := fmt.Sprintf("“%s” 有新的评论", comment.Title)
+	t, pErr := template.ParseFiles(tplName)
+	if pErr != nil {
+		revel.INFO.Printf("Template ParseFiles Error: %s", pErr)
+		return false, pErr
+	}
+
+	data := map[string]interface{}{
+		"Title":     comment.Title,
+		"Url":       comment.Url,
+		"Name":      comment.Name,
+		"Content":   template.HTML(comment.Content),
+		"CreatedAt": utils.Date(utils.BaseTimeFormat, comment.CreatedAt),
+		"Host":      host}
+
+	var tpl bytes.Buffer
+	if exeErr := t.Execute(&tpl, data); exeErr != nil {
+		revel.INFO.Printf("Template Execute Error: %s", exeErr)
+		return false, exeErr
+	}
+
+	body := tpl.String()
+	ret, err := this.SendMail(subject, body)
 	if err != nil {
 		return false, err
 	}
 
-	comment, cmErr := commentService.GetOne(commentId)
-	if cmErr != nil {
-		return false, cmErr
-	}
-
-	createdAt, _ := comment.CreatedAt.MarshalJSON()
-	subject := fmt.Sprintf("“%s” 有新的评论", post.Title)
-	body := fmt.Sprintf(string(data), subject, comment.Url, comment.Name, comment.Content, string(createdAt), host)
-	//revel.INFO.Println(body)
-
-	ret, err := this.SendMail(subject, body)
-	if err != nil {
-		return ret, err
-	}
-
-	return true, nil
+	return ret, nil
 }

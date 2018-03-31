@@ -10,7 +10,7 @@ type Trash struct {
 }
 
 func (c Trash) Index(page int, rows int, categoryId int, keywords string) revel.Result {
-	lists, err := postTrashService.GetTrashListPaging(categoryId, keywords, rows, page)
+	lists, err := postTrashService.GetTrashListPaging(categoryId, keywords, rows, page, false)
 	if err != nil {
 		return c.ResponseError(500, err.Error())
 	}

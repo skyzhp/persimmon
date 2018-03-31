@@ -1,19 +1,5 @@
 package info
 
-import (
-	"time"
-)
-
-type JsonTime time.Time
-
-func (j JsonTime) MarshalJSON() ([]byte, error) {
-	return []byte(`"` + time.Time(j).Format("2006-01-02 15:04:05") + `"`), nil
-}
-
-func (j JsonTime) ToDateTime() (string) {
-	return time.Time(j).Format("02 Jan , 2006")
-}
-
 type BaiduFanyi struct {
 	ErrorCode string `json:"error_code"`
 	ErrorMsg  string `json:"error_msg"`
@@ -23,13 +9,6 @@ type BaiduFanyi struct {
 		Src string `json:"src"`
 		Dst string `json:"dst"`
 	} `json:"trans_result"`
-}
-
-type CommentMail struct {
-	Title     string
-	Content   string
-	Url       string
-	CreatedAt string
 }
 
 type MetaInfo struct {
@@ -44,4 +23,9 @@ type PagingContent struct {
 	Total       int         `json:"total"`
 	TotalPage   int         `json:"total_page"`
 	CurrentPage int         `json:"current_page"`
+}
+
+type SiteMap struct {
+	Flag      string `json:"flag"`
+	CreatedAt int64  `json:"created_at" xorm:"created"`
 }
