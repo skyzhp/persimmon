@@ -22,6 +22,10 @@ cd $GOPATH/src/github.com/cong5/persimmon
 glide install
 ```
 
+## Edit config file
+
+To conf directory move `conf/app.conf.example` to `conf/app.conf`
+
 ## Run APP
 
 ```
