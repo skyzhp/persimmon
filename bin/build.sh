@@ -2,8 +2,7 @@
 SCRIPTPATH=$(cd "$(dirname "$0")"; pwd)
 
 # SET ENV
-# export GOPATH=$HOME/go
-# export PATH=$HOME/bin:$GOPATH/bin:$PATH
+export GOPATH=$SCRIPTPATH
 export GO15VENDOREXPERIMENT=1
 
 if [ ! -n "GOPATH" ]; then
