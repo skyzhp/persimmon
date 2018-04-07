@@ -1,21 +1,21 @@
 webpackJsonp([5],{
 
-/***/ 265:
+/***/ 390:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_post_tags_vue__ = __webpack_require__(287);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_post_tags_vue__ = __webpack_require__(412);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_post_tags_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_post_tags_vue__);
 /* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_post_tags_vue__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_post_tags_vue__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_16ea7d25_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_post_tags_vue__ = __webpack_require__(346);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_16ea7d25_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_post_tags_vue__ = __webpack_require__(471);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_16ea7d25_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_post_tags_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_16ea7d25_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_post_tags_vue__);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(344)
+  __webpack_require__(469)
 }
-var normalizeComponent = __webpack_require__(4)
+var normalizeComponent = __webpack_require__(5)
 /* script */
 
 
@@ -60,7 +60,7 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 287:
+/***/ 412:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70,7 +70,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _util = __webpack_require__(16);
+var _util = __webpack_require__(17);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -113,7 +113,11 @@ exports.default = {
                 key: 'tags_flag'
             }, {
                 title: '日期',
-                key: 'created_at'
+                key: 'created_at',
+                render: function render(h, params) {
+                    var time = _util2.default.timeFormat(params.row.created_at);
+                    return h('span', time);
+                }
             }, {
                 title: '操作',
                 key: 'action',
@@ -385,17 +389,17 @@ exports.default = {
 
 /***/ }),
 
-/***/ 344:
+/***/ 469:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(345);
+var content = __webpack_require__(470);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(20)("b8053e4e", content, false, {});
+var update = __webpack_require__(21)("b8053e4e", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -412,10 +416,10 @@ if(false) {
 
 /***/ }),
 
-/***/ 345:
+/***/ 470:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(19)(false);
+exports = module.exports = __webpack_require__(20)(false);
 // imports
 
 
@@ -427,7 +431,7 @@ exports.push([module.i, "", ""]);
 
 /***/ }),
 
-/***/ 346:
+/***/ 471:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

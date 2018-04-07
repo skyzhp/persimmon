@@ -5,10 +5,21 @@
 @import "./markdown.css";
 @import "../../../../node_modules/font-awesome/css/font-awesome.min.css";
 
+@font-face {
+    font-family: "noto";
+    src: url("../fonts/noto-light.woff2") format("woff2"),
+    url("../fonts/noto-light.woff") format("woff"),
+    url("../fonts/noto-light.ttf") format("truetype"),
+    url("../fonts/noto-light.eot") format("embedded-opentype"),
+    url("../fonts/noto-light.svg") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
 html, body, div, p, ol, ul, li, dl, dt, dd, h1, h2, h3, h4, h5, h6, form, input, select, button, textarea, iframe, table, th, td, blockquote {
     margin: 0;
     padding: 0;
-    font: 14px/1.5 "PingFang SC", "Hiragino Sans GB", "WenQuanYi Micro Hei", "Microsoft YaHei", sans-serif;
+    font: 14px/1.5 "noto", "PingFang SC", "Hiragino Sans GB", "WenQuanYi Micro Hei", "Microsoft YaHei", sans-serif;
 }
 
 img {
@@ -42,7 +53,6 @@ input[type^="radio"] {
     background: none;
     width: auto;
 }
-
 
 .quote-left {
     font-size: 40px;
@@ -102,14 +112,39 @@ a:hover, a:active {
 }
 
 /* 滚动条 */
-::-webkit-scrollbar{width: 8px; height: 8px;}
-::-webkit-scrollbar-button:vertical{display:none;}
-::-webkit-scrollbar-track:vertical{background-color:black;}
-::-webkit-scrollbar-track-piece{background-color: #F5F5F5;}
-::-webkit-scrollbar-thumb:vertical{margin-right:10px; background-color: #999;}
-::-webkit-scrollbar-thumb:vertical:hover{background-color: #666;}
-::-webkit-scrollbar-corner:vertical{background-color:#535353;}
-::-webkit-scrollbar-resizer:vertical{background-color:#FF6E00;}
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-button:vertical {
+    display: none;
+}
+
+::-webkit-scrollbar-track:vertical {
+    background-color: black;
+}
+
+::-webkit-scrollbar-track-piece {
+    background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb:vertical {
+    margin-right: 10px;
+    background-color: #999;
+}
+
+::-webkit-scrollbar-thumb:vertical:hover {
+    background-color: #666;
+}
+
+::-webkit-scrollbar-corner:vertical {
+    background-color: #535353;
+}
+
+::-webkit-scrollbar-resizer:vertical {
+    background-color: #FF6E00;
+}
 
 .clear {
     clear: both
@@ -234,13 +269,76 @@ a:hover, a:active {
     line-height: 2em;
 }
 
-.post .post-content .thumb img{
+.post .post-content .thumb img {
     display: block;
     margin: 0 auto;
 }
 
-.post .post-content img{
+.post .post-content h1, .post .post-content h2, .post .post-content h3, .post .post-content h4, .post .post-content h5 {
+    margin: 20px 0;
+    border-bottom: 2px solid #f5f2f0;
+    padding-bottom: 10px;
+}
+
+.post .post-content h1 {
+}
+
+.post .post-content h2 {
+}
+
+.post .post-content h3 {
+}
+
+.post .post-content h4 {
+}
+
+.post .post-content h5 {
+}
+
+.post .post-content blockquote{
+    display:block;
+    background: #fff;
+    padding: 15px 20px 15px 45px;
+    margin: 20px 0;
+    position: relative;
+
+    /*字体*/
+    font-family: Georgia, serif;
+    font-size: 16px;
+    line-height: 1.2;
+    color: #666;
+    text-align: justify;
+
+    /*边框 - (选项)*/
+    border-left: 15px solid #b1a0b0;
+    border-right: 2px solid #b1a0b0;
+
+    /*盒子阴影 - (选项)*/
+    -moz-box-shadow: 2px 2px 15px #ccc;
+    -webkit-box-shadow: 2px 2px 15px #ccc;
+    box-shadow: 2px 2px 15px #ccc;
+}
+.post .post-content blockquote::before{
+    content: "\201C"; /*左双引号的Unicode编码*/
+
+    /*字体*/
+    font-family: Georgia, serif;
+    font-size: 60px;
+    font-weight: bold;
+    color: #999;
+
+    /*位置*/
+    position: absolute;
+    left: 10px;
+    top:5px;
+}
+.post .post-content blockquote::after{
+    content: ""; /*如果要显示右双引号，则写 content: "\201D"; */
+}
+
+.post .post-content img {
     max-width: 100%;
+    height: auto;
     padding: 15px 0;
 }
 
@@ -264,7 +362,7 @@ a:hover, a:active {
 
 #pager {
     text-align: left;
-    margin:20px 0 20px 20px;
+    margin: 20px 0 20px 20px;
 }
 
 #pager .pager-inner {
@@ -284,9 +382,11 @@ a:hover, a:active {
     color: #999999;
     -webkit-font-smoothing: antialiased;
 }
+
 #pager .pager-previous {
     margin-right: 1em;
 }
+
 #pager .pager-next {
     margin-left: 1em;
 }
@@ -463,6 +563,11 @@ hr {
 
 .nav-bar li a:hover {
     background: rgba(0, 0, 0, 0.25);
+}
+
+.links-title {
+    border-bottom: 1px #eee solid;
+    padding-bottom: 10px;
 }
 
 .friend-links {
@@ -685,6 +790,10 @@ hr {
     overflow: hidden;
 }
 
+.comment-content .date {
+    color: #ccc;
+}
+
 .children {
     margin-left: 68px;
 }
@@ -748,7 +857,8 @@ li.depth-2 #respond {
 }
 
 #commentform {
-    padding-top: 20px;
+    padding: 20px 0 15px 0;
+    border-bottom: 1px solid #eee;
 }
 
 #commentform p label {
@@ -852,7 +962,6 @@ input[type^="text"], input[type^="password"], textarea {
     margin-bottom: 0;
     padding: 12px 25px
 }
-
 
 /* http://prismjs.com/download.html?themes=prism&languages=markup+css+clike+javascript+apacheconf+applescript+bash+c+cpp+ruby+docker+elixir+erlang+git+go+http+java+lua+makefile+markdown+nginx+objectivec+perl+php+powershell+python+jsx+smarty+sql+swift+typescript+vim+yaml&plugins=jsonp-highlight */
 /**
@@ -1083,24 +1192,71 @@ div.prism-show-language > div.prism-show-language-label {
 .sublimt-loading {
     width: 20px;
 }
+
 .commentPreview {
     padding: 10px;
     background: #EEE;
     border: 1px #ccc dashed;
     margin: 10px 15px 10px 0;
 }
+
 .mk-tips {
     font-size: 12px;
 }
 
 #my-social {
-    display: inline-block!important;
+    display: inline-block !important;
     width: 100%;
 }
+
 #my-social a.fa-rss {
-    display: inline-block!important;
+    display: inline-block !important;
 }
+
 .comment a {
     text-decoration: none;
 }
 
+.smilies {
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+.smilies li {
+    float: left;
+    cursor: pointer;
+}
+
+.viewer-info {
+    margin: 10px 0;
+}
+
+.edit-info, .comment-reply-link {
+    margin-left: 18px;
+    color: #e87474 !important;
+    font-size: small;
+}
+a.friends:hover {
+    text-decoration: none;
+}
+.friends {
+    line-height: normal;
+    padding: 8px 10px 8px 45px;
+    display: inline-block;
+    background: #fafafa;
+    border: 1px solid #f0f0f0;
+    margin: 0 18px 18px 0;
+    border-radius: 3px;
+    color: rgba(0, 0, 0, 0.54);
+    font-size: 14px;
+    position: relative;
+}
+.friends img {
+    border-radius: 3px 0 0 3px;
+    width: 36px;
+    height: 36px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 0 !important;
+}

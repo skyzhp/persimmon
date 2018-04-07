@@ -13,8 +13,8 @@ type OptionService struct{}
 
 func (this *OptionService) GetList(limit int, page int) ([]info.Options, error) {
 
-	limit = utils.IntDefault(limit, 20)
-	page = utils.IntDefault(page, 1)
+	limit = utils.IntDefault(limit > 0, limit, 20)
+	page = utils.IntDefault(page > 0, page, 1)
 	start := (page - 1) * limit
 	optionList := make([]info.Options, 0)
 	if err := db.MasterDB.Limit(limit, start).Find(&optionList); err != nil {
@@ -67,13 +67,18 @@ func (this *OptionService) GetValueByName(optionName string, real bool) (string,
 
 func (this *OptionService) GetAllOption(real bool) ([]info.Options, error) {
 	options := make([]info.Options, 0)
-	cacheKey := utils.CacheKey("OptionService", "AllOption")
-	if err := cache.Get(cacheKey, &options); err != nil || real {
+	cKey := utils.CacheKey("OptionService", "AllOption")
+
+	if real {
+		go cache.Delete(cKey)
+	}
+
+	if err := cache.Get(cKey, &options); err != nil {
 		dbErr := db.MasterDB.Where("option_status !='hidden'").Find(&options)
 		if dbErr != nil {
 			return nil, dbErr
 		}
-		go cache.Set(cacheKey, options, 30*time.Minute)
+		go cache.Set(cKey, options, 30*time.Minute)
 	}
 
 	return options, nil

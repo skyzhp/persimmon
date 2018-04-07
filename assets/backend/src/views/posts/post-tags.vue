@@ -49,8 +49,8 @@
 </template>
 
 <script>
-    import Util from '../../libs/util';
-    
+    import util from '../../libs/util';
+
     export default{
         data(){
             return {
@@ -94,7 +94,11 @@
                     },
                     {
                         title: '日期',
-                        key: 'created_at'
+                        key: 'created_at',
+                        render: (h, params) => {
+                            let time = util.timeFormat(params.row.created_at);
+                            return h('span', time);
+                        }
                     },
                     {
                         title: '操作',
@@ -144,7 +148,7 @@
             getData: function () {
                 let that = this;
                 that.listLoading = true;
-                Util.ajax.get('/backend/tags', {
+                util.ajax.get('/backend/tags', {
                     params: {
                         rows: this.pageSize,
                         page: this.currentPage
@@ -189,7 +193,7 @@
                 that.editFormLoading = true;
                 that.myFormTitle = '编辑';
                 that.editFormVisible = true;
-                Util.ajax.get('/backend/tags/' + row.id).then(function (response) {
+                util.ajax.get('/backend/tags/' + row.id).then(function (response) {
                     let res = response.data;
                     if (res.status == 200) {
                         res.tags_flag = decodeURI(res.item.tags_flag);
@@ -239,7 +243,7 @@
                     content: '<p>您确认删除选中的记录吗?</p>',
                     onOk: () => {
                         that.listLoading = true;
-                        Util.ajax.post('/backend/tags/destroy', Util.stringify(idsParam)).then(function (response) {
+                        util.ajax.post('/backend/tags/destroy', util.stringify(idsParam)).then(function (response) {
                             that.listLoading = false;
                             let res = response.data;
                             that.$Notice.open({
@@ -272,7 +276,7 @@
                     }
 
                     if (that.myForm.id > 0) {
-                        Util.ajax.put('/backend/tags/update', that.myForm).then(function (response) {
+                        util.ajax.put('/backend/tags/update', that.myForm).then(function (response) {
                             let res = response.data;
                             that.$message({
                                 message: res.status == 200 ? '编辑成功' : '编辑失败',
@@ -286,7 +290,7 @@
                             console.log(error);
                         });
                     } else {
-                        Util.ajax.post('/backend/tags/store', that.myForm).then(function (response) {
+                        util.ajax.post('/backend/tags/store', that.myForm).then(function (response) {
                             //console.log(response);
                             let res = response.data;
                             if (res.status == 200) {
@@ -344,7 +348,7 @@
                 if (query == null || query == '') {
                     return false;
                 }
-                Util.ajax.get('/backend/utils/fanyi/' + query).then(function (response) {
+                util.ajax.get('/backend/utils/fanyi/' + query).then(function (response) {
                     let res = response.data;
                     if (res.status == 200) {
                         that.myForm.tags_flag = res.item

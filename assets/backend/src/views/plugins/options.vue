@@ -58,7 +58,7 @@
 
 </style>
 <script>
-    import Util from '../../libs/util';
+    import util from '../../libs/util';
 
     export default{
         data(){
@@ -87,7 +87,11 @@
                     },
                     {
                         title: '日期',
-                        key: 'created_at'
+                        key: 'created_at',
+                        render: (h, params) => {
+                            let time = util.timeFormat(params.row.created_at);
+                            return h('span', time);
+                        }
                     },
                     {
                         title: '操作',
@@ -158,7 +162,7 @@
             getData: function () {
                 let that = this;
                 that.listLoading = true;
-                Util.ajax.get('/backend/options', {
+                util.ajax.get('/backend/options', {
                     params: {
                         rows: this.pageSize
                     }
@@ -199,7 +203,7 @@
                 that.editFormLoading = true;
                 that.myFormTitle = '编辑';
                 that.editFormVisible = true;
-                Util.ajax.get('/backend/options/' + row.id).then(function (response) {
+                util.ajax.get('/backend/options/' + row.id).then(function (response) {
                     let res = response.data;
                     if (res.status == 200) {
                         that.myForm = res.item;
@@ -229,7 +233,7 @@
                         idsParam = {ids: [row.id]};
                         break;
                     case 'multi':
-                        let ids = Util.getIdByArr(that.checkedAll);
+                        let ids = util.getIdByArr(that.checkedAll);
                         if (ids.length <= 0) {
                             that.$Notice.open({
                                 title: '请选择需要删除的数据',
@@ -248,7 +252,7 @@
                     content: '<p>您确认删除选中的记录吗?</p>',
                     onOk: () => {
                         that.listLoading = true;
-                        Util.ajax.post('/backend/options/destroy', Util.stringify(idsParam)).then(function (response) {
+                        util.ajax.post('/backend/options/destroy', util.stringify(idsParam)).then(function (response) {
                             that.listLoading = false;
                             let res = response.data;
                             that.$Notice.open({
@@ -256,10 +260,10 @@
                                 desc: ''
                             });
                             if (type == 'one') {
-                                Util.removeByValue(that.listData, row.id);
+                                util.removeByValue(that.listData, row.id);
                             } else {
                                 for (let index in that.checkedAll) {
-                                    Util.removeByValue(that.listData, that.checkedAll[index].id);
+                                    util.removeByValue(that.listData, that.checkedAll[index].id);
                                 }
                             }
 
@@ -281,7 +285,7 @@
                     }
 
                     if (that.myForm.id > 0) {
-                        Util.ajax.post('/backend/options/update', Util.stringify(that.myForm)).then(function (response) {
+                        util.ajax.post('/backend/options/update', util.stringify(that.myForm)).then(function (response) {
                             let res = response.data;
                             that.$Notice.open({
                                 title: res.status == 200 ? '编辑成功' : '编辑失败',
@@ -295,7 +299,7 @@
                             console.log(error);
                         });
                     } else {
-                        Util.ajax.post('/backend/options/store', Util.stringify(that.myForm)).then(function (response) {
+                        util.ajax.post('/backend/options/store', util.stringify(that.myForm)).then(function (response) {
                             let res = response.data;
                             if (res.status == 200) {
                                 that.closeForm('myForm');

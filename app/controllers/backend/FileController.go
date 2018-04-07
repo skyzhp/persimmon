@@ -13,6 +13,7 @@ import (
 	"time"
 	"fmt"
 	"os"
+	"strings"
 )
 
 type File struct {
@@ -27,7 +28,7 @@ const (
 )
 
 const (
-	qiniu = "qiniu"
+	Qiniu = "qiniu"
 	//...
 )
 
@@ -57,17 +58,47 @@ func (c File) Uploads(file []byte) revel.Result {
 	saveErr := ioutil.WriteFile(filePath, file, 0777)
 
 	if saveErr != nil {
-		return c.ResponseError(500, err.Error())
+		return c.ResponseError(500, saveErr.Error())
 	}
 
 	fileSystem := revel.Config.StringDefault("file.system", "")
 	var resInfo info.Res
 	switch fileSystem {
-	case qiniu:
+	case Qiniu:
 		resInfo = uploadsService.QiniuUploads(format, filePath)
-		//...还可以有其他的上传方式
 	default:
 		resInfo = info.Res{Status: 200, Item: fileSystem}
+	}
+	return c.RenderJSON(resInfo)
+}
+
+func (c File) UploadsFile(file []byte) revel.Result {
+
+	fileName := c.Params.Files["file"][0].Filename
+	formatArr := strings.Split(fileName, ".")
+	format := formatArr[len(formatArr)-1]
+
+	nowDate := time.Now().Format("2006-01")
+	uploadsDir := fmt.Sprintf("public/uploads/%s/%d", nowDate, time.Now().Day())
+	mkErr := os.MkdirAll(uploadsDir, 0755)
+	if mkErr != nil {
+		return c.ResponseError(501, mkErr.Error())
+	}
+
+	filePath := fmt.Sprintf("%s/%s.%s", uploadsDir, utils.NewGuid(), format)
+	saveErr := ioutil.WriteFile(filePath, file, 0777)
+
+	if saveErr != nil {
+		return c.ResponseError(500, saveErr.Error())
+	}
+
+	fileSystem := revel.Config.StringDefault("file.system", "")
+	var resInfo info.Res
+	switch fileSystem {
+	case Qiniu:
+		resInfo = uploadsService.QiniuUploads(format, filePath)
+	default:
+		resInfo = info.Res{Status: 200, Item: fileSystem, Info: fileName}
 	}
 	return c.RenderJSON(resInfo)
 }

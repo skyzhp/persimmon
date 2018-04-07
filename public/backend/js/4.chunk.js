@@ -1,21 +1,21 @@
 webpackJsonp([4],{
 
-/***/ 264:
+/***/ 389:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_post_trash_vue__ = __webpack_require__(286);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_post_trash_vue__ = __webpack_require__(411);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_post_trash_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_post_trash_vue__);
 /* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_post_trash_vue__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_post_trash_vue__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_72045d5c_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_post_trash_vue__ = __webpack_require__(343);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_72045d5c_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_post_trash_vue__ = __webpack_require__(468);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_72045d5c_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_post_trash_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_72045d5c_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_post_trash_vue__);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(341)
+  __webpack_require__(466)
 }
-var normalizeComponent = __webpack_require__(4)
+var normalizeComponent = __webpack_require__(5)
 /* script */
 
 
@@ -60,7 +60,7 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 286:
+/***/ 411:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70,7 +70,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _util = __webpack_require__(16);
+var _util = __webpack_require__(17);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -107,7 +107,11 @@ exports.default = {
                 }
             }, {
                 title: '日期',
-                key: 'created_at'
+                key: 'created_at',
+                render: function render(h, params) {
+                    var time = util.timeFormat(params.row.created_at);
+                    return h('span', time);
+                }
             }, {
                 title: '操作',
                 key: 'action',
@@ -255,7 +259,7 @@ exports.default = {
                 content: '<p>您确认删除选中的记录吗?</p>',
                 onOk: function onOk() {
                     that.listLoading = true;
-                    _util2.default.ajax.delete('/backend/posts-trash/destroy', { data: idsParam }).then(function (response) {
+                    _util2.default.ajax.delete('/backend/posts-trash/destroy', util.stringify(idsParam)).then(function (response) {
                         that.listLoading = false;
                         var res = response.data;
                         that.$Notice.open({
@@ -321,17 +325,17 @@ exports.default = {
 
 /***/ }),
 
-/***/ 341:
+/***/ 466:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(342);
+var content = __webpack_require__(467);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(20)("c8ff3ff8", content, false, {});
+var update = __webpack_require__(21)("c8ff3ff8", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -348,10 +352,10 @@ if(false) {
 
 /***/ }),
 
-/***/ 342:
+/***/ 467:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(19)(false);
+exports = module.exports = __webpack_require__(20)(false);
 // imports
 
 
@@ -363,7 +367,7 @@ exports.push([module.i, "\n.myp-search-item {\n  float: left;\n  margin-right: 1
 
 /***/ }),
 
-/***/ 343:
+/***/ 468:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

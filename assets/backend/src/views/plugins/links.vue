@@ -88,6 +88,7 @@
                 myFormTitle: '编辑',
                 checkedAll: [],
                 sizeOpts: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+
                 tableColumns: [
                     {
                         type: 'selection',
@@ -126,7 +127,11 @@
                     },
                     {
                         title: '日期',
-                        key: 'created_at'
+                        key: 'created_at',
+                        render: (h, params) => {
+                            let time = Util.timeFormat(params.row.created_at);
+                            return h('span', time);
+                        }
                     },
                     {
                         title: '操作',
@@ -164,6 +169,13 @@
                         }
                     }
                 ],
+
+
+
+
+
+
+
             }
         },
         methods: {
@@ -287,16 +299,16 @@
                 });
 
             },
-            submitMyForm: function (myForm) {
-                var that = this;
-                that.$refs[myForm].validate((valid) => {
+            submitMyForm: function () {
+                let that = this;
+                that.$refs['myForm'].validate((valid) => {
                     if (!valid) {
                         console.log('myForm valid error.');
                         return false;
                     }
 
                     if (that.myForm.id > 0) {
-                        Util.ajax.post('/backend/links/update', Util.stringify(that.myForm)).then(function (response) {
+                        Util.ajax.post('/backend/links/update', that.myForm).then(function (response) {
                             let res = response.data;
                             that.$Notice.warning({
                                 title: res.status == 200 ? '编辑成功' : '编辑失败',
@@ -310,7 +322,7 @@
                             console.log(error);
                         });
                     } else {
-                        Util.ajax.post('/backend/links', Util.stringify(that.myForm)).then(function (response) {
+                        Util.ajax.post('/backend/links', that.myForm).then(function (response) {
                             let res = response.data;
                             if (res.status == 200) {
                                 that.closeForm('myForm');

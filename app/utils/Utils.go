@@ -1,31 +1,33 @@
 package utils
 
 import (
-	"github.com/cong5/persimmon/app/info"
-	"encoding/binary"
-	"encoding/base64"
-	"crypto/sha256"
-	"encoding/hex"
-	"crypto/md5"
-	"crypto/rand"
-	"strconv"
-	"strings"
-	"regexp"
-	"bytes"
-	"math"
+	"io"
+	"os"
 	"fmt"
 	"net"
-	"os"
-	"io"
+	"math"
 	"time"
+	"bytes"
+	"regexp"
+	"strconv"
 	"reflect"
+	"strings"
+	"crypto/md5"
+	"crypto/rand"
+	"encoding/hex"
+	"crypto/sha256"
+	"encoding/base64"
+	"encoding/binary"
+	mathRand "math/rand"
+	"github.com/cong5/persimmon/app/info"
 )
 
-const (
-	YmdTimeFormat  = "2006-01-02"
-	BaseTimeFormat = "2006-01-02 15:04:05"
-	WdmyTimeFormat = "Mon, 2 Jan 2006 15:04:05"
-)
+/**
+Date Time Format:
+	"2006-01-02"
+	"2006-01-02 15:04:05"
+	"Mon, 2 Jan 2006 15:04:05"
+*/
 
 // md5
 func Md5(s string) string {
@@ -77,7 +79,7 @@ func Urlencode(data map[string]string) string {
 		buf.WriteByte('&')
 	}
 	s := buf.String()
-	return s[0: len(s)-1]
+	return s[0 : len(s)-1]
 }
 
 func SQLFilters(sql string) bool {
@@ -90,13 +92,8 @@ func SQLFilters(sql string) bool {
 	return re.MatchString(sql)
 }
 
-func IntImplode(intArr []int, delimiter string) string {
-	newString := ""
-	for _, v := range intArr {
-		newString += fmt.Sprintf("%d%s", v, delimiter)
-	}
-	newString = string([]byte(newString)[:len(newString)-1])
-	return newString
+func IntJoin(intArr []int, delimiter string) string {
+	return strings.Trim(strings.Replace(fmt.Sprint(intArr), " ", delimiter, -1), "[]")
 }
 
 func Ip2long(ipstr string) uint32 {
@@ -119,10 +116,18 @@ func GetTotalPage(count int, limit int) int {
 	return int(math.Ceil(float64(count) / float64(limit)))
 }
 
-func IntDefault(inputVal int, defaultVal int) int {
-	newVal := inputVal
-	if newVal <= 0 {
-		newVal = defaultVal
+func IntDefault(check bool, inputVal int, defaultVal int) int {
+	newVal := defaultVal
+	if check {
+		newVal = inputVal
+	}
+	return newVal
+}
+
+func StringDefault(check bool, inputVal string, defaultVal string) string {
+	newVal := defaultVal
+	if check {
+		newVal = inputVal
 	}
 	return newVal
 }
@@ -160,6 +165,11 @@ func CacheKey(keys ...interface{}) string {
 	}
 	newStr := strings.Join(strArr, ":")
 	return fmt.Sprintf("persimmon:%s", newStr)
+}
+
+func Random(max int) int {
+	r := mathRand.New(mathRand.NewSource(time.Now().UnixNano()))
+	return r.Intn(max)
 }
 
 func TrimHtml(src string) string {

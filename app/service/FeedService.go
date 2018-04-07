@@ -2,9 +2,9 @@ package service
 
 import (
 	"time"
-	"html/template"
 	"github.com/cong5/persimmon/app/info"
 	"github.com/cong5/persimmon/app/utils"
+	"html/template"
 )
 
 type FeedService struct{}
@@ -31,30 +31,36 @@ func (this *FeedService) BuildFeed(domain string) (string, error) {
 func (this *FeedService) makeXml(optArr map[string]string, posts []info.Posts) string {
 	lastBuildDate := time.Now().Format("Mon, 2 Jan 2006 15:04:05")
 	begin := `<?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-<channel>
-<atom:link href="https://` + optArr["domain"] + `/feed" rel="self" type="application/rss+xml" />`
+<feed xmlns="http://www.w3.org/2005/Atom">`
 
 	siteInfo := `<title>` + optArr["site_name"] + `</title>
-        <link>http://` + optArr["domain"] + `</link>
         <description>` + optArr["description"] + `</description>
         <language>zh-CN</language>
-        <copyright>Copyright (c) ` + optArr["site_name"] + `</copyright>
-        <lastBuildDate>` + lastBuildDate + `</lastBuildDate>`
+        <updated>` + lastBuildDate + `</updated>
+ 		<link href="https://` + optArr["domain"] + `/"></link>
+  		<link ref="self" href="https://` + optArr["domain"] + `/feed"></link>
+		<copyright>Copyright (c) ` + optArr["site_name"] + `</copyright>`
 
 	items := ""
 	for _, val := range posts {
-		pubDate := utils.Date(utils.WdmyTimeFormat, val.CreatedAt)
-		items += `<item>
+		user, _ := userService.GetUserByUid(val.UserId)
+		if user.Name == "" {
+			user.Name = optArr["site_name"]
+		}
+		pubDate := utils.Date("Mon, 2 Jan 2006 15:04:05", val.CreatedAt)
+		items += `<entry>
             <title>` + val.Title + `</title>
-            <link>http://` + optArr["domain"] + "/post/" + val.Flag + `</link>
-            <description><![CDATA[` + template.HTMLEscapeString(val.Content) + `]]></description>
+			<link href="https://` + optArr["domain"] + "/post/" + val.Flag + `"  rel="alternate"></link>
+    		<author>
+      			<name>` + user.Name + `</name>
+    		</author>
+            <summary type="html"><![CDATA[` + template.HTMLEscapeString(val.Content) + `]]></summary>
             <guid>` + val.Flag + `</guid>
-            <pubDate>` + pubDate + ` +0000</pubDate>
-        </item>`
+            <updated>` + pubDate + ` +0000</updated>
+        </entry>`
 	}
 
-	end := `</channel></rss>`
+	end := `</feed>`
 	html := begin + siteInfo + items + end
 	return html
 }

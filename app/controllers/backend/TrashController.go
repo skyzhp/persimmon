@@ -18,10 +18,9 @@ func (c Trash) Index(page int, rows int, categoryId int, keywords string) revel.
 	return c.RenderJSON(info.Res{Status: 200, List: lists})
 }
 
-func (c Trash) Update(content *info.Posts) revel.Result {
+func (c Trash) Update(ids []int) revel.Result {
 	//save
-	posts := info.Posts{}
-	_, err := postService.Update(content.Id, posts)
+	_, err := postTrashService.Restore(ids)
 	if err != nil {
 		return c.ResponseError(500, err.Error())
 	}

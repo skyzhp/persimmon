@@ -15,8 +15,13 @@ type NavigationService struct {
 
 func (this *NavigationService) GetNavigation(real bool) ([]info.Navigation, error) {
 	NavigationMenu := make([]info.Navigation, 0)
-	cacheKey := utils.CacheKey("NavigationService", "Navigation")
-	if err := cache.Get(cacheKey, &NavigationMenu); err != nil || real {
+	cKey := utils.CacheKey("NavigationService", "Navigation")
+
+	if real {
+		go cache.Delete(cKey)
+	}
+
+	if err := cache.Get(cKey, &NavigationMenu); err != nil {
 		navigation, navErr := optionService.GetValueByName(this.GetNavKey(),false)
 		if navErr != nil {
 			return nil, navErr
@@ -27,7 +32,7 @@ func (this *NavigationService) GetNavigation(real bool) ([]info.Navigation, erro
 			revel.INFO.Printf("Json unmarshal failed. data: %s : error: %s", navigation, err)
 			return nil, err
 		}
-		go cache.Set(cacheKey, NavigationMenu, 30*time.Minute)
+		go cache.Set(cKey, NavigationMenu, 30*time.Minute)
 	}
 
 	return NavigationMenu, nil

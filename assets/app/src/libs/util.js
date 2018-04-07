@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import Moment from 'moment/moment';
 
 let util = {};
 
@@ -47,6 +48,14 @@ util.checkUrl = function (str, msg) {
         return false;
     }
     return true;
+};
+
+util.timeFormat = function (timestamp) {
+    if(timestamp <= 0){
+        return ""
+    }
+    let time = Moment.unix(timestamp);
+    return time.format('ddd, DD MMM YYYY HH:mm:ss');
 };
 
 export default util;

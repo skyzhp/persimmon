@@ -4,16 +4,28 @@ import (
 	"strings"
 	"github.com/cong5/persimmon/app/info"
 	"github.com/cong5/persimmon/app/db"
+	"github.com/revel/revel"
 )
 
 type UserService struct{}
+
+func (this *UserService) GetUserByUid(uid int) (*info.Users, error) {
+	users := &info.Users{Id: uid}
+	_, err := db.MasterDB.Get(users)
+	if err != nil {
+		revel.INFO.Printf("GetUserByUid failed : %s", err)
+		return nil, err
+	}
+
+	return users, nil
+}
 
 func (this *UserService) GetUserByEmail(email string) (*info.Users, error) {
 	email = strings.ToLower(email)
 	users := &info.Users{Email: email}
 	_, err := db.MasterDB.Get(users)
 	if err != nil {
-		//revel.INFO.Printf("Get user by email failed : %s", err)
+		revel.INFO.Printf("GetUserByEmail failed : %s", err)
 		return nil, err
 	}
 

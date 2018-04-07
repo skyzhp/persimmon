@@ -161,7 +161,11 @@
                     },
                     {
                         title: '日期',
-                        key: 'created_at'
+                        key: 'created_at',
+                        render: (h, params) => {
+                            let time = Util.timeFormat(params.row.created_at);
+                            return h('span', time);
+                        }
                     },
                     {
                         title: '操作',

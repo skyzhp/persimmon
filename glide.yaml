@@ -47,3 +47,4 @@ import:
   version: ^1.6.0
   subpackages:
   - redis
+- package: github.com/adtac/go-akismet

@@ -14,13 +14,19 @@ type CommentService struct{}
 
 func (this *CommentService) GetCommentById(id int, real bool) (info.Comments, error) {
 	comments := info.Comments{}
-	cacheKey := utils.CacheKey("CommentService", "InfoById", id)
-	if err := cache.Get(cacheKey, &comments); err != nil || real {
+	cKey := utils.CacheKey("CommentService", "InfoById", id)
+
+	if real {
+		go cache.Delete(cKey)
+	}
+
+	if err := cache.Get(cKey, &comments); err != nil {
 		_, err := db.MasterDB.Where("id = ?", id).Get(&comments)
 		if err != nil {
 			return comments, err
 		}
-		go cache.Set(cacheKey, comments, 30*time.Minute)
+
+		go cache.Set(cKey, comments, 30*time.Minute)
 	}
 
 	//post title
@@ -49,9 +55,9 @@ func (this *CommentService) GetCommentByIdArr(idArr []int, real bool) ([]info.Co
 }
 
 func (this *CommentService) GetList(postId int, limit int, page int, real bool) ([]info.Comments, error) {
-	limit = utils.IntDefault(limit, 20)
-	page = utils.IntDefault(page, 1)
-	postId = utils.IntDefault(postId, 0)
+	limit = utils.IntDefault(limit > 0, limit, 20)
+	page = utils.IntDefault(page > 0, page, 1)
+	postId = utils.IntDefault(postId > 0, postId, 0)
 	start := (page - 1) * limit
 	commentIdArr := make([]info.Comments, 0)
 	dbSession := db.MasterDB.NewSession()
@@ -60,7 +66,7 @@ func (this *CommentService) GetList(postId int, limit int, page int, real bool) 
 		dbSession.Where("posts_id = ?", postId)
 	}
 
-	err := dbSession.Cols("id").Limit(start, limit).Find(&commentIdArr)
+	err := dbSession.Cols("id").Limit(limit, start).Find(&commentIdArr)
 	if err != nil {
 		revel.INFO.Printf("Get comment failed : %s", err)
 		return nil, err
@@ -69,6 +75,10 @@ func (this *CommentService) GetList(postId int, limit int, page int, real bool) 
 	idArr := make([]int, len(commentIdArr))
 	for k, v := range commentIdArr {
 		idArr[k] = v.Id
+	}
+
+	if len(idArr) <= 0 {
+		return make([]info.Comments, 0), nil
 	}
 
 	commentArr, cErr := this.GetCommentByIdArr(idArr, false)
@@ -100,12 +110,12 @@ func (this *CommentService) GetListPaging(limit int, page int, real bool) (*info
 }
 
 func (this *CommentService) GetCommentByPostId(postId int, limit int, page int) (*info.PagingContent, error) {
-	limit = utils.IntDefault(limit, 20)
-	page = utils.IntDefault(page, 1)
+	limit = utils.IntDefault(limit > 0, limit, 20)
+	page = utils.IntDefault(page > 0, page, 1)
 
 	comments := make([]info.Comments, 0)
 	start := (page - 1) * limit
-	err := db.MasterDB.Where("posts_id = ?", postId).Limit(limit, start).Find(&comments)
+	err := db.MasterDB.Where("posts_id = ? AND status = 1", postId).Limit(limit, start).Find(&comments)
 	if err != nil {
 		//revel.INFO.Printf("Get comment by post id failed : %s", err)
 		return nil, err

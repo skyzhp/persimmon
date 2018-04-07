@@ -15,13 +15,23 @@ type TagService struct{}
 
 func (this *TagService) GetTagById(id int, real bool) (info.Tags, error) {
 	tag := info.Tags{}
-	cacheKey := utils.CacheKey("TagService", "InfoById", id)
-	if err := cache.Get(cacheKey, &tag); err != nil || real {
+
+	if id <= 0 {
+		return tag, errors.New("Param error.")
+	}
+
+	cKey := utils.CacheKey("TagService", "InfoById", id)
+	if real {
+		go cache.Delete(cKey)
+	}
+
+	if err := cache.Get(cKey, &tag); err != nil {
 		_, err := db.MasterDB.Where("id = ?", id).Get(&tag)
 		if err != nil {
 			return tag, err
 		}
-		go cache.Set(cacheKey, tag, 30*time.Minute)
+
+		go cache.Set(cKey, tag, 30*time.Minute)
 	}
 
 	return tag, nil
@@ -55,8 +65,8 @@ func (this *TagService) GetTagByName(tagName string) (*info.Tags, error) {
 
 func (this *TagService) GetList(limit int, page int, real bool) ([]info.Tags, error) {
 
-	limit = utils.IntDefault(limit, 20)
-	page = utils.IntDefault(page, 1)
+	limit = utils.IntDefault(limit > 0, limit, 20)
+	page = utils.IntDefault(page > 0, page, 1)
 	start := (page - 1) * limit
 	tagsList := make([]info.Tags, 0)
 	err := db.MasterDB.Cols("id").Limit(limit, start).Find(&tagsList)
@@ -184,8 +194,8 @@ func (this *TagService) Destroy(id int, tag info.Tags) (bool, error) {
 		return false, err
 	}
 
-	cacheKey := utils.CacheKey("TagService", "InfoById", id)
-	go cache.Delete(cacheKey)
+	cKey := utils.CacheKey("TagService", "InfoById", id)
+	go cache.Delete(cKey)
 	return true, nil
 }
 

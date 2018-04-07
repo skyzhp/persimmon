@@ -81,7 +81,7 @@ func (c Posts) Update(post info.Post) revel.Result {
 }
 
 func (c Posts) Destroy(ids []int) revel.Result {
-	_, err := postService.Trash(ids, info.Posts{})
+	_, err := postService.Trash(ids)
 	if err != nil {
 		return c.ResponseError(500, "Delete failed.")
 	}

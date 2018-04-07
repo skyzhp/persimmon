@@ -2,6 +2,7 @@ import axios from 'axios';
 import Qs from 'qs';
 import Cookies from 'js-cookie';
 import Md5 from 'js-md5';
+import Moment from 'moment';
 import env from '../../build/env';
 // import semver from 'semver';
 // import packjson from '../../../../package.json';
@@ -33,7 +34,7 @@ util.ajax.interceptors.response.use((response) => {
     if (error.response.status === 401) {
         console.log('unauthorized, logging out ...');
         Cookies.remove('user');
-        location.href = "#/login";
+        location.href = '#/login';
     }
     return Promise.reject(error.response);
 });
@@ -42,7 +43,6 @@ util.title = function (title) {
     title = title || 'Persimmon';
     window.document.title = title;
 };
-
 
 util.inOf = function (arr, targetArr) {
     let res = true;
@@ -274,20 +274,20 @@ util.fullscreenEvent = function (vm) {
 };
 
 util.stringify = function (data) {
-    return Qs.stringify(data)
-}
+    return Qs.stringify(data);
+};
 
 util.getUserInfo = function (key) {
     if (key == '') {
-        return ''
+        return '';
     }
     let user = Cookies.get('user');
     if (user == '') {
-        return ''
+        return '';
     }
     let userInfo = JSON.parse(user);
-    return userInfo[key]
-}
+    return userInfo[key];
+};
 
 util.removeByValue = function (arr, val) {
     for (var i = 0; i < arr.length; i++) {
@@ -296,7 +296,7 @@ util.removeByValue = function (arr, val) {
             break;
         }
     }
-}
+};
 
 util.getIdByArr = function (arr) {
     var checkedAll = [];
@@ -304,11 +304,11 @@ util.getIdByArr = function (arr) {
         checkedAll.push(arr[index].id);
     }
     return checkedAll;
-}
+};
 
 util.toFirstUpper = function (str) {
     return str.substring(0, 1).toUpperCase() + str.substring(1);
-}
+};
 
 util.toStructData = function (obj) {
     let newData = {};
@@ -316,17 +316,60 @@ util.toStructData = function (obj) {
         if (obj[i] instanceof Object) {
             continue;
         }
-        newData['post.' + util.toFirstUpper(i)] = obj[i]
+        newData['post.' + util.toFirstUpper(i)] = obj[i];
     }
     //console.log(newData)
-    return newData
-}
+    return newData;
+};
 
 util.emailToMd5 = function (data) {
     for (let i = 0, len = data.length; i < len; i++) {
-        data[i]["md5"] = Md5(data[i].email)
+        data[i]['md5'] = Md5(data[i].email);
     }
-    return data
-}
+    return data;
+};
+
+util.timeFormat = function (timestamp) {
+    if (timestamp <= 0) {
+        return '';
+    }
+    let time = Moment.unix(timestamp);
+    return time.format('YYYY-MM-DD HH:mm:ss');
+};
+
+util.uploadFile = function (editor) {
+    let progressText = '[](http://)';
+    let input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    let event = document.createEvent('MouseEvent');
+    event.initEvent('click', false, false);
+    input.dispatchEvent(event);
+    input.onchange = function (event) {
+        if (input.files.length === 0) {
+            return false;
+        }
+
+        let formData = new FormData();
+        formData.append('file', input.files[0]);
+        util.ajax.post('/backend/files/file', formData,{
+            onUploadProgress: function (progressEvent) {
+                let oldText = editor.codemirror.getValue();
+                editor.codemirror.setValue(oldText + progressText);
+            },
+        }).then(function (response) {
+            let res = response.data;
+            if (res.status === 200) {
+                let newValue = '[' + res.info + '](' + res.item + ')';
+                let text = editor.codemirror.getValue().replace(progressText, newValue);
+                editor.codemirror.setValue(text);
+            } else {
+                alert(res.info);
+            }
+
+        }).catch(function (error) {
+            console.log(error);
+        });
+    };
+};
 
 export default util;

@@ -15,7 +15,7 @@ import (
 
 type UploadsService struct{}
 
-func (this UploadsService) QiniuUploads(format string, filePath string) info.Res {
+func (this *UploadsService) QiniuUploads(format string, filePath string) info.Res {
 	accessKey := revel.Config.StringDefault("qiniu.access_key", "")
 	secretKey := revel.Config.StringDefault("qiniu.secret_key", "")
 	bucket := revel.Config.StringDefault("qiniu.bucket", "")
@@ -51,5 +51,5 @@ func (this UploadsService) QiniuUploads(format string, filePath string) info.Res
 		protocol = "s"
 	}
 	item := fmt.Sprintf("http%s://%s/%s", protocol, domain, key)
-	return info.Res{Status: 200, Item: item}
+	return info.Res{Status: 200, Item: item, Info: key}
 }

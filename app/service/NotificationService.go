@@ -54,7 +54,7 @@ func (this *NotificationService) SendCommentNotice(postId int, commentId int, ho
 		"Url":       comment.Url,
 		"Name":      comment.Name,
 		"Content":   template.HTML(comment.Content),
-		"CreatedAt": utils.Date(utils.BaseTimeFormat, comment.CreatedAt),
+		"CreatedAt": utils.Date("2006-01-02 15:04:05", comment.CreatedAt),
 		"Host":      host}
 
 	var tpl bytes.Buffer

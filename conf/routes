@@ -15,14 +15,12 @@ POST    /xmlrpc                                     XmlRpc.Index
 GET     /categories/:slug                           Home.Categories
 GET     /categories/:slug/:page                     Home.Categories
 # comment
-GET     /comment/:id/:page                          HomeComment.List
+GET     /comment/:postId/:page                      HomeComment.List
 POST    /comment                                    HomeComment.Post
 # post & tags
 GET     /post/:slug                                 Home.Post
 GET     /tag/:name                                  Home.Tag
 GET     /tag/:name/:page                            Home.Tag
-
-GET     /test                                       Home.Test
 
 # other
 GET     /friends                                    Home.Friends
@@ -85,6 +83,7 @@ GET     /backend/user                               User.Index
 POST    /backend/user/update                        User.Update
 # uploads
 POST    /backend/files/uploads                      File.Uploads
+POST    /backend/files/file                         File.UploadsFile
 # utils
 GET     /backend/utils/fanyi/:words                 Utils.Translate
 

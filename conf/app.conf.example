@@ -95,14 +95,20 @@ i18n.default_language = en
 db.driver = mysql
 db.connect = root:root@tcp(127.0.0.1:3306)/myp_in2017?charset=utf8
 
-build.tags=gorp
+build.tags=
 
 # Module to serve static content such as CSS, JavaScript and Media files
 # Allows Routes like this:
 #  `Static.ServeModule("modulename","public")`
 module.static = github.com/revel/modules/static
 module.jobs = github.com/revel/modules/jobs
-module.gorp = github.com/revel/modules/orm/gorp
+# module.gorp = github.com/revel/modules/orm/gorp
+
+# Cache
+cache.expires = 1h
+cache.memcached = false
+cache.redis = true
+cache.hosts = 127.0.0.1:6379
 
 # Filesystem
 # Uploads filesystem, Local storage: local / Qiniu cloud storage: qiniu
@@ -115,29 +121,32 @@ file.system = qiniu
 file.local.save = false
 
 # Qiniu
-qiniu.access_key = xxxxxxxxxxx
-qiniu.secret_key = xxxxxxxxx
-qiniu.bucket = persimmon
+qiniu.access_key =
+qiniu.secret_key =
+qiniu.bucket =
 qiniu.https = true
-qiniu.domain =
+qiniu.domain = xxxxx.qnssl.com
 
 # Title translate to uri path driver. None not translate.
 # Value : baidu|pinyin
 # Or null value don't translate.
-translate.driver = pinyin
+translate.driver = baidu
 
 # Baidu translate config
-baidu.translate.ak = 2011xxxxxxxxxxx
-baidu.translate.sk = xxxxxxxxxxx
+baidu.translate.ak =
+baidu.translate.sk =
 baidu.translate.from = zh
 baidu.translate.to = en
 
 # Email config
-email.host = smtp.sina.com
+email.host = smtp.qq.com
 email.port = 25
-email.account = exmaple@sina.com
-email.password = 123456
-email.to = myexmaple@sina.com
+email.account =
+email.password =
+email.to =
+
+# akismet
+akismet.key =
 
 ################################################################################
 
@@ -171,7 +180,7 @@ results.pretty = true
 # Watch your applicaton files for changes and automatically rebuild
 # Values:
 # "true"
-#   Enables auto rebuilding. 
+#   Enables auto rebuilding.
 # "false"
 #   Disables auto rebuilding.
 watch = true

@@ -14,9 +14,9 @@ type Posts struct {
 	Comments   int       `json:"comments"`
 	ClientIp   uint32    `json:"client_ip"`
 	Tags       []Tags    `json:"tags" xorm:"-"`
-	DeletedAt  int64     `json:"deleted_at" xorm:"deleted"`
 	CreatedAt  int64     `json:"created_at" xorm:"created"`
 	UpdatedAt  int64     `json:"updated_at" xorm:"updated"`
+	DeletedAt  int64     `json:"deleted_at"`
 }
 
 type Post struct {

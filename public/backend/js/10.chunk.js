@@ -1,21 +1,21 @@
 webpackJsonp([10],{
 
-/***/ 267:
+/***/ 392:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_links_vue__ = __webpack_require__(290);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_links_vue__ = __webpack_require__(415);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_links_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_links_vue__);
 /* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_links_vue__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_links_vue__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_aeeccef6_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_links_vue__ = __webpack_require__(355);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_aeeccef6_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_links_vue__ = __webpack_require__(480);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_aeeccef6_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_links_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__babel_loader_node_modules_vue_loader_lib_template_compiler_index_id_data_v_aeeccef6_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_links_vue__);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(353)
+  __webpack_require__(478)
 }
-var normalizeComponent = __webpack_require__(4)
+var normalizeComponent = __webpack_require__(5)
 /* script */
 
 
@@ -60,7 +60,7 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 290:
+/***/ 415:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70,7 +70,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _util = __webpack_require__(16);
+var _util = __webpack_require__(17);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -103,6 +103,7 @@ exports.default = {
             myFormTitle: '编辑',
             checkedAll: [],
             sizeOpts: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+
             tableColumns: [{
                 type: 'selection',
                 width: 60,
@@ -136,7 +137,11 @@ exports.default = {
                 }
             }, {
                 title: '日期',
-                key: 'created_at'
+                key: 'created_at',
+                render: function render(h, params) {
+                    var time = _util2.default.timeFormat(params.row.created_at);
+                    return h('span', time);
+                }
             }, {
                 title: '操作',
                 key: 'action',
@@ -169,6 +174,7 @@ exports.default = {
                     }, '删除')]);
                 }
             }]
+
         };
     },
 
@@ -291,16 +297,16 @@ exports.default = {
                 }
             });
         },
-        submitMyForm: function submitMyForm(myForm) {
+        submitMyForm: function submitMyForm() {
             var that = this;
-            that.$refs[myForm].validate(function (valid) {
+            that.$refs['myForm'].validate(function (valid) {
                 if (!valid) {
                     console.log('myForm valid error.');
                     return false;
                 }
 
                 if (that.myForm.id > 0) {
-                    _util2.default.ajax.post('/backend/links/update', _util2.default.stringify(that.myForm)).then(function (response) {
+                    _util2.default.ajax.post('/backend/links/update', that.myForm).then(function (response) {
                         var res = response.data;
                         that.$Notice.warning({
                             title: res.status == 200 ? '编辑成功' : '编辑失败',
@@ -314,7 +320,7 @@ exports.default = {
                         console.log(error);
                     });
                 } else {
-                    _util2.default.ajax.post('/backend/links', _util2.default.stringify(that.myForm)).then(function (response) {
+                    _util2.default.ajax.post('/backend/links', that.myForm).then(function (response) {
                         var res = response.data;
                         if (res.status == 200) {
                             that.closeForm('myForm');
@@ -368,17 +374,17 @@ exports.default = {
 
 /***/ }),
 
-/***/ 353:
+/***/ 478:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(354);
+var content = __webpack_require__(479);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(20)("5b55e274", content, false, {});
+var update = __webpack_require__(21)("5b55e274", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -395,10 +401,10 @@ if(false) {
 
 /***/ }),
 
-/***/ 354:
+/***/ 479:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(19)(false);
+exports = module.exports = __webpack_require__(20)(false);
 // imports
 
 
@@ -410,7 +416,7 @@ exports.push([module.i, "\n.links {\n    text-decoration: none;\n    color: #000
 
 /***/ }),
 
-/***/ 355:
+/***/ 480:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

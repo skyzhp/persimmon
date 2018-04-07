@@ -16,22 +16,32 @@ type PostService struct{}
 
 func (this *PostService) GetPostById(id int, real bool) (info.Posts, error) {
 	post := info.Posts{}
-	cacheKey := utils.CacheKey("PostService", "InfoById", id)
-	if err := cache.Get(cacheKey, &post); err != nil || real {
+
+	cKey := utils.CacheKey("PostService", "InfoById", id)
+	if real {
+		go cache.Delete(cKey)
+	}
+
+	if err := cache.Get(cKey, &post); err != nil {
 		_, err := db.MasterDB.Where("id = ?", id).Get(&post)
 		if err != nil {
 			return post, err
 		}
-		go cache.Set(cacheKey, post, 30*time.Minute)
+
+		go cache.Set(cKey, post, 30*time.Minute)
 	}
 
 	//related tags
 	tags, err := tagService.GetListByPostId(post.Id, real)
 	if err != nil {
-		revel.INFO.Printf("GetListByPostId failed : %s", tags)
+		revel.INFO.Printf("GetListByPostId failed : %s", err)
 		return post, err
 	}
-	post.Tags = tags
+	if len(tags) > 0 {
+		post.Tags = tags
+	} else {
+		post.Tags = make([]info.Tags, 0)
+	}
 
 	//related Categories
 	category, catErr := categoryService.GetCategoryById(post.CategoryId, real)
@@ -63,8 +73,8 @@ func (this *PostService) GetPostBySlug(slug string, real bool) (info.Posts, erro
 }
 
 func (this *PostService) GetSlugList(limit int, page int) ([]info.Posts, error) {
-	limit = utils.IntDefault(limit, 20)
-	page = utils.IntDefault(page, 1)
+	limit = utils.IntDefault(limit > 0, limit, 20)
+	page = utils.IntDefault(page > 0, page, 1)
 	start := (page - 1) * limit
 	postArr := make([]info.Posts, 0)
 	err := db.MasterDB.Desc("id").Cols("flag", "created_at").Limit(limit, start).Find(&postArr)
@@ -76,8 +86,8 @@ func (this *PostService) GetSlugList(limit int, page int) ([]info.Posts, error) 
 }
 
 func (this *PostService) GetPostIdArr(categoryId int, keywords string, limit int, page int) ([]int, error) {
-	limit = utils.IntDefault(limit, 20)
-	page = utils.IntDefault(page, 1)
+	limit = utils.IntDefault(limit > 0, limit, 20)
+	page = utils.IntDefault(page > 0, page, 1)
 	session := db.MasterDB.NewSession()
 	start := (page - 1) * limit
 	postList := make([]info.Posts, 0)
@@ -104,7 +114,7 @@ func (this *PostService) GetPostIdArr(categoryId int, keywords string, limit int
 func (this *PostService) GetPostByIdArr(idArr []int, real bool) ([]info.Posts, error) {
 	idLen := len(idArr)
 	if idLen <= 0 {
-		return nil, errors.New("参数不正确")
+		return nil, errors.New("Param error.")
 	}
 
 	postArr := make([]info.Posts, idLen)
@@ -154,10 +164,12 @@ func (this *PostService) ShowPage(prefix string, page int, totalPage int) templa
 	} else if page == 1 {
 		html = fmt.Sprintf(next, prefix, page+1)
 	} else if page >= totalPage {
-		previousNum := utils.IntDefault(totalPage-1, 1)
+		newTotalPage := totalPage - 1
+		previousNum := utils.IntDefault(newTotalPage > 0, newTotalPage, 1)
 		html = fmt.Sprintf(previous, prefix, previousNum)
 	} else {
-		previousNum := utils.IntDefault(totalPage-1, 1)
+		newTotalPage := totalPage - 1
+		previousNum := utils.IntDefault(newTotalPage > 0, newTotalPage, 1)
 		html = fmt.Sprintf(previous+next, prefix, previousNum, prefix, page+1)
 	}
 
@@ -176,11 +188,13 @@ func (this *PostService) GetListPaging(categoryId int, keywords string, limit in
 }
 
 func (this *PostService) SearchList(categoryId int, keywords string, limit int, page int, real bool) ([]info.Posts, error) {
-	limit = utils.IntDefault(limit, 20)
-	page = utils.IntDefault(page, 1)
+	limit = utils.IntDefault(limit > 0, limit, 20)
+	page = utils.IntDefault(page > 0, page, 1)
 	session := db.MasterDB.NewSession()
 	start := (page - 1) * limit
 	postList := make([]info.Posts, 0)
+
+	session.Where("deleted_at IS NULL")
 	if categoryId > 0 {
 		session.And("category_id = ?", categoryId)
 	}
@@ -227,9 +241,9 @@ func (this *PostService) Update(id int, post info.Posts) (bool, error) {
 	return true, nil
 }
 
-// add to Trash
-func (this *PostService) Trash(ids []int, post info.Posts) (bool, error) {
-	_, err := db.MasterDB.In("id", ids).Delete(post)
+func (this *PostService) Trash(ids []int) (bool, error) {
+	post := info.Posts{DeletedAt: time.Now().Unix()}
+	_, err := db.MasterDB.In("id", ids).Update(&post)
 	if err != nil {
 		revel.INFO.Printf("Destroy post failed: %s", err)
 		return false, err

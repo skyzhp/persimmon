@@ -69,6 +69,13 @@ func NewTemplateFunc() {
 		date := utils.Date(format, timestamp)
 		return template.JS(date)
 	}
+	revel.TemplateFuncs["isEmpty"] = func(arg string) bool {
+		if arg == "" {
+			return true
+		}
+		return false
+	}
+
 }
 
 func init() {

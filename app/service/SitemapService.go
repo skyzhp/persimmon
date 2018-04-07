@@ -41,7 +41,7 @@ xmlns:mobile="http://www.baidu.com/schemas/sitemap-mobile/1/">`
 	items := ""
 	lastBuildDate := ""
 	for key, val := range posts {
-		pubDate := utils.Date(utils.YmdTimeFormat, val.CreatedAt)
+		pubDate := utils.Date("2006-01-02", val.CreatedAt)
 		if key == 0 {
 			lastBuildDate = pubDate
 		}

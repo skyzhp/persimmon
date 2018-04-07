@@ -16,14 +16,38 @@ type CategoryService struct {
 
 func (this *CategoryService) GetCategoryById(id int, real bool) (info.Categorys, error) {
 	category := info.Categorys{}
-	cacheKey := utils.CacheKey("CategoryService", "InfoById", id)
-	if err := cache.Get(cacheKey, &category); err != nil || real {
+
+	if id <= 0 {
+		return category, errors.New("Param error.")
+	}
+
+	cKey := utils.CacheKey("CategoryService", "InfoById", id)
+	if real {
+		go cache.Delete(cKey)
+	}
+
+	if err := cache.Get(cKey, &category); err != nil {
 		_, err := db.MasterDB.Where("id = ?", id).Get(&category)
 		if err != nil {
 			return category, err
 		}
-		go cache.Set(cacheKey, category, 30*time.Minute)
+
+		go cache.Set(cKey, category, 30*time.Minute)
 	}
+
+	return category, nil
+}
+
+func (this *CategoryService) GetCategory(id int) (info.Categorys, error) {
+	category := info.Categorys{}
+
+	_, err := db.MasterDB.Where("id = ?", id).Get(&category)
+	if err != nil {
+		return category, err
+	}
+
+	key := utils.CacheKey("CategoryService", "InfoById", id)
+	go cache.Set(key, category, 30*time.Minute)
 
 	return category, nil
 }
@@ -36,11 +60,6 @@ func (this *CategoryService) GetCategoryBySlug(slug string, real bool) (info.Cat
 	_, err := db.MasterDB.Where("category_flag = ?", slug).Cols("id").Get(&category)
 	if err != nil {
 		return category, err
-	}
-
-	category, catErr := this.GetCategoryById(category.Id, real)
-	if catErr != nil {
-		return category, catErr
 	}
 
 	return category, nil
@@ -65,8 +84,8 @@ func (this *CategoryService) GetCategoryByIdArr(idArr []int, real bool) ([]info.
 }
 
 func (this *CategoryService) GetList(limit int, page int, real bool) ([]info.Categorys, error) {
-	this.limit = utils.IntDefault(limit, 20)
-	this.page = utils.IntDefault(page, 20)
+	this.limit = utils.IntDefault(limit > 0, limit, 20)
+	this.page = utils.IntDefault(page > 0, page, 20)
 
 	start := (this.page - 1) * limit
 	categorysList := make([]info.Categorys, 0)

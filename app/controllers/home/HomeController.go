@@ -10,8 +10,9 @@ type Home struct {
 }
 
 func (c Home) Index(page int) revel.Result {
-	page = utils.IntDefault(page, FirstPage)
-	postArr, err := postService.SearchList(0, "", PageSize, FirstPage, false)
+
+	page = utils.IntDefault(page > 0, page, FirstPage)
+	postArr, err := postService.SearchList(0, "", PageSize, page, false)
 	if err != nil {
 		c.Flash.Error(err.Error())
 	}
@@ -36,7 +37,7 @@ func (c Home) Post(slug string) revel.Result {
 }
 
 func (c Home) Tag(name string, page int) revel.Result {
-	page = utils.IntDefault(page, 1)
+	page = utils.IntDefault(page > 0, page, 1)
 
 	if name == "" {
 		c.Flash.Error("标签不能为空.")
@@ -68,9 +69,10 @@ func (c Home) Categories(slug string, page int) revel.Result {
 	category, cErr := categoryService.GetCategoryBySlug(slug, false)
 	if cErr != nil {
 		c.Flash.Error(cErr.Error())
+		return c.NotFound("很抱歉，页面没找到")
 	}
 
-	page = utils.IntDefault(page, 1)
+	page = utils.IntDefault(page > 0, page, 1)
 	postArr, err := postService.SearchList(category.Id, "", PageSize, page, false)
 	if err != nil {
 		c.Flash.Error(err.Error())

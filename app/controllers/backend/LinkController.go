@@ -20,7 +20,7 @@ func (c Link) Index(rows int, page int) revel.Result {
 }
 
 func (c Link) Show(id int) revel.Result {
-	link, err := linkService.GetOne(id)
+	link, err := linkService.GetLinkById(id,false)
 	if err != nil {
 		return c.ResponseError(500, err.Error())
 	}

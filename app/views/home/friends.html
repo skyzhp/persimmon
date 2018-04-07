@@ -9,11 +9,11 @@
         </header>
         <div class="post-content markdown-body" itemprop="articleBody">
             <div class="links">
-                <ul>
-                    {{range .links}}
-                    <li><a href="{{ .Url }}" title="{{ .Name }}" target="_blank"><i class="fa fa-anchor" aria-hidden="true"></i>{{ .Name }}</a></li>
-                    {{end}}
-                </ul>
+                {{range .links}}
+                <a href="{{ .Url }}" title="{{ .Name }}" target="_blank" class="friends">
+                    {{ if isEmpty .Logo}} <img src="/public/images/visitor.png" alt=""> {{else}} <img src="{{ .Logo }}" alt=""> {{end}} {{ .Name }}
+                </a>
+                {{end}}
             </div>
             <div class="clear"></div>
         </div>

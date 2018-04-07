@@ -17,7 +17,7 @@
 
 </style>
 <script>
-    import Util from '../../libs/util';
+    import util from '../../libs/util';
 
     export default {
         data() {
@@ -34,7 +34,7 @@
             getData: function () {
                 let that = this;
                 that.editFormLoading = true;
-                Util.ajax.get('/backend/settings').then(function (response) {
+                util.ajax.get('/backend/settings').then(function (response) {
                     let res = response.data;
                     if (res.status == 200) {
                         let data = res.list
@@ -59,7 +59,7 @@
 
             submitMyForm: function () {
                 let that = this;
-                Util.ajax.post('/backend/settings/update', Util.stringify(that.myForm)).then(function (response) {
+                util.ajax.post('/backend/settings/update', util.stringify(that.myForm)).then(function (response) {
                     let res = response.data;
                     that.$Notice.warning({
                         title: res.status == 200 ? '更新成功' : '更新失败',
