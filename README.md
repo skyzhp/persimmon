@@ -28,7 +28,7 @@ glide install
 cd $GOPATH && revel run github.com/cong5/persimmon
 ```
 
-## build
+## build binary deploy
 
 Build persimmon binary exec file to current directory.
 
