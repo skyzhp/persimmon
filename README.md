@@ -30,22 +30,30 @@ cd $GOPATH && revel run github.com/cong5/persimmon
 
 ## build
 
-在当前目录生成了persimmon二进制文件
+Build persimmon binary exec file to current directory.
 
 ```
-go build -o ./persimmon github.com/cong5/persimmon/app/tmp
+cd $GOPATH/src/github.com/cong5/persimmon
+go build -o ./bin/persimmon github.com/cong5/persimmon/app/tmp
 ```
 
 ## 运行persimmon
 
-其中-importPath是必须的
+Argument -importPath required.
 
 ```
-./persimmon -importPath=github.com/cong5/persimmon -runMode=prod -port=9100
+./bin/persimmon -importPath=github.com/cong5/persimmon -runMode=prod -port=9100
 ```
 
-FYI, in the meantime, after Revel generates your app, you can just do:
+more... see ``
 
-go build -o bin/myapp import/path/to/myapp/app/tmp
-run gdb on the binary bin/myapp.
-Pass in flags "-importPath", "-srcPath", "-runMode"
+## backend 
+
+backend url
+
+http://example.com/backend
+
+Default user.
+
+UserName: persimmon@cong5.net
+Password: Persimmon2018

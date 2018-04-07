@@ -21,5 +21,8 @@ func InitDB() {
 	MasterDB.TZLocation, _ = time.LoadLocation("Asia/Shanghai")
 	tbMapper := core.NewPrefixMapper(core.SnakeMapper{}, "pit_")
 	MasterDB.SetTableMapper(tbMapper)
-	MasterDB.ShowSQL(true)
+	// if dev env show sql log
+	if revel.RunMode == "dev" {
+		MasterDB.ShowSQL(true)
+	}
 }

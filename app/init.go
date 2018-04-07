@@ -6,6 +6,7 @@ import (
 	"github.com/cong5/persimmon/app/controllers/backend"
 	"github.com/cong5/persimmon/app/db"
 	"github.com/cong5/persimmon/app/modules/mycsrf"
+	"runtime"
 )
 
 var (
@@ -51,6 +52,7 @@ func init() {
 		db.InitDB()
 	})
 
+	runtime.GOMAXPROCS(runtime.NumCPU())
 }
 
 // HeaderFilter adds common security headers
