@@ -1,6 +1,10 @@
-hash: 38d6ebebca48a723ddb2e15822b12a88f4dadedd237c34b686eafd5f6b3b55fe
-updated: 2018-03-28T15:46:43.675831+08:00
+hash: 717f82e54bf3fe3e04afaf8669fe6f67c25075347d141e73e6f631d56c9e9883
+updated: 2018-04-07T16:14:30.609459+08:00
 imports:
+- name: github.com/adtac/go-akismet
+  version: f332a49c03313e67c622679086931d57e04683b5
+  subpackages:
+  - akismet
 - name: github.com/bradfitz/gomemcache
   version: 1952afaa557dc08e8e0d89eafab110fb501c1a2b
   subpackages:
@@ -54,6 +58,10 @@ imports:
   - ctype.v7
   - rpc.v7
   - xlog.v7
+- name: github.com/revel/cmd
+  version: 95d6366c0d8d727ca62767848fb0801268b49ea6
+  subpackages:
+  - revel
 - name: github.com/revel/config
   version: 662332b741dd464a886ab0901379c02b9bc5dc30
 - name: github.com/revel/cron
@@ -89,15 +97,12 @@ imports:
   subpackages:
   - bcrypt
   - blowfish
-- name: golang.org/x/net
+- name: golang.org/x/net/context
   version: 22ae77b79946ea320088417e4d50825671d82d57
-  subpackages:
-  - context
-  - websocket
-- name: golang.org/x/sys
+- name: golang.org/x/net/websocket
+  version: eb925808374e5ca90c83401a40d711dc08c0c0f6
+- name: golang.org/x/sys/unix
   version: f6cff0780e542efa0c8e864dc8fa522808f6a598
-  subpackages:
-  - unix
 - name: gopkg.in/fsnotify/fsnotify.v1
   version: c2828203cd70a50dcccfb2761f8b1f8ceef9a8e9
 - name: gopkg.in/natefinch/lumberjack.v2
@@ -110,6 +115,7 @@ imports:
   version: 946c4a16076d6d98aeb78619e2bd4012357f7228
   subpackages:
   - bytes.v7
+  - errors.v7
   - log.v7
   - reqid.v7
 testImports: []

@@ -48,3 +48,5 @@ import:
   subpackages:
   - redis
 - package: github.com/adtac/go-akismet
+- package: github.com/revel/cmd/revel
+  version: v0.14.1
