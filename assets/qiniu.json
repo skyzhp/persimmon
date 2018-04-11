@@ -1,15 +1,15 @@
 {
-  "src_dir"            :   "/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public",
-  "bucket"             :   "cong5",
-  "key_prefix"         :   "assets/",
-  "rescan_local"       :   true,
-  "skip_file_prefixes" :   "test,demo,",
-  "skip_path_prefixes" :   "hello/,temp/,uploads/",
-  "skip_fixed_strings" :   ".svn,.git",
-  "skip_suffixes"      :   ".DS_Store,.exe",
-  "log_file"           :   "upload.log",
-  "log_level"          :   "info",
-  "log_rotate"         :   1,
-  "log_stdout"         :   false,
-  "file_type"          :   0
+  "src_dir": "/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public",
+  "bucket": "cong5",
+  "key_prefix": "assets/",
+  "rescan_local": true,
+  "skip_file_prefixes": "test,demo,",
+  "skip_path_prefixes": "hello/,temp/,uploads/",
+  "skip_fixed_strings": ".svn,.git",
+  "skip_suffixes": ".DS_Store,.exe",
+  "log_file": "upload.log",
+  "log_level": "info",
+  "log_rotate": 1,
+  "log_stdout": false,
+  "file_type": 0
 }

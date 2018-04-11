@@ -8,3 +8,4 @@ log/
 assets/upload.log
 bin/persimmon/
 assets/upload.log
+assets/qiniu.json
