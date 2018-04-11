@@ -17,6 +17,10 @@ type PostService struct{}
 func (this *PostService) GetPostById(id int, real bool) (info.Posts, error) {
 	post := info.Posts{}
 
+	if id <= 0 {
+		return post, errors.New("param error")
+	}
+
 	cKey := utils.CacheKey("PostService", "InfoById", id)
 	if real {
 		go cache.Delete(cKey)
@@ -42,6 +46,8 @@ func (this *PostService) GetPostById(id int, real bool) (info.Posts, error) {
 	} else {
 		post.Tags = make([]info.Tags, 0)
 	}
+
+	revel.INFO.Println(post.CategoryId)
 
 	//related Categories
 	category, catErr := categoryService.GetCategoryById(post.CategoryId, real)
@@ -218,6 +224,30 @@ func (this *PostService) SearchList(categoryId int, keywords string, limit int, 
 	}
 
 	return postList, nil
+}
+
+func (this *PostService) GetPostTitleById(id int, real bool) (string, error) {
+	post := info.Posts{}
+
+	if id <= 0 {
+		return "", errors.New("param error")
+	}
+
+	cKey := utils.CacheKey("PostService", "InfoById", id)
+	if real {
+		go cache.Delete(cKey)
+	}
+
+	if err := cache.Get(cKey, &post); err != nil {
+		_, err := db.MasterDB.Where("id = ?", id).Get(&post)
+		if err != nil {
+			return "", err
+		}
+
+		go cache.Set(cKey, post, 30*time.Minute)
+	}
+
+	return post.Title, nil
 }
 
 //================================ use backend ===============================

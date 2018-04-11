@@ -14,6 +14,10 @@ type CommentService struct{}
 
 func (this *CommentService) GetCommentById(id int, real bool) (info.Comments, error) {
 	comments := info.Comments{}
+	if id <= 0 {
+		return comments, errors.New("param error")
+	}
+
 	cKey := utils.CacheKey("CommentService", "InfoById", id)
 
 	if real {
@@ -30,8 +34,8 @@ func (this *CommentService) GetCommentById(id int, real bool) (info.Comments, er
 	}
 
 	//post title
-	post, _ := postService.GetPostById(comments.PostsId, false)
-	comments.Title = post.Title
+	postTitle, _ := postService.GetPostTitleById(comments.PostsId, false)
+	comments.Title = postTitle
 
 	return comments, nil
 }
@@ -115,9 +119,10 @@ func (this *CommentService) GetCommentByPostId(postId int, limit int, page int) 
 
 	comments := make([]info.Comments, 0)
 	start := (page - 1) * limit
-	err := db.MasterDB.Where("posts_id = ? AND status = 1", postId).Limit(limit, start).Find(&comments)
+	err := db.MasterDB.Where("posts_id = ? AND status = 1", postId).OrderBy("id DESC").Limit(limit,
+		start).Find(&comments)
 	if err != nil {
-		//revel.INFO.Printf("Get comment by post id failed : %s", err)
+		revel.INFO.Printf("Get comment by post id failed : %s", err)
 		return nil, err
 	}
 
@@ -149,7 +154,7 @@ func (this *CommentService) Save(comment info.Comments) (int, error) {
 func (this *CommentService) Update(id int, comment info.Comments) (bool, error) {
 	_, err := db.MasterDB.Id(id).Update(comment)
 	if err != nil {
-		//revel.INFO.Printf("Update comment failed: %s", err)
+		revel.INFO.Printf("Update comment failed: %s", err)
 		return false, err
 	}
 	return true, nil
@@ -158,7 +163,7 @@ func (this *CommentService) Update(id int, comment info.Comments) (bool, error) 
 func (this *CommentService) Destroy(id int, comment info.Comments) (bool, error) {
 	_, err := db.MasterDB.Id(id).Delete(comment)
 	if err != nil {
-		//revel.INFO.Printf("Destroy comment failed: %s", err)
+		revel.INFO.Printf("Destroy comment failed: %s", err)
 		return false, err
 	}
 	return true, nil
@@ -172,7 +177,7 @@ func (this *CommentService) CountComment(postId int) (int, error) {
 	}
 	total, err := dbSession.Count(comment)
 	if err != nil {
-		//revel.INFO.Printf("Count comment failed: %s", err)
+		revel.INFO.Printf("Count comment failed: %s", err)
 		return 0, err
 	}
 	return int(total), nil

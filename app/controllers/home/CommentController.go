@@ -66,12 +66,12 @@ func (c HomeComment) Post(comment info.Comments) revel.Result {
 		comments.Content = string(htmlContent)
 	}
 
-	_, err := commentService.Save(comments)
+	commentId, err := commentService.Save(comments)
 	if err != nil {
 		return c.AjaxError(500, err.Error())
 	}
 
-	go notificationService.SendCommentNotice(comment.PostsId, comment.Id, c.Request.Host)
+	go notificationService.SendCommentNotice(comment.PostsId, commentId, c.Request.Host)
 
 	return c.AjaxSuccess("评论成功")
 }

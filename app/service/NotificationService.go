@@ -35,7 +35,7 @@ func (this *NotificationService) SendMail(subject string, body string) (bool, er
 
 func (this *NotificationService) SendCommentNotice(postId int, commentId int, host string) (bool, error) {
 
-	tplName := "app/views/mails/comments.html"
+	tplFile := "app/views/mails/comments.html"
 	comment, cmErr := commentService.GetCommentById(commentId, false)
 	if cmErr != nil {
 		revel.INFO.Printf("GetCommentById Error: %s", cmErr)
@@ -43,7 +43,7 @@ func (this *NotificationService) SendCommentNotice(postId int, commentId int, ho
 	}
 
 	subject := fmt.Sprintf("“%s” 有新的评论", comment.Title)
-	t, pErr := template.ParseFiles(tplName)
+	t, pErr := template.ParseFiles(tplFile)
 	if pErr != nil {
 		revel.INFO.Printf("Template ParseFiles Error: %s", pErr)
 		return false, pErr

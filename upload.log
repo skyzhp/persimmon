@@ -1,0 +1,349 @@
+2018/04/11 14:57:20 [I] Load account from /Users/mrcong/.qshell/account.json
+2018/04/11 14:57:20 [I] Listing local sync dir, this can take a long time for big directory, please wait patiently
+2018/04/11 14:57:20 [I] Walk `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public` start from 2018-04-11 14:57:20.887504 +0800 CST m=+0.166041814
+2018/04/11 14:57:20 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public`
+2018/04/11 14:57:20 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app`
+2018/04/11 14:57:20 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/css`
+2018/04/11 14:57:20 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/js`
+2018/04/11 14:57:20 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend`
+2018/04/11 14:57:20 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/css`
+2018/04/11 14:57:20 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js`
+2018/04/11 14:57:20 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/images`
+2018/04/11 14:57:20 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies`
+2018/04/11 14:57:20 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/uploads`
+2018/04/11 14:57:20 [I] Walk `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public` end at 2018-04-11 14:57:20.896106 +0800 CST m=+0.174644004
+2018/04/11 14:57:20 [I] Walk `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public` last for 8.626964ms
+2018/04/11 14:57:20 [I] Total file count cached 70
+2018/04/11 14:57:20 [I] Skip by suffix `.DS_Store` for local file `.DS_Store`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/1d42b9cb563186520f735c83d5af1330.woff`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/2022d2d6b391ce8b27ddec3d9493e2b7.woff2`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/3c3a84378057470a4c944b866ecef619.eot`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/6157ad7c7f5eca993afe93da842cf2f9.svg`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/674f50d287a8c48dc19ba404d20fe713.eot`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/81a2b6996374fc6e695565f388a557da.svg`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/912ec66d7572ff821749319396470bde.svg`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/93c7d5883f5338ee5bbbf4143a8fa375.jpg`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/af7ae505a9eed503f8b8e6982036873e.woff2`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/b06871f281fee6b241d60582ae9369b9.ttf`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/ce2475110601dacdbabc5904a94536ae.eot`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/css/main.css`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/d20a95dce6ec4b07c6ed62cf811656f7.ttf`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/dfcfdc160f323c84d0055414521321a3.ttf`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/fad6867b42d9bdba582802a8a32144f5.woff`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/fee66e712a8a08eef5805a46892932ad.woff`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/js/main.js`
+2018/04/11 14:57:20 [I] Skip by suffix `.DS_Store` for local file `backend/.DS_Store`
+2018/04/11 14:57:20 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/05acfdb568b3df49ad31355b19495d4a.woff` because `overwrite` is false
+2018/04/11 14:57:20 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/24712f6c47821394fba7942fbb52c3b2.ttf` because `overwrite` is false
+2018/04/11 14:57:20 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/2c2ae068be3b089e0a5b59abb1831550.eot` because `overwrite` is false
+2018/04/11 14:57:20 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/621bd386841f74e0053cb8e67f8a0604.svg` because `overwrite` is false
+2018/04/11 14:57:20 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/9f35d093728efc834cf6f8b15fd17eea.jpg` because `overwrite` is false
+2018/04/11 14:57:20 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/css/main.css` because `overwrite` is false
+2018/04/11 14:57:20 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/f580abc21990eab686ce876612e30505.jpg` because `overwrite` is false
+2018/04/11 14:57:20 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/g.css` because `overwrite` is false
+2018/04/11 14:57:20 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/0.chunk.js` because `overwrite` is false
+2018/04/11 14:57:20 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/1.chunk.js` because `overwrite` is false
+2018/04/11 14:57:20 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/10.chunk.js` because `overwrite` is false
+2018/04/11 14:57:20 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/11.chunk.js` because `overwrite` is false
+2018/04/11 14:57:20 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/12.chunk.js` because `overwrite` is false
+2018/04/11 14:57:20 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/2.chunk.js` because `overwrite` is false
+2018/04/11 14:57:20 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/3.chunk.js` because `overwrite` is false
+2018/04/11 14:57:20 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/4.chunk.js` because `overwrite` is false
+2018/04/11 14:57:20 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/5.chunk.js` because `overwrite` is false
+2018/04/11 14:57:20 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/6.chunk.js` because `overwrite` is false
+2018/04/11 14:57:20 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/7.chunk.js` because `overwrite` is false
+2018/04/11 14:57:20 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/8.chunk.js` because `overwrite` is false
+2018/04/11 14:57:20 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/9.chunk.js` because `overwrite` is false
+2018/04/11 14:57:20 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/main.js` because `overwrite` is false
+2018/04/11 14:57:20 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/vender-base.js` because `overwrite` is false
+2018/04/11 14:57:20 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/vender-exten.js` because `overwrite` is false
+2018/04/11 14:57:20 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/r.css` because `overwrite` is false
+2018/04/11 14:57:20 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/y.css` because `overwrite` is false
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/favicon.ico`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/images/visitor.png`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/arrow.gif`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/biggrin.gif`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/confused.gif`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/cool.gif`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/cry.gif`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/eek.gif`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/evil.gif`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/exclaim.gif`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/idea.gif`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/lol.gif`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/mad.gif`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/mrgreen.gif`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/neutral.gif`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/question.gif`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/razz.gif`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/redface.gif`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/rolleyes.gif`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/sad.gif`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/smile.gif`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/surprised.gif`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/twisted.gif`
+2018/04/11 14:57:20 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/wink.gif`
+2018/04/11 14:57:20 [I] Skip by path prefix `uploads/` for local file path `uploads/.DS_Store`
+2018/04/11 14:57:20 [I] -------------Upload Result--------------
+2018/04/11 14:57:20 [I]               Total:        70
+2018/04/11 14:57:20 [I]             Success:         0
+2018/04/11 14:57:20 [I]             Failure:         0
+2018/04/11 14:57:20 [I]        NotOverwrite:        26
+2018/04/11 14:57:20 [I]             Skipped:        44
+2018/04/11 14:57:20 [I]            Duration:   153.733945ms
+2018/04/11 14:57:20 [I] ----------------------------------------
+2018/04/11 14:58:54 [I] Load account from /Users/mrcong/.qshell/account.json
+2018/04/11 14:58:54 [I] Listing local sync dir, this can take a long time for big directory, please wait patiently
+2018/04/11 14:58:54 [I] Walk `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public` start from 2018-04-11 14:58:54.143005 +0800 CST m=+0.126065300
+2018/04/11 14:58:54 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public`
+2018/04/11 14:58:54 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app`
+2018/04/11 14:58:54 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/css`
+2018/04/11 14:58:54 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/js`
+2018/04/11 14:58:54 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend`
+2018/04/11 14:58:54 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/css`
+2018/04/11 14:58:54 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js`
+2018/04/11 14:58:54 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/images`
+2018/04/11 14:58:54 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies`
+2018/04/11 14:58:54 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/uploads`
+2018/04/11 14:58:54 [I] Walk `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public` end at 2018-04-11 14:58:54.14511 +0800 CST m=+0.128169791
+2018/04/11 14:58:54 [I] Walk `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public` last for 2.136454ms
+2018/04/11 14:58:54 [I] Total file count cached 70
+2018/04/11 14:58:54 [I] Skip by suffix `.DS_Store` for local file `.DS_Store`
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/1d42b9cb563186520f735c83d5af1330.woff => cong5 : assets/app/1d42b9cb563186520f735c83d5af1330.woff
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/2022d2d6b391ce8b27ddec3d9493e2b7.woff2 => cong5 : assets/app/2022d2d6b391ce8b27ddec3d9493e2b7.woff2
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/3c3a84378057470a4c944b866ecef619.eot => cong5 : assets/app/3c3a84378057470a4c944b866ecef619.eot
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/6157ad7c7f5eca993afe93da842cf2f9.svg => cong5 : assets/app/6157ad7c7f5eca993afe93da842cf2f9.svg
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/674f50d287a8c48dc19ba404d20fe713.eot => cong5 : assets/app/674f50d287a8c48dc19ba404d20fe713.eot
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/81a2b6996374fc6e695565f388a557da.svg => cong5 : assets/app/81a2b6996374fc6e695565f388a557da.svg
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/912ec66d7572ff821749319396470bde.svg => cong5 : assets/app/912ec66d7572ff821749319396470bde.svg
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/93c7d5883f5338ee5bbbf4143a8fa375.jpg => cong5 : assets/app/93c7d5883f5338ee5bbbf4143a8fa375.jpg
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/af7ae505a9eed503f8b8e6982036873e.woff2 => cong5 : assets/app/af7ae505a9eed503f8b8e6982036873e.woff2
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/b06871f281fee6b241d60582ae9369b9.ttf => cong5 : assets/app/b06871f281fee6b241d60582ae9369b9.ttf
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/ce2475110601dacdbabc5904a94536ae.eot => cong5 : assets/app/ce2475110601dacdbabc5904a94536ae.eot
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/css/main.css => cong5 : assets/app/css/main.css
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/d20a95dce6ec4b07c6ed62cf811656f7.ttf => cong5 : assets/app/d20a95dce6ec4b07c6ed62cf811656f7.ttf
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/dfcfdc160f323c84d0055414521321a3.ttf => cong5 : assets/app/dfcfdc160f323c84d0055414521321a3.ttf
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/fad6867b42d9bdba582802a8a32144f5.woff => cong5 : assets/app/fad6867b42d9bdba582802a8a32144f5.woff
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/fee66e712a8a08eef5805a46892932ad.woff => cong5 : assets/app/fee66e712a8a08eef5805a46892932ad.woff
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/js/main.js => cong5 : assets/app/js/main.js
+2018/04/11 14:58:54 [I] Skip by suffix `.DS_Store` for local file `backend/.DS_Store`
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/05acfdb568b3df49ad31355b19495d4a.woff => cong5 : assets/backend/05acfdb568b3df49ad31355b19495d4a.woff
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/24712f6c47821394fba7942fbb52c3b2.ttf => cong5 : assets/backend/24712f6c47821394fba7942fbb52c3b2.ttf
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/2c2ae068be3b089e0a5b59abb1831550.eot => cong5 : assets/backend/2c2ae068be3b089e0a5b59abb1831550.eot
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/621bd386841f74e0053cb8e67f8a0604.svg => cong5 : assets/backend/621bd386841f74e0053cb8e67f8a0604.svg
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/9f35d093728efc834cf6f8b15fd17eea.jpg => cong5 : assets/backend/9f35d093728efc834cf6f8b15fd17eea.jpg
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/css/main.css => cong5 : assets/backend/css/main.css
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/f580abc21990eab686ce876612e30505.jpg => cong5 : assets/backend/f580abc21990eab686ce876612e30505.jpg
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/g.css => cong5 : assets/backend/g.css
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/0.chunk.js => cong5 : assets/backend/js/0.chunk.js
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/1.chunk.js => cong5 : assets/backend/js/1.chunk.js
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/10.chunk.js => cong5 : assets/backend/js/10.chunk.js
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/11.chunk.js => cong5 : assets/backend/js/11.chunk.js
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/12.chunk.js => cong5 : assets/backend/js/12.chunk.js
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/2.chunk.js => cong5 : assets/backend/js/2.chunk.js
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/3.chunk.js => cong5 : assets/backend/js/3.chunk.js
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/4.chunk.js => cong5 : assets/backend/js/4.chunk.js
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/5.chunk.js => cong5 : assets/backend/js/5.chunk.js
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/6.chunk.js => cong5 : assets/backend/js/6.chunk.js
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/7.chunk.js => cong5 : assets/backend/js/7.chunk.js
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/8.chunk.js => cong5 : assets/backend/js/8.chunk.js
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/9.chunk.js => cong5 : assets/backend/js/9.chunk.js
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/main.js => cong5 : assets/backend/js/main.js
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/vender-base.js => cong5 : assets/backend/js/vender-base.js
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/vender-exten.js => cong5 : assets/backend/js/vender-exten.js
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/fad6867b42d9bdba582802a8a32144f5.woff` => `cong5 : assets/app/fad6867b42d9bdba582802a8a32144f5.woff` success
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/r.css => cong5 : assets/backend/r.css
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/dfcfdc160f323c84d0055414521321a3.ttf` => `cong5 : assets/app/dfcfdc160f323c84d0055414521321a3.ttf` success
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/y.css => cong5 : assets/backend/y.css
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/3c3a84378057470a4c944b866ecef619.eot` => `cong5 : assets/app/3c3a84378057470a4c944b866ecef619.eot` success
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/favicon.ico => cong5 : assets/favicon.ico
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/2022d2d6b391ce8b27ddec3d9493e2b7.woff2` => `cong5 : assets/app/2022d2d6b391ce8b27ddec3d9493e2b7.woff2` success
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/images/visitor.png => cong5 : assets/images/visitor.png
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/ce2475110601dacdbabc5904a94536ae.eot` => `cong5 : assets/app/ce2475110601dacdbabc5904a94536ae.eot` success
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/arrow.gif => cong5 : assets/smilies/arrow.gif
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/81a2b6996374fc6e695565f388a557da.svg` => `cong5 : assets/app/81a2b6996374fc6e695565f388a557da.svg` success
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/biggrin.gif => cong5 : assets/smilies/biggrin.gif
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/6157ad7c7f5eca993afe93da842cf2f9.svg` => `cong5 : assets/app/6157ad7c7f5eca993afe93da842cf2f9.svg` success
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/confused.gif => cong5 : assets/smilies/confused.gif
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/1d42b9cb563186520f735c83d5af1330.woff` => `cong5 : assets/app/1d42b9cb563186520f735c83d5af1330.woff` success
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/cool.gif => cong5 : assets/smilies/cool.gif
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/d20a95dce6ec4b07c6ed62cf811656f7.ttf` => `cong5 : assets/app/d20a95dce6ec4b07c6ed62cf811656f7.ttf` success
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/cry.gif => cong5 : assets/smilies/cry.gif
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/1.chunk.js` => `cong5 : assets/backend/js/1.chunk.js` success
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/eek.gif => cong5 : assets/smilies/eek.gif
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/10.chunk.js` => `cong5 : assets/backend/js/10.chunk.js` success
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/evil.gif => cong5 : assets/smilies/evil.gif
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/9f35d093728efc834cf6f8b15fd17eea.jpg` => `cong5 : assets/backend/9f35d093728efc834cf6f8b15fd17eea.jpg` success
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/exclaim.gif => cong5 : assets/smilies/exclaim.gif
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/11.chunk.js` => `cong5 : assets/backend/js/11.chunk.js` success
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/idea.gif => cong5 : assets/smilies/idea.gif
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/05acfdb568b3df49ad31355b19495d4a.woff` => `cong5 : assets/backend/05acfdb568b3df49ad31355b19495d4a.woff` success
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/lol.gif => cong5 : assets/smilies/lol.gif
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/css/main.css` => `cong5 : assets/app/css/main.css` success
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/mad.gif => cong5 : assets/smilies/mad.gif
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/12.chunk.js` => `cong5 : assets/backend/js/12.chunk.js` success
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/mrgreen.gif => cong5 : assets/smilies/mrgreen.gif
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/fee66e712a8a08eef5805a46892932ad.woff` => `cong5 : assets/app/fee66e712a8a08eef5805a46892932ad.woff` success
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/neutral.gif => cong5 : assets/smilies/neutral.gif
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/3.chunk.js` => `cong5 : assets/backend/js/3.chunk.js` success
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/question.gif => cong5 : assets/smilies/question.gif
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/af7ae505a9eed503f8b8e6982036873e.woff2` => `cong5 : assets/app/af7ae505a9eed503f8b8e6982036873e.woff2` success
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/razz.gif => cong5 : assets/smilies/razz.gif
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/674f50d287a8c48dc19ba404d20fe713.eot` => `cong5 : assets/app/674f50d287a8c48dc19ba404d20fe713.eot` success
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/redface.gif => cong5 : assets/smilies/redface.gif
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/4.chunk.js` => `cong5 : assets/backend/js/4.chunk.js` success
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/rolleyes.gif => cong5 : assets/smilies/rolleyes.gif
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/2c2ae068be3b089e0a5b59abb1831550.eot` => `cong5 : assets/backend/2c2ae068be3b089e0a5b59abb1831550.eot` success
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/sad.gif => cong5 : assets/smilies/sad.gif
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/5.chunk.js` => `cong5 : assets/backend/js/5.chunk.js` success
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/smile.gif => cong5 : assets/smilies/smile.gif
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/b06871f281fee6b241d60582ae9369b9.ttf` => `cong5 : assets/app/b06871f281fee6b241d60582ae9369b9.ttf` success
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/surprised.gif => cong5 : assets/smilies/surprised.gif
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/2.chunk.js` => `cong5 : assets/backend/js/2.chunk.js` success
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/twisted.gif => cong5 : assets/smilies/twisted.gif
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/7.chunk.js` => `cong5 : assets/backend/js/7.chunk.js` success
+2018/04/11 14:58:54 [I] Uploading file /Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/wink.gif => cong5 : assets/smilies/wink.gif
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/g.css` => `cong5 : assets/backend/g.css` success
+2018/04/11 14:58:54 [I] Skip by path prefix `uploads/` for local file path `uploads/.DS_Store`
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/6.chunk.js` => `cong5 : assets/backend/js/6.chunk.js` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/8.chunk.js` => `cong5 : assets/backend/js/8.chunk.js` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/24712f6c47821394fba7942fbb52c3b2.ttf` => `cong5 : assets/backend/24712f6c47821394fba7942fbb52c3b2.ttf` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/9.chunk.js` => `cong5 : assets/backend/js/9.chunk.js` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/f580abc21990eab686ce876612e30505.jpg` => `cong5 : assets/backend/f580abc21990eab686ce876612e30505.jpg` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/images/visitor.png` => `cong5 : assets/images/visitor.png` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/css/main.css` => `cong5 : assets/backend/css/main.css` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/arrow.gif` => `cong5 : assets/smilies/arrow.gif` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/favicon.ico` => `cong5 : assets/favicon.ico` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/vender-exten.js` => `cong5 : assets/backend/js/vender-exten.js` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/confused.gif` => `cong5 : assets/smilies/confused.gif` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/cool.gif` => `cong5 : assets/smilies/cool.gif` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/biggrin.gif` => `cong5 : assets/smilies/biggrin.gif` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/eek.gif` => `cong5 : assets/smilies/eek.gif` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/cry.gif` => `cong5 : assets/smilies/cry.gif` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/evil.gif` => `cong5 : assets/smilies/evil.gif` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/exclaim.gif` => `cong5 : assets/smilies/exclaim.gif` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/js/main.js` => `cong5 : assets/app/js/main.js` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/lol.gif` => `cong5 : assets/smilies/lol.gif` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/r.css` => `cong5 : assets/backend/r.css` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/912ec66d7572ff821749319396470bde.svg` => `cong5 : assets/app/912ec66d7572ff821749319396470bde.svg` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/idea.gif` => `cong5 : assets/smilies/idea.gif` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/mad.gif` => `cong5 : assets/smilies/mad.gif` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/neutral.gif` => `cong5 : assets/smilies/neutral.gif` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/mrgreen.gif` => `cong5 : assets/smilies/mrgreen.gif` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/razz.gif` => `cong5 : assets/smilies/razz.gif` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/question.gif` => `cong5 : assets/smilies/question.gif` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/redface.gif` => `cong5 : assets/smilies/redface.gif` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/0.chunk.js` => `cong5 : assets/backend/js/0.chunk.js` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/rolleyes.gif` => `cong5 : assets/smilies/rolleyes.gif` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/surprised.gif` => `cong5 : assets/smilies/surprised.gif` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/sad.gif` => `cong5 : assets/smilies/sad.gif` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/smile.gif` => `cong5 : assets/smilies/smile.gif` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/twisted.gif` => `cong5 : assets/smilies/twisted.gif` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/main.js` => `cong5 : assets/backend/js/main.js` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/y.css` => `cong5 : assets/backend/y.css` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/wink.gif` => `cong5 : assets/smilies/wink.gif` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/vender-base.js` => `cong5 : assets/backend/js/vender-base.js` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/93c7d5883f5338ee5bbbf4143a8fa375.jpg` => `cong5 : assets/app/93c7d5883f5338ee5bbbf4143a8fa375.jpg` success
+2018/04/11 14:58:54 [I] Upload file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/621bd386841f74e0053cb8e67f8a0604.svg` => `cong5 : assets/backend/621bd386841f74e0053cb8e67f8a0604.svg` success
+2018/04/11 14:58:54 [I] -------------Upload Result--------------
+2018/04/11 14:58:54 [I]               Total:        70
+2018/04/11 14:58:54 [I]             Success:        67
+2018/04/11 14:58:54 [I]             Failure:         0
+2018/04/11 14:58:54 [I]        NotOverwrite:         0
+2018/04/11 14:58:54 [I]             Skipped:         3
+2018/04/11 14:58:54 [I]            Duration:   642.114742ms
+2018/04/11 14:58:54 [I] ----------------------------------------
+2018/04/12 00:05:32 [I] Load account from /Users/mrcong/.qshell/account.json
+2018/04/12 00:05:33 [I] Listing local sync dir, this can take a long time for big directory, please wait patiently
+2018/04/12 00:05:33 [I] Walk `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public` start from 2018-04-12 00:05:33.246477 +0800 CST m=+0.314817483
+2018/04/12 00:05:33 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public`
+2018/04/12 00:05:33 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app`
+2018/04/12 00:05:33 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/css`
+2018/04/12 00:05:33 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/js`
+2018/04/12 00:05:33 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend`
+2018/04/12 00:05:33 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/css`
+2018/04/12 00:05:33 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js`
+2018/04/12 00:05:33 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/images`
+2018/04/12 00:05:33 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies`
+2018/04/12 00:05:33 [I] Walking through `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/uploads`
+2018/04/12 00:05:33 [I] Walk `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public` end at 2018-04-12 00:05:33.249201 +0800 CST m=+0.317541107
+2018/04/12 00:05:33 [I] Walk `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public` last for 2.75773ms
+2018/04/12 00:05:33 [I] Total file count cached 70
+2018/04/12 00:05:33 [I] Skip by suffix `.DS_Store` for local file `.DS_Store`
+2018/04/12 00:05:33 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/1d42b9cb563186520f735c83d5af1330.woff` because `overwrite` is false
+2018/04/12 00:05:33 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/2022d2d6b391ce8b27ddec3d9493e2b7.woff2` because `overwrite` is false
+2018/04/12 00:05:33 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/3c3a84378057470a4c944b866ecef619.eot` because `overwrite` is false
+2018/04/12 00:05:33 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/6157ad7c7f5eca993afe93da842cf2f9.svg` because `overwrite` is false
+2018/04/12 00:05:33 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/674f50d287a8c48dc19ba404d20fe713.eot` because `overwrite` is false
+2018/04/12 00:05:33 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/81a2b6996374fc6e695565f388a557da.svg` because `overwrite` is false
+2018/04/12 00:05:33 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/912ec66d7572ff821749319396470bde.svg` because `overwrite` is false
+2018/04/12 00:05:33 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/93c7d5883f5338ee5bbbf4143a8fa375.jpg` because `overwrite` is false
+2018/04/12 00:05:33 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/af7ae505a9eed503f8b8e6982036873e.woff2` because `overwrite` is false
+2018/04/12 00:05:33 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/b06871f281fee6b241d60582ae9369b9.ttf` because `overwrite` is false
+2018/04/12 00:05:33 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/ce2475110601dacdbabc5904a94536ae.eot` because `overwrite` is false
+2018/04/12 00:05:33 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/css/main.css` because `overwrite` is false
+2018/04/12 00:05:33 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/d20a95dce6ec4b07c6ed62cf811656f7.ttf` because `overwrite` is false
+2018/04/12 00:05:33 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/dfcfdc160f323c84d0055414521321a3.ttf` because `overwrite` is false
+2018/04/12 00:05:33 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/fad6867b42d9bdba582802a8a32144f5.woff` because `overwrite` is false
+2018/04/12 00:05:33 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/fee66e712a8a08eef5805a46892932ad.woff` because `overwrite` is false
+2018/04/12 00:05:33 [W] Skip upload of changed file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/app/js/main.js` because `overwrite` is false
+2018/04/12 00:05:33 [I] Skip by suffix `.DS_Store` for local file `backend/.DS_Store`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/05acfdb568b3df49ad31355b19495d4a.woff`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/24712f6c47821394fba7942fbb52c3b2.ttf`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/2c2ae068be3b089e0a5b59abb1831550.eot`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/621bd386841f74e0053cb8e67f8a0604.svg`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/9f35d093728efc834cf6f8b15fd17eea.jpg`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/css/main.css`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/f580abc21990eab686ce876612e30505.jpg`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/g.css`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/0.chunk.js`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/1.chunk.js`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/10.chunk.js`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/11.chunk.js`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/12.chunk.js`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/2.chunk.js`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/3.chunk.js`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/4.chunk.js`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/5.chunk.js`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/6.chunk.js`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/7.chunk.js`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/8.chunk.js`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/9.chunk.js`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/main.js`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/vender-base.js`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/js/vender-exten.js`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/r.css`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/backend/y.css`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/favicon.ico`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/images/visitor.png`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/arrow.gif`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/biggrin.gif`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/confused.gif`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/cool.gif`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/cry.gif`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/eek.gif`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/evil.gif`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/exclaim.gif`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/idea.gif`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/lol.gif`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/mad.gif`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/mrgreen.gif`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/neutral.gif`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/question.gif`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/razz.gif`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/redface.gif`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/rolleyes.gif`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/sad.gif`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/smile.gif`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/surprised.gif`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/twisted.gif`
+2018/04/12 00:05:33 [I] Skip by local leveldb log for file `/Users/mrcong/GoLang/src/github.com/cong5/persimmon/public/smilies/wink.gif`
+2018/04/12 00:05:33 [I] Skip by path prefix `uploads/` for local file path `uploads/.DS_Store`
+2018/04/12 00:05:33 [I] -------------Upload Result--------------
+2018/04/12 00:05:33 [I]               Total:        70
+2018/04/12 00:05:33 [I]             Success:         0
+2018/04/12 00:05:33 [I]             Failure:         0
+2018/04/12 00:05:33 [I]        NotOverwrite:        17
+2018/04/12 00:05:33 [I]             Skipped:        53
+2018/04/12 00:05:33 [I]            Duration:   285.250243ms
+2018/04/12 00:05:33 [I] ----------------------------------------
