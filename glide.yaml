@@ -1,52 +1,37 @@
 package: github.com/cong5/persimmon
 import:
+- package: github.com/adtac/go-akismet
+  subpackages:
+  - akismet
 - package: github.com/go-sql-driver/mysql
   version: ^1.3.0
 - package: github.com/go-xorm/core
   version: ^0.5.7
 - package: github.com/go-xorm/xorm
   version: ^0.6.4
+- package: github.com/mozillazg/go-pinyin
+  version: ^0.12.0
+- package: github.com/qiniu/api.v7
+  version: ^7.2.3
+  subpackages:
+  - auth/qbox
+  - storage
 - package: github.com/revel/modules
   version: ^0.19.0
   subpackages:
   - jobs/app/controllers
   - jobs/app/jobs
-  - orm/gorp/app
-  - orm/gorp/app/controllers
   - static/app/controllers
-  - testrunner/app
-  - testrunner/app/controllers
 - package: github.com/revel/revel
-  version: ^0.19.0
+  version: ^0.19.1
   subpackages:
+  - cache
   - testing
-- package: golang.org/x/crypto
-  subpackages:
-  - bcrypt
-- package: github.com/gorilla/rpc
-  version: ^1.1.0
-- package: github.com/rogpeppe/go-charset
+- package: github.com/shurcooL/sanitized_anchor_name
+- package: golang.org/x/crypto/bcrypt
 - package: gopkg.in/russross/blackfriday.v2
   version: ^2.0.0
-- package: github.com/shurcooL/sanitized_anchor_name
-- package: github.com/qiniu/api.v7
-  version: ^7.2.3
-- package: github.com/qiniu/x
-  version: ^7.0.8
-  subpackages:
-  - bytes.v7
-- package: github.com/mozillazg/go-pinyin
-  version: ^0.12.0
 - package: qiniupkg.com/x
   version: ^7.0.8
   subpackages:
-  - bytes.v7
-- package: gopkg.in/fsnotify/fsnotify.v1
-  version: ^1.4.7
-- package: github.com/garyburd/redigo
-  version: ^1.6.0
-  subpackages:
-  - redis
-- package: github.com/adtac/go-akismet
-- package: github.com/revel/cmd/revel
-  version: v0.14.1
+  - errors.v7

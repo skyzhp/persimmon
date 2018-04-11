@@ -9,7 +9,7 @@
     "prod": "npm run production",
     "build": "webpack --progress --hide-modules --config build/webpack.prod.config.js",
     "home-watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=assets/app/build/webpack.dev.config.js",
-    "home-production": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=assets/app/build/webpack.prod.config.js"
+    "home-production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=assets/app/build/webpack.prod.config.js"
   },
   "dependencies": {
     "area-data": "^1.0.0",

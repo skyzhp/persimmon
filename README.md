@@ -60,7 +60,7 @@ cd $GOPATH/src/github.com/cong5/persimmon
 go build -o ./bin/persimmon github.com/cong5/persimmon/app/tmp
 ```
 
-Or revel cmd build
+Or revel cmd build, recommend
 
 ```
 revel build github.com/cong5/persimmon ./bin/persimmon prod
