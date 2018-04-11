@@ -4,3 +4,4 @@ routes/
 conf/app.conf
 node_modules/
 conf/app.conf
+log/
