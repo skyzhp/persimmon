@@ -8,7 +8,8 @@ const appPath = path.resolve(__dirname, '../../../public/');
 
 module.exports = merge(webpackBaseConfig, {
     output: {
-        publicPath: '/public/app/',
+        //publicPath: '/public/app/',
+        publicPath: 'https://o75u5ooep.qnssl.com/assets/app/',
         filename: 'js/[name].js',
         chunkFilename: 'js/[name].chunk.js'
     },

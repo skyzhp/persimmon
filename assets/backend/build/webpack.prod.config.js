@@ -16,7 +16,8 @@ fs.open('./env.js', 'w', function (err, fd) {
 
 module.exports = merge(webpackBaseConfig, {
     output: {
-        publicPath: '/public/backend/',
+        //publicPath: '/public/backend/',
+        publicPath: 'https://o75u5ooep.qnssl.com/assets/backend',
         filename: 'js/[name].js',
         chunkFilename: 'js/[name].chunk.js'
     },
