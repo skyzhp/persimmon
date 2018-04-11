@@ -7,3 +7,4 @@ conf/app.conf
 log/
 assets/upload.log
 bin/persimmon/
+assets/upload.log
